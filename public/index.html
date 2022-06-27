@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--lang="zh-CN"用于声明“本网页的主语言是中文，便于外国人进入此网页时，提示此网页是中文，应该翻译成其他语言  -->
+<html lang="zh-CN">
+  <head>
+      <!-- 网站统计：CNZZTV Code https://cnzztv.com/ -->
+    <script async src="https://cnzztv.com/pixel/gyWFC9YHt8tEe8dP"></script>
+      <!--包含X-Content-Type-Options，可以防止黑客在浏览器进行MIME类型的嗅探-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff;"/>
+      <!--为了不然浏览器报兼容性错误，去掉下面这行的” http-equiv="X-UA-Compatible"“-->
+    <meta content="IE=edge">
+      <!--网站标题-->
+    <meta name="title" content="待办事项-生活清单">
+    <meta name="application name" content="待办事项">
+    <meta name="keywords" content="待办事项, todolist, 备忘录">
+      <!--作者-->
+    <meta name="author" content="黄元昱">
+      <!--对该网站的简单描述-->
+    <meta name="description" content="TodoList、待办事项网站，可当作时间管理系统中的收集箱，保持工作、生活的条理性">
+    <meta content="width=device-width,initial-scale=1.0" name="viewport">
+    <link href="<%= BASE_URL %>favicon.ico" rel="icon">
+    <title>待办事项</title>
+      <style>
+          /*注意！解决其他组件在放置背景图片时，上边和左边会出现白边的问题
+          在待办事项项目中，可以将这里的background改为黑色，这样网页初始化时就是黑色的，不会导致白色闪烁
+          备份：;background: #333333*/
+          body {
+              /*让外边距为0，才不会出现边框*/
+              margin: 0;
+              /*进入页面时，如果内容为空，则显示黑色背景*/
+              background: #333;
+              /*白色背景，注释掉，作为备份*/
+              /*background: #fff;*/
+              /*如果在vue中要隐藏滚动条，要在index.html里面设置，在组件中无法设置*/
+              overflow-x: hidden;
+              overflow-y: hidden;
+          }
+      </style>
+  </head>
+  
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!--构建的文件将自动加载-->
+  </body>
+</html>
