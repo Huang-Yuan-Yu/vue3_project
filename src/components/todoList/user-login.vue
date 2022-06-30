@@ -46,116 +46,154 @@
                 <p id="close" @click="closeWindow">✖</p>
                 <!--使用v-model绑定到对象的属性-->
                 <!--登录-->
-                <p v-if="isShowLoginWindow" class="loginText">登录</p>
-                <p v-if="isShowRegistrationWindow" class="loginText">注册</p>
-                <!--form里面是表单元素，如果不加from，会提示”密码字段不包含在表单中（已翻译）“-->
-                <form>
-                    <!--clearable：可一键清除输入框的内容；maxlength：输入框可输入的最大字符数；
-                    show-word-limit：显示输入框允许输入的最大字符数
-                    inputError: this.inputAccountError表示“当输入有误时，就应用inputError这个CSS的class，将输入框变红色-->
-                    <el-input
-                        v-if="isShowLoginWindow"
-                        v-focus
-                        v-model.trim="user.name"
-                        :class="{ inputError: this.inputAccountError }"
-                        class="userAccountInput"
-                        clearable
-                        maxlength="20"
-                        placeholder="请输入您的账号"
-                        show-word-limit
-                        type="text"
-                        @blur="checkAccount"
-                        @focus="this.inputAccountError = false"
-                        @keyup.enter="userLogin"
-                    >
-                        <!--使用Element Plus（UI库）提供的插槽，这里“#prefix”表示从输入表单的开头插入-->
-                        <template #prefix>
-                            <!--用户图标，:size为图标大小-->
-                            <el-icon :size="22" class="avatar"><avatar /></el-icon>
-                        </template>
-                    </el-input>
-                    <el-input
-                        v-if="isShowRegistrationWindow"
-                        v-focus
-                        v-model.trim="user.name"
-                        :class="{ inputError: this.inputAccountError }"
-                        class="userAccountInput"
-                        clearable
-                        maxlength="20"
-                        placeholder="请输入您要注册的账号"
-                        show-word-limit
-                        type="text"
-                        @blur="checkAccount"
-                        @focus="this.inputAccountError = false"
-                        @keyup.enter="userRegistration"
-                    >
-                        <template #prefix>
-                            <el-icon :size="22" class="avatar"><avatar /></el-icon>
-                        </template>
-                    </el-input>
-                    <p v-if="inputAccountError" class="loginInputErrorTips">
-                        提示：可由数字、26个英文字母或者下划线组成，8至20位
-                    </p>
-                    <!--show-password：显示密码-->
-                    <el-input
-                        v-if="isShowLoginWindow"
-                        v-model.trim="user.password"
-                        :class="{ inputError: this.inputPasswordError }"
-                        class="userPasswordInput"
-                        clearable
-                        maxlength="15"
-                        placeholder="请输入您的密码"
-                        show-password
-                        type="password"
-                        @blur="checkPassword"
-                        @focus="this.inputPasswordError = false"
-                        @keyup.enter="userLogin"
-                    >
-                        <template #prefix>
-                            <!--锁的图标-->
-                            <el-icon :size="22" class="avatar"><lock /></el-icon>
-                        </template>
-                    </el-input>
-                    <el-input
-                        v-if="isShowRegistrationWindow"
-                        v-model.trim="user.password"
-                        :class="{ inputError: this.inputPasswordError }"
-                        class="userPasswordInput"
-                        clearable
-                        maxlength="15"
-                        placeholder="请输入用于账号的密码"
-                        show-password
-                        type="password"
-                        @blur="checkPassword"
-                        @focus="this.inputPasswordError = false"
-                        @keyup.enter="userRegistration"
-                    >
-                        <template #prefix>
-                            <el-icon :size="22" class="avatar"><lock /></el-icon>
-                        </template>
-                    </el-input>
-                    <p v-if="inputPasswordError" class="loginInputErrorTips">
-                        提示：密码至少要包括总共8位的英文和数字！
-                    </p>
-                    <el-button
-                        v-if="isShowLoginWindow"
-                        class="loginOrRegisterButton"
-                        size="large"
-                        type="primary"
-                        @click="userLogin"
-                        >登录
-                    </el-button>
-                    <span v-if="isShowLoginWindow" class="forgetPassword">忘记密码？</span>
-                    <el-button
-                        v-if="isShowRegistrationWindow"
-                        class="loginOrRegisterButton"
-                        size="large"
-                        type="primary"
-                        @click="userRegistration"
-                        >注册
-                    </el-button>
-                    <span v-if="isShowRegistrationWindow" class="forgetPassword">手机号注册</span>
-                </form>
+                <div v-if="isShowLoginWindow">
+                    <p class="loginText">登录</p>
+                    <form>
+                        <!--clearable：可一键清除输入框的内容；maxlength：输入框可输入的最大字符数；
+                        show-word-limit：显示输入框允许输入的最大字符数
+                        inputError: this.inputAccountError表示“当输入有误时，就应用inputError这个CSS的class，将输入框变红色-->
+                        <el-input
+                            v-focus
+                            v-model.trim="user.name"
+                            :class="{ inputError: this.inputAccountError }"
+                            class="userAccountInput"
+                            clearable
+                            maxlength="20"
+                            placeholder="请输入您的邮箱"
+                            show-word-limit
+                            type="text"
+                            @blur="checkAccount"
+                            @focus="this.inputAccountError = false"
+                            @keyup.enter="userLogin"
+                        >
+                            <!--使用Element Plus（UI库）提供的插槽，这里“#prefix”表示从输入表单的开头插入-->
+                            <template #prefix>
+                                <!--用户图标，:size为图标大小-->
+                                <el-icon :size="22" class="avatar"><avatar /></el-icon>
+                            </template>
+                        </el-input>
+                        <p v-if="inputAccountError" class="loginInputErrorTips">提示：电子邮箱格式错误</p>
+                        <!--show-password：显示密码-->
+                        <el-input
+                            v-model.trim="user.password"
+                            :class="{ inputError: this.inputPasswordError }"
+                            class="userPasswordInput"
+                            clearable
+                            maxlength="15"
+                            placeholder="请输入您的密码"
+                            show-password
+                            type="password"
+                            @blur="checkPassword"
+                            @focus="this.inputPasswordError = false"
+                            @keyup.enter="userLogin"
+                        >
+                            <template #prefix>
+                                <!--锁的图标-->
+                                <el-icon :size="22" class="avatar"><lock /></el-icon>
+                            </template>
+                        </el-input>
+                        <p v-if="inputPasswordError" class="loginInputErrorTips">
+                            提示：您的密码至少包括总共8位的英文和数字！
+                        </p>
+                        <el-button class="loginOrRegisterButton" size="large" type="primary" @click="userLogin"
+                            >登录
+                        </el-button>
+                        <span class="forgetPassword">忘记密码？</span>
+                    </form>
+                </div>
+
+                <div v-if="isShowRegistrationWindow">
+                    <p class="loginText">注册</p>
+                    <!--form里面是表单元素，如果不加from，会提示”密码字段不包含在表单中（已翻译）“-->
+                    <form>
+                        <el-row>
+                            <el-col :span="19">
+                                <el-input
+                                    v-focus
+                                    v-model.trim="user.name"
+                                    :class="{ inputError: this.inputAccountError }"
+                                    class="userAccountInput"
+                                    clearable
+                                    maxlength="20"
+                                    placeholder="请输入您的邮箱"
+                                    show-word-limit
+                                    type="text"
+                                    @blur="checkAccount"
+                                    @focus="this.inputAccountError = false"
+                                    @keyup.enter="userRegistration"
+                                >
+                                    <template #prefix>
+                                        <el-icon :size="22" class="avatar"><avatar /></el-icon>
+                                    </template>
+                                </el-input>
+                            </el-col>
+                            <el-col :span="5">
+                                <!--获取验证码的按钮，发送后60秒处于禁用状态（如果这里为button，则会导致回车事件页面刷新的BUG-->
+                                <input
+                                    id="sendVerificationCode"
+                                    type="button"
+                                    @click="sendVerificationCode"
+                                    v-if="getVerificationCode.loading === false"
+                                    :value="getVerificationCode.text"
+                                />
+                                <!--包含获取中动画的按钮-->
+                                <el-button
+                                    type="primary"
+                                    id="sendVerificationCode"
+                                    loading
+                                    v-if="getVerificationCode.loading === true"
+                                    >获取中
+                                </el-button>
+                            </el-col>
+                        </el-row>
+                        <p v-if="inputAccountError" class="loginInputErrorTips">提示：电子邮箱格式错误</p>
+                        <el-input
+                            v-model.trim="user.password"
+                            :class="{ inputError: this.inputPasswordError }"
+                            class="userPasswordInput"
+                            clearable
+                            maxlength="15"
+                            placeholder="请输入用于邮箱的密码"
+                            show-password
+                            type="password"
+                            @blur="checkPassword"
+                            @focus="this.inputPasswordError = false"
+                            @keyup.enter="userRegistration"
+                        >
+                            <template #prefix>
+                                <el-icon :size="22" class="avatar"><lock /></el-icon>
+                            </template>
+                        </el-input>
+                        <p v-if="inputPasswordError" class="loginInputErrorTips">
+                            提示：密码至少要包括总共8位的英文和数字！
+                        </p>
+                        <el-row>
+                            <el-col :span="12">
+                                <el-input
+                                    v-model.trim="user.verificationCode"
+                                    :class="{ inputError: this.inputVerificationCodeError }"
+                                    @focus="this.inputVerificationCodeError = false"
+                                    class="userPasswordInput"
+                                    clearable
+                                    maxlength="6"
+                                    placeholder="输入邮箱验证码"
+                                    show-word-limit
+                                    type="text"
+                                    @keyup.enter="userRegistration"
+                                >
+                                    <template #prefix>
+                                        <!--<el-icon><avatar /></el-icon>-->
+                                        <el-icon :size="22" class="avatar"><Promotion /></el-icon>
+                                    </template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-button class="loginOrRegisterButton" size="large" type="primary" @click="userRegistration"
+                            >注册
+                        </el-button>
+                        <span class="forgetPassword">手机号注册</span>
+                    </form>
+                </div>
             </div>
         </transition>
     </div>
@@ -183,6 +221,7 @@ export default {
             user: {
                 name: "",
                 password: "",
+                verificationCode: "",
             },
             // 三元运算符，判断本地存储的name值是否为null，如果为null就证明用户未登录，未登录时myName就为null，登录后就获取对应的用户名
             myName: localStorage.getItem("name") === null ? null : localStorage.getItem("name"),
@@ -198,10 +237,29 @@ export default {
             isShowLoginWindow: false,
             // 是否要显示注册窗口
             isShowRegistrationWindow: false,
-            // 输入的账号是否有误：
+            // 输入的邮箱是否有误：
             inputAccountError: false,
-            // 输入的账号是否有误：
+            // 输入的邮箱是否有误：
             inputPasswordError: false,
+            // 输入验证码是否错误
+            inputVerificationCodeError: false,
+            // 验证码
+            getVerificationCode: {
+                // 按钮用的文本，会动态变化
+                text: "获取验证码",
+                // 获取到的验证码
+                verificationCode: null,
+                // 是否正在获取
+                loading: false,
+                // 按钮是否禁用
+                disabled: false,
+                // 获取后倒计时等待时间
+                duration: 60,
+                // 用于计时器
+                timer: null,
+                // 记录临时邮箱，防止填写完验证码之后修改邮箱——作弊
+                tempEmail: null,
+            },
         };
     },
     // 在Vue3中，新引入的Avatar, Lock要注册到全局，使之变成响应式，最好不要在components里注册
@@ -366,14 +424,19 @@ export default {
             this.isShowLoginWindow = false;
             this.isShowRegistrationWindow = false;
             // 清空输入的内容
-            this.user.name = "";
-            this.user.password = "";
+            this.user = {
+                name: "",
+                password: "",
+                verificationCode: "",
+            };
         },
-        // 检查账号输入是否正确
+        // 检查邮箱邮箱输入是否正确
         checkAccount() {
             if (this.user.name.length !== 0) {
                 // 符合正则表达式，则inputAccountError为false，不符合则为true
-                this.inputAccountError = !new RegExp("^\\w{8,20}$").test(this.user.name);
+                this.inputAccountError = !new RegExp("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$").test(
+                    this.user.name
+                );
             }
         },
         // 检查密码输入是否正确
@@ -383,6 +446,80 @@ export default {
                 this.inputPasswordError = !new RegExp("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$").test(
                     this.user.password
                 );
+            }
+        },
+        // 获取验证码
+        sendVerificationCode() {
+            // 如果已经获取验证码，并且正在倒计时等待
+            if (this.getVerificationCode.disabled === true) {
+                ElMessage({
+                    // 显示关闭按钮
+                    showClose: true,
+                    message: "验证码已获取过了，请查看邮箱！",
+                    type: "warning",
+                });
+            }
+            // 非空判断
+            else if (this.user.name === "") {
+                ElMessage({
+                    // 显示关闭按钮
+                    showClose: true,
+                    message: "邮箱不能为空！",
+                    type: "warning",
+                });
+            }
+            // inputAccountError为true则表示邮箱格式错误
+            else if (this.inputAccountError === true) {
+                ElMessage({
+                    // 显示关闭按钮
+                    showClose: true,
+                    message: "邮箱格式错误！",
+                    type: "error",
+                });
+            } else {
+                // loading为true表示正在获取中
+                this.getVerificationCode.loading = true;
+                // 先保存输入的邮箱到对象的属性中，防止用户填写验证码后修改邮箱——作弊
+                this.getVerificationCode.tempEmail = this.user.name;
+                // 将随机生成的6位验证码保存到data的变量中
+                this.getVerificationCode.verificationCode = Math.random().toFixed(6).slice(-6);
+                console.log(this.getVerificationCode.verificationCode);
+                // 调用后端发送邮件的接口
+                this.$axios
+                    .post("/api/TodoEmail/postEmail", {
+                        // 用户输入的邮箱
+                        email: this.user.name,
+                        // 前端随机生成的6位数字验证码
+                        verificationCode: this.getVerificationCode.verificationCode,
+                    })
+                    .then((response) => {
+                        // 发送完毕，就将“获取中”的状态关闭
+                        this.getVerificationCode.loading = false;
+                        ElMessage({
+                            // 显示关闭按钮
+                            showClose: true,
+                            message: response.data,
+                            type: "success",
+                        });
+                    });
+
+                // 倒计时期间按钮不能单击（为true，按钮处于禁用状态）
+                this.getVerificationCode.disabled = true;
+                // 清除掉定时器
+                this.getVerificationCode.timer && clearInterval(this.getVerificationCode.timer);
+                // 开启定时器
+                this.getVerificationCode.timer = setInterval(() => {
+                    const temporary = this.getVerificationCode.duration--;
+                    this.getVerificationCode.text = `${temporary}秒后重取`;
+                    if (temporary <= 0) {
+                        // 清除掉定时器
+                        clearInterval(this.getVerificationCode.timer);
+                        this.getVerificationCode.duration = 60;
+                        this.getVerificationCode.text = "重新获取";
+                        // 设置按钮可以单击
+                        this.getVerificationCode.disabled = false;
+                    }
+                }, 1000);
             }
         },
         // 用户注册
@@ -400,16 +537,38 @@ export default {
                     message: "密码不能为空！",
                     type: "warning",
                 });
+            } else if (this.user.verificationCode === "") {
+                ElMessage({
+                    showClose: true,
+                    message: "验证码不能为空！",
+                    type: "warning",
+                });
             } else if (this.inputAccountError === true) {
                 ElMessage({
                     showClose: true,
-                    message: "账号格式错误，请重新输入！",
+                    message: "邮箱格式错误，请重新输入！",
                     type: "error",
                 });
             } else if (this.inputPasswordError === true) {
                 ElMessage({
                     showClose: true,
                     message: "密码格式错误，请重新输入！",
+                    type: "error",
+                });
+            }
+            // 检验验证码是否填写正确，如果对不上
+            else if (this.user.verificationCode !== this.getVerificationCode.verificationCode) {
+                // 在界面上将验证码输入框的边框变为红色
+                this.inputVerificationCodeError = true;
+                ElMessage({
+                    showClose: true,
+                    message: "验证码错误，请重新输入！",
+                    type: "error",
+                });
+            } else if (this.getVerificationCode.tempEmail !== this.user.name) {
+                ElMessage({
+                    showClose: true,
+                    message: "禁止中途修改邮箱！（防作弊机制）",
                     type: "error",
                 });
             } else {
@@ -459,6 +618,12 @@ export default {
                                         });
                                         // 登录成功则关闭注册窗口：
                                         this.isShowRegistrationWindow = false;
+                                        // 清空输入的内容
+                                        this.user = {
+                                            name: "",
+                                            password: "",
+                                            verificationCode: "",
+                                        };
                                     } else {
                                         ElMessage({
                                             // 显示关闭按钮
@@ -479,7 +644,7 @@ export default {
                 ElMessage({
                     // 显示关闭按钮
                     showClose: true,
-                    message: "账号不能为空！",
+                    message: "邮箱不能为空！",
                     type: "warning",
                 });
             } else if (this.user.password === "") {
@@ -495,7 +660,7 @@ export default {
                 ElMessage({
                     // 显示关闭按钮
                     showClose: true,
-                    message: "账号格式错误，请重新输入！",
+                    message: "邮箱格式错误，请重新输入！",
                     type: "error",
                 });
             } else if (this.inputPasswordError === true) {
@@ -821,7 +986,7 @@ export default {
     margin-top: 1vmax;
 }
 
-/*账号和密码输入错误的警告*/
+/*邮箱和密码输入错误的警告*/
 .loginInputErrorTips {
     color: red;
     font-weight: bold;
@@ -832,9 +997,8 @@ export default {
     margin-top: -10px;
 }
 
-/*用户登录时输入的内容——账号和密码*/
+/*用户登录时输入的内容——邮箱和密码*/
 ::v-deep(.userAccountInput, .userPasswordInput) {
-    /*font-size: 2vw;*/
     width: 100%;
 }
 
@@ -846,14 +1010,43 @@ export default {
 }
 
 /*当用户输入错误时，将输入边框变红*/
-::v-deep(.inputError) {
+::v-deep(.inputError .el-input__inner) {
     border: 2px solid red;
     border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
+    // 内边框
+    box-sizing: border-box;
 }
 
-/*输入账号*/
+/*输入邮箱*/
 .userAccountInput {
     margin-bottom: 16px;
+}
+
+/*修改输入框的样式*/
+::v-deep(.userAccountInput .el-input__inner) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/*获取验证码的按钮*/
+#sendVerificationCode {
+    width: 100%;
+    height: 32px;
+    border-radius: 0 4px 4px 0;
+    border: none;
+    background: #409eff;
+    color: #ffffff;
+}
+
+/*悬停*/
+#sendVerificationCode:hover {
+    background: #59abff;
+    cursor: url("../../assets/cursor/pointer.png"), pointer;
+}
+
+/*点击时*/
+#sendVerificationCode:active {
+    background: #3b91eb;
 }
 
 /*输入密码*/
@@ -866,7 +1059,7 @@ export default {
 .loginOrRegisterButton {
     width: 100px;
     border: whitesmoke;
-    margin-top: 30px;
+    margin-top: 16px;
     margin-left: 80px;
 }
 
@@ -897,7 +1090,7 @@ export default {
 .forgetPassword {
     color: white;
     position: relative;
-    top: 16px;
+    top: 10px;
     left: 52px;
     cursor: url("../../assets/cursor/pointer.png"), pointer;
     text-align: right;
