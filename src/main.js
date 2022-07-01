@@ -14,6 +14,7 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import axios from "axios";
 // 根组件:
 import myTest from "@/root_components/my-test";
+// import htmlEmail from "@/root_components/html-email"
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 

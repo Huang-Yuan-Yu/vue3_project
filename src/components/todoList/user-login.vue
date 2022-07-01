@@ -98,7 +98,7 @@
                         <el-button class="loginOrRegisterButton" size="large" type="primary" @click="userLogin"
                             >登录
                         </el-button>
-                        <span class="forgetPassword">忘记密码？</span>
+                        <span class="forgetPassword" @click="forgotPassword">忘记密码？</span>
                     </form>
                 </div>
 
@@ -483,7 +483,6 @@ export default {
                 this.getVerificationCode.tempEmail = this.user.name;
                 // 将随机生成的6位验证码保存到data的变量中
                 this.getVerificationCode.verificationCode = Math.random().toFixed(6).slice(-6);
-                console.log(this.getVerificationCode.verificationCode);
                 // 调用后端发送邮件的接口
                 this.$axios
                     .post("/api/TodoEmail/postEmail", {
@@ -714,6 +713,10 @@ export default {
                 });
             }
         },
+        // 忘记密码的文字按钮
+        forgotPassword(){
+            console.log("测试")
+        },
         // 注销
         userLogout() {
             if (this.loginSuccess === true) {
@@ -774,7 +777,7 @@ export default {
     cursor: url("../../assets/cursor/pointer.png"), pointer;
 }
 
-::v-deep(.el-input__inner) {
+::v-deep(.el-input__wrapper) {
     cursor: url("../../assets/cursor/text.png"), text;
 }
 
@@ -1005,16 +1008,15 @@ export default {
 /*用户图标*/
 .avatar {
     position: relative;
-    right: 8px;
-    top: 4px;
+    right: 1px;
+    bottom: 1px;
 }
 
 /*当用户输入错误时，将输入边框变红*/
-::v-deep(.inputError .el-input__inner) {
-    border: 2px solid red;
+::v-deep(.inputError .el-input__wrapper) {
     border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
-    // 内边框
-    box-sizing: border-box;
+    // 内阴影，充当边框，这样就不会占用空间
+    box-shadow:0 0 0 2px red inset;
 }
 
 /*输入邮箱*/
@@ -1023,7 +1025,7 @@ export default {
 }
 
 /*修改输入框的样式*/
-::v-deep(.userAccountInput .el-input__inner) {
+::v-deep(.userAccountInput .el-input__wrapper) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
