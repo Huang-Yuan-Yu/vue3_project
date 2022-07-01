@@ -23,9 +23,24 @@ export default {
         return {
             // 是否展示天气
             isShowWeather: false,
+            // 是否临时禁用展示天气
+            isDisable: false,
         };
     },
     components: { YyWeather },
+    watch: {
+        // 监听决定是否展示的变量是否变化，这里是防止关闭之后，立即将鼠标移动到图标上，导致显示出来后又关闭
+        isShowWeather() {
+            // 当正在关闭时，这里时间设置为动画执行的时间——0.8秒
+            if (this.isShowWeather === false) {
+                this.isDisable = true;
+                // 与关闭用的时间长度一样，1秒后就解除禁用
+                setTimeout(() => {
+                    this.isDisable = false;
+                }, 800);
+            }
+        },
+    },
     mounted() {
         // 监听子组件的消息
         emitter.on("是否关闭天气模块", (message) => {
@@ -37,10 +52,13 @@ export default {
     methods: {
         // 当用户指针进入时
         userMouseEnter() {
-            // 清除计时器，防止isShowCheckLogin设置为false，因为用户进入了，窗口不能消失
-            clearTimeout(this.showTimeout);
-            this.isShowWeather = true;
+            // 当没有禁用时，才能够显示天气模块
+            if (this.isDisable === false) {
+                // 清除计时器，防止isShowCheckLogin设置为false，因为用户进入了，窗口不能消失
+                this.isShowWeather = true;
+            }
         },
+        
     },
 };
 </script>

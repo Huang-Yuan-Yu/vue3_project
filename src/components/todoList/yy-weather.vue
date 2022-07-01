@@ -1,7 +1,7 @@
 <template>
     <!--过渡标签一定要在最外面-->
     <transition name="weatherTransition">
-        <div class="weather" @mouseleave="userMouseleave">
+        <div class="weather" @mouseleave="userMouseleave" @mouseenter="enterWeather">
             <!--整个天气组件的div-->
             <div id="he-plugin-standard"></div>
         </div>
@@ -12,6 +12,7 @@
 import { defineComponent, onMounted } from "vue";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
+
 window.WIDGET = {
     CONFIG: {
         layout: "2",
@@ -26,8 +27,8 @@ window.WIDGET = {
 export default defineComponent({
     data() {
         return {
-            // 用于存储计时器的变量，便于清除
-            showTimeout: null,
+            // 关闭天气模块的定时器，用于特殊情况下取消关闭（只需清除定时器）
+            closeTimeout: null,
         };
     },
     // Vue3.0的写法
@@ -47,9 +48,16 @@ export default defineComponent({
     methods: {
         // 用户指针离开时
         userMouseleave() {
-            this.showTimeout = setTimeout(() => {
+            // 1.5秒后通知父组件关闭天气模块
+            this.closeTimeout = setTimeout(() => {
                 emitter.emit("是否关闭天气模块", "是");
-            }, 500);
+            }, 1500);
+            
+        },
+        // 鼠标移进天气模块
+        enterWeather() {
+            // 清除计时器，取消关闭
+            clearTimeout(this.closeTimeout);
         },
     },
 });

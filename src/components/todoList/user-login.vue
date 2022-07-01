@@ -58,10 +58,10 @@
                             :class="{ inputError: this.inputAccountError }"
                             class="userAccountInput"
                             clearable
-                            maxlength="20"
+                            maxlength="40"
                             placeholder="请输入您的邮箱"
                             show-word-limit
-                            type="text"
+                            type="email"
                             @blur="checkAccount"
                             @focus="this.inputAccountError = false"
                             @keyup.enter="userLogin"
@@ -108,19 +108,21 @@
                     <form>
                         <el-row>
                             <el-col :span="19">
+                                <!--注意！autocomplete="nope"能够取消浏览器对此输入框的自动内容填充提示-->
                                 <el-input
                                     v-focus
                                     v-model.trim="user.name"
                                     :class="{ inputError: this.inputAccountError }"
                                     class="userAccountInput"
                                     clearable
-                                    maxlength="20"
+                                    maxlength="40"
+                                    type="email"
                                     placeholder="请输入您的邮箱"
                                     show-word-limit
-                                    type="text"
                                     @blur="checkAccount"
                                     @focus="this.inputAccountError = false"
                                     @keyup.enter="userRegistration"
+                                    autocomplete="nope"
                                 >
                                     <template #prefix>
                                         <el-icon :size="22" class="avatar"><avatar /></el-icon>
@@ -176,7 +178,7 @@
                                     class="userPasswordInput"
                                     clearable
                                     maxlength="6"
-                                    placeholder="输入邮箱验证码"
+                                    placeholder="验证码"
                                     show-word-limit
                                     type="text"
                                     @keyup.enter="userRegistration"
@@ -434,7 +436,7 @@ export default {
         checkAccount() {
             if (this.user.name.length !== 0) {
                 // 符合正则表达式，则inputAccountError为false，不符合则为true
-                this.inputAccountError = !new RegExp("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$").test(
+                this.inputAccountError = !new RegExp("^[A-Za-z0-9]+([_.][A-Za-z0-9]+)*@([A-Za-z0-9\\-]+\\.)+[A-Za-z]{2,6}$").test(
                     this.user.name
                 );
             }
@@ -506,7 +508,7 @@ export default {
                 this.getVerificationCode.disabled = true;
                 // 清除掉定时器
                 this.getVerificationCode.timer && clearInterval(this.getVerificationCode.timer);
-                // 开启定时器
+                // 开启定时器；注意！setInterval是间歇调用，这里是每1000毫秒（1秒）调用一次
                 this.getVerificationCode.timer = setInterval(() => {
                     const temporary = this.getVerificationCode.duration--;
                     this.getVerificationCode.text = `${temporary}秒后重取`;
@@ -1038,6 +1040,7 @@ export default {
     border: none;
     background: #409eff;
     color: #ffffff;
+    font-size: 10px;
 }
 
 /*悬停*/
