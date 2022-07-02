@@ -8,9 +8,12 @@ module.exports = defineConfig({
 });
 
 // 在构建时，会出现各种资源路径错误的情况，在本文件中重写打包后的基础路径为当前目录，就可以解决
+// 后来通过“npm install --save-dev compression-webpack-plugin”引入打包大小优化的依赖
 module.exports = {
     // 公共路径为“./”：
     publicPath: "./",
+    // 是否为生产环境构建生成sourceMap，为false则在控制台不显示来源于代码的何处
+    productionSourceMap: false,
     // 解决跨域问题（同源策略的跨域问题，只要“协议+地址+端口”三者，有一个与对方不同，则会有跨域问题：
     devServer: {
         // 这里的ip和端口是我们本机的
@@ -59,7 +62,7 @@ module.exports = {
             }),
             Components({
                 resolvers: [ElementPlusResolver()],
-            })
+            }),
         ],
     },
 };
