@@ -433,7 +433,11 @@ export default {
         this.$watch(
             () => {
                 // 监听子组件中data的布尔值变量，只要有一个为true，这里的结果就为true
-                return this.$refs.userLogin.isShowLoginWindow || this.$refs.userLogin.isShowRegistrationWindow;
+                return (
+                    this.$refs.userLogin.isShowLoginWindow ||
+                    this.$refs.userLogin.isShowRegistrationWindow ||
+                    this.$refs.userLogin.isShowResetPassword
+                );
             },
             // 是否有打开登录、注册等窗口
             (isOpen) => {

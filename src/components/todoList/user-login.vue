@@ -42,7 +42,7 @@
 
         <transition name="loginUi">
             <!--是否显示登录界面-->
-            <div v-if="isShowLoginWindow || isShowRegistrationWindow" id="loginUi">
+            <div v-if="isShowLoginWindow || isShowRegistrationWindow || isShowResetPassword" id="loginUi">
                 <p id="close" @click="closeWindow">✖</p>
                 <!--使用v-model绑定到对象的属性-->
                 <!--登录-->
@@ -102,6 +102,99 @@
                     </form>
                 </div>
 
+                <div v-if="isShowResetPassword">
+                    <p class="loginText">重置密码</p>
+                    <form>
+                        <el-row>
+                            <el-col :span="19">
+                                <!--注意！autocomplete="nope"能够取消浏览器对此输入框的自动内容填充提示-->
+                                <el-input
+                                    v-focus
+                                    v-model.trim="user.name"
+                                    :class="{ inputError: this.inputAccountError }"
+                                    class="userAccountInput"
+                                    clearable
+                                    maxlength="40"
+                                    type="email"
+                                    placeholder="请输入您的邮箱（作为依据）"
+                                    show-word-limit
+                                    @blur="checkAccount"
+                                    @focus="this.inputAccountError = false"
+                                    @keyup.enter="userRegistration"
+                                    autocomplete="nope"
+                                >
+                                    <template #prefix>
+                                        <el-icon :size="22" class="avatar"><avatar /></el-icon>
+                                    </template>
+                                </el-input>
+                            </el-col>
+                            <el-col :span="5">
+                                <!--获取验证码的按钮，发送后60秒处于禁用状态（如果这里为button，则会导致回车事件页面刷新的BUG-->
+                                <input
+                                    class="sendVerificationCode"
+                                    type="button"
+                                    @click="sendVerificationCode"
+                                    v-if="getVerificationCode.loading === false"
+                                    :value="getVerificationCode.text"
+                                />
+                                <!--包含获取中动画的按钮-->
+                                <el-button
+                                    type="primary"
+                                    class="sendVerificationCode"
+                                    loading
+                                    v-if="getVerificationCode.loading === true"
+                                    >获取中
+                                </el-button>
+                            </el-col>
+                        </el-row>
+                        <p v-if="inputAccountError" class="loginInputErrorTips">提示：电子邮箱格式错误</p>
+                        <el-input
+                            v-model.trim="user.password"
+                            :class="{ inputError: this.inputPasswordError }"
+                            class="userPasswordInput"
+                            clearable
+                            maxlength="15"
+                            placeholder="请输入您的新密码"
+                            show-password
+                            type="password"
+                            @blur="checkPassword"
+                            @focus="this.inputPasswordError = false"
+                            @keyup.enter="userRegistration"
+                        >
+                            <template #prefix>
+                                <el-icon :size="22" class="avatar"><lock /></el-icon>
+                            </template>
+                        </el-input>
+                        <p v-if="inputPasswordError" class="loginInputErrorTips">
+                            提示：密码至少要包括总共8位的英文和数字！
+                        </p>
+                        <el-row>
+                            <el-col :span="12">
+                                <el-input
+                                    v-model.trim="user.verificationCode"
+                                    :class="{ inputError: this.inputVerificationCodeError }"
+                                    @focus="this.inputVerificationCodeError = false"
+                                    class="userPasswordInput"
+                                    clearable
+                                    maxlength="6"
+                                    placeholder="验证码"
+                                    show-word-limit
+                                    type="text"
+                                    @keyup.enter="userRegistration"
+                                >
+                                    <template #prefix>
+                                        <!--<el-icon><avatar /></el-icon>-->
+                                        <el-icon :size="22" class="avatar"><Promotion /></el-icon>
+                                    </template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-button class="resetPasswordButton" size="large" type="primary" @click="resetPassword"
+                            >确认修改
+                        </el-button>
+                    </form>
+                </div>
+
                 <div v-if="isShowRegistrationWindow">
                     <p class="loginText">注册</p>
                     <!--form里面是表单元素，如果不加from，会提示”密码字段不包含在表单中（已翻译）“-->
@@ -132,7 +225,7 @@
                             <el-col :span="5">
                                 <!--获取验证码的按钮，发送后60秒处于禁用状态（如果这里为button，则会导致回车事件页面刷新的BUG-->
                                 <input
-                                    id="sendVerificationCode"
+                                    class="sendVerificationCode"
                                     type="button"
                                     @click="sendVerificationCode"
                                     v-if="getVerificationCode.loading === false"
@@ -141,7 +234,7 @@
                                 <!--包含获取中动画的按钮-->
                                 <el-button
                                     type="primary"
-                                    id="sendVerificationCode"
+                                    class="sendVerificationCode"
                                     loading
                                     v-if="getVerificationCode.loading === true"
                                     >获取中
@@ -237,6 +330,8 @@ export default {
             showTimeout: null,
             // 是否要显示登录窗口
             isShowLoginWindow: false,
+            // 是否显示重置密码的窗口
+            isShowResetPassword: false,
             // 是否要显示注册窗口
             isShowRegistrationWindow: false,
             // 输入的邮箱是否有误：
@@ -425,6 +520,7 @@ export default {
         closeWindow() {
             this.isShowLoginWindow = false;
             this.isShowRegistrationWindow = false;
+            this.isShowResetPassword = false;
             // 清空输入的内容
             this.user = {
                 name: "",
@@ -436,9 +532,9 @@ export default {
         checkAccount() {
             if (this.user.name.length !== 0) {
                 // 符合正则表达式，则inputAccountError为false，不符合则为true
-                this.inputAccountError = !new RegExp("^[A-Za-z0-9]+([_.][A-Za-z0-9]+)*@([A-Za-z0-9\\-]+\\.)+[A-Za-z]{2,6}$").test(
-                    this.user.name
-                );
+                this.inputAccountError = !new RegExp(
+                    "^[A-Za-z0-9]+([_.][A-Za-z0-9]+)*@([A-Za-z0-9\\-]+\\.)+[A-Za-z]{2,6}$"
+                ).test(this.user.name);
             }
         },
         // 检查密码输入是否正确
@@ -461,7 +557,7 @@ export default {
                     type: "warning",
                 });
             }
-            // 非空判断
+            // 非空判断，不能没填写邮箱就发送验证码
             else if (this.user.name === "") {
                 ElMessage({
                     // 显示关闭按钮
@@ -529,7 +625,7 @@ export default {
                 ElMessage({
                     // 显示关闭按钮
                     showClose: true,
-                    message: "用户名不能为空！",
+                    message: "邮箱不能为空！",
                     type: "warning",
                 });
             } else if (this.user.password === "") {
@@ -696,6 +792,13 @@ export default {
                             });
                             // 登录成功则关闭窗口：
                             this.isShowLoginWindow = false;
+                        } else if (response.data.result === "不存在此用户，请检查账号是否输入正确！") {
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: response.data.result,
+                                type: "error",
+                            });
                         } else {
                             ElMessage({
                                 // 显示关闭按钮
@@ -716,8 +819,110 @@ export default {
             }
         },
         // 忘记密码的文字按钮
-        forgotPassword(){
-            console.log("测试")
+        forgotPassword() {
+            // 关闭登录窗口
+            this.isShowLoginWindow = false;
+            // 打开重置密码窗口
+            this.isShowResetPassword = true;
+            ElMessage({
+                // 显示关闭按钮
+                showClose: true,
+                message: "已打开重置密码界面！",
+                type: "success",
+            });
+        },
+        // 确认重置密码
+        resetPassword() {
+            if (this.user.name === "") {
+                ElMessage({
+                    // 显示关闭按钮
+                    showClose: true,
+                    message: "邮箱不能为空，需作为依据！",
+                    type: "warning",
+                });
+            } else if (this.user.password === "") {
+                ElMessage({
+                    showClose: true,
+                    message: "新密码不能为空！",
+                    type: "warning",
+                });
+            } else if (this.user.verificationCode === "") {
+                ElMessage({
+                    showClose: true,
+                    message: "验证码不能为空！",
+                    type: "warning",
+                });
+            } else if (this.inputAccountError === true) {
+                ElMessage({
+                    showClose: true,
+                    message: "邮箱格式错误，请重新输入！",
+                    type: "error",
+                });
+            } else if (this.inputPasswordError === true) {
+                ElMessage({
+                    showClose: true,
+                    message: "密码格式错误，请重新输入！",
+                    type: "error",
+                });
+            }
+            // 检验验证码是否填写正确，如果对不上
+            else if (this.user.verificationCode !== this.getVerificationCode.verificationCode) {
+                // 在界面上将验证码输入框的边框变为红色
+                this.inputVerificationCodeError = true;
+                ElMessage({
+                    showClose: true,
+                    message: "验证码错误，请重新输入！",
+                    type: "error",
+                });
+            } else if (this.getVerificationCode.tempEmail !== this.user.name) {
+                ElMessage({
+                    showClose: true,
+                    message: "禁止中途修改邮箱！（防作弊机制）",
+                    type: "error",
+                });
+            } else {
+                // 使用axios的post方法，向后端传递数据
+                this.$axios
+                    // 调用自定义的aes.js文件里的“加密encrypt”方法，将密码加密后传给后端
+                    .post("/api/TodoList/resetPassword", {
+                        name: this.user.name,
+                        password: aes.encrypt(this.user.password),
+                    })
+                    .then((res) => {
+                        if (res.data === "不存在此用户，请检查账号是否输入正确！") {
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: res.data,
+                                type: "error",
+                            });
+                        } else if (res.data === "密码重置失败···") {
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: res.data,
+                                type: "error",
+                            });
+                        } else if (res.data === "新密码和旧密码一致，不必修改！") {
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: res.data,
+                                type: "warning",
+                            });
+                        } else {
+                            // 提示重置密码成功
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: res.data,
+                                type: "success",
+                            });
+                            // 关闭重置密码窗口
+                            this.isShowResetPassword = false;
+                        }
+                    });
+            }
         },
         // 注销
         userLogout() {
@@ -1018,7 +1223,7 @@ export default {
 ::v-deep(.inputError .el-input__wrapper) {
     border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
     // 内阴影，充当边框，这样就不会占用空间
-    box-shadow:0 0 0 2px red inset;
+    box-shadow: 0 0 0 2px red inset;
 }
 
 /*输入邮箱*/
@@ -1033,7 +1238,7 @@ export default {
 }
 
 /*获取验证码的按钮*/
-#sendVerificationCode {
+.sendVerificationCode {
     width: 100%;
     height: 32px;
     border-radius: 0 4px 4px 0;
@@ -1044,13 +1249,13 @@ export default {
 }
 
 /*悬停*/
-#sendVerificationCode:hover {
+.sendVerificationCode:hover {
     background: #59abff;
     cursor: url("../../assets/cursor/pointer.png"), pointer;
 }
 
 /*点击时*/
-#sendVerificationCode:active {
+.sendVerificationCode:active {
     background: #3b91eb;
 }
 
@@ -1066,6 +1271,13 @@ export default {
     border: whitesmoke;
     margin-top: 16px;
     margin-left: 80px;
+}
+
+/*重置密码界面的确认按钮*/
+.resetPasswordButton {
+    width: 100px;
+    border: whitesmoke;
+    margin-top: 14px;
 }
 
 @media (max-width: 350px) {
