@@ -44,8 +44,6 @@
             <!--是否显示登录界面-->
             <div v-if="isShowLoginWindow || isShowRegistrationWindow || isShowResetPassword" id="loginUi">
                 <p id="close" @click="closeWindow">✖</p>
-                <!--使用v-model绑定到对象的属性-->
-                <!--登录-->
                 <div v-if="isShowLoginWindow">
                     <p class="loginText">登录</p>
                     <form>
@@ -84,14 +82,20 @@
                             show-password
                             type="password"
                             @blur="checkPassword"
-                            @focus="this.inputPasswordError = false"
+                            @focus="inputPasswordFocus"
                             @keyup.enter="userLogin"
+                            @keyup="inputPasswordKeyup"
+                            @keydown="inputPasswordKeydown"
                         >
                             <template #prefix>
                                 <!--锁的图标-->
                                 <el-icon :size="22" class="avatar"><lock /></el-icon>
                             </template>
                         </el-input>
+                        <!--大写提示-->
+                        <template v-if="isFocusInputPassword">
+                            <el-tag class="capitalizationHint" v-show="bigChar" type="warning">大写锁定已打开</el-tag>
+                        </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：您的密码至少包括总共8位的英文和数字！
                         </p>
@@ -158,13 +162,19 @@
                             show-password
                             type="password"
                             @blur="checkPassword"
-                            @focus="this.inputPasswordError = false"
+                            @focus="inputPasswordFocus"
                             @keyup.enter="userRegistration"
+                            @keyup="inputPasswordKeyup"
+                            @keydown="inputPasswordKeydown"
                         >
                             <template #prefix>
                                 <el-icon :size="22" class="avatar"><lock /></el-icon>
                             </template>
                         </el-input>
+                        <!--大写提示-->
+                        <template v-if="isFocusInputPassword">
+                            <el-tag class="capitalizationHint" v-show="bigChar" type="warning">大写锁定已打开</el-tag>
+                        </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：密码至少要包括总共8位的英文和数字！
                         </p>
@@ -252,13 +262,19 @@
                             show-password
                             type="password"
                             @blur="checkPassword"
-                            @focus="this.inputPasswordError = false"
+                            @focus="inputPasswordFocus"
                             @keyup.enter="userRegistration"
+                            @keyup="inputPasswordKeyup"
+                            @keydown="inputPasswordKeydown"
                         >
                             <template #prefix>
                                 <el-icon :size="22" class="avatar"><lock /></el-icon>
                             </template>
                         </el-input>
+                        <!--大写提示-->
+                        <template v-if="isFocusInputPassword">
+                            <el-tag class="capitalizationHint" v-show="bigChar" type="warning">大写锁定已打开</el-tag>
+                        </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：密码至少要包括总共8位的英文和数字！
                         </p>
@@ -357,6 +373,12 @@ export default {
                 // 记录临时邮箱，防止填写完验证码之后修改邮箱——作弊
                 tempEmail: null,
             },
+            // 下面三个变量用于大写提示的功能（bigChar：聚焦到输入框为true）
+            bigChar: false,
+            // 用于是否同时按住shift键，按下组合键：Shift+字母键，也能大写，但不会提示
+            shiftKey: undefined,
+            // 是否聚焦到密码输入框
+            isFocusInputPassword: false,
         };
     },
     // 在Vue3中，新引入的Avatar, Lock要注册到全局，使之变成响应式，最好不要在components里注册
@@ -459,6 +481,17 @@ export default {
                 position: "bottom-right",
             });
         }
+
+        // 监听键盘是否开启大写锁定
+        window.addEventListener("keydown", (event) => {
+            let e = event || window.event;
+            //  检测大写锁定键
+            if (e.keyCode === 20) {
+                if (!this.isFocusInputPassword) {
+                    this.bigChar = !this.bigChar;
+                }
+            }
+        });
     },
     methods: {
         // 当用户指针进入时
@@ -539,12 +572,19 @@ export default {
         },
         // 检查密码输入是否正确
         checkPassword() {
+            // 将“是否正在聚焦”改为false
+            this.isFocusInputPassword = false;
             if (this.user.password.length !== 0) {
                 // 符合正则表达式，则inputAccountError为false，不符合则为true
                 this.inputPasswordError = !new RegExp("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$").test(
                     this.user.password
                 );
             }
+        },
+        // 输入密码时失去焦点
+        inputPasswordFocus() {
+            this.inputPasswordError = false;
+            this.isFocusInputPassword = true;
         },
         // 获取验证码
         sendVerificationCode() {
@@ -792,6 +832,12 @@ export default {
                             });
                             // 登录成功则关闭窗口：
                             this.isShowLoginWindow = false;
+                            // 清空输入的内容
+                            this.user = {
+                                name: "",
+                                password: "",
+                                verificationCode: "",
+                            };
                         } else if (response.data.result === "不存在此用户，请检查账号是否输入正确！") {
                             ElMessage({
                                 // 显示关闭按钮
@@ -817,6 +863,40 @@ export default {
                     type: "warning",
                 });
             }
+        },
+        // 用于密码输入框的键盘弹起事件，用于提示用户是否开启大写锁定键
+        inputPasswordKeyup(event) {
+            const _that = this;
+            // 判断是否按键为caps Lock
+            if (event.keyCode === 20) {
+                _that.bigChar = !_that.bigChar;
+                return;
+            }
+            // 按键不是caps Lock，判断每次最后输入的字母的大小写
+            let e = event || window.event;
+            let keyValue = e.keyCode ? e.keyCode : e.which;
+            let shiftKey = _that.shifKey;
+            if (typeof _that.userPassword === "undefined") return;
+            let userPassword = _that.userPassword;
+            let stringLength = userPassword.length;
+
+            if (stringLength) {
+                let uniCode = userPassword.charCodeAt(stringLength - 1);
+                // 65到90字母键
+                if (keyValue >= 65 && keyValue <= 90) {
+                    // 是否同时按住shift键
+                    _that.bigChar = !!(
+                        (uniCode >= 65 && uniCode <= 90 && !shiftKey) ||
+                        (uniCode >= 97 && uniCode <= 122 && shiftKey)
+                    );
+                }
+            }
+        },
+        // 用于密码输入框的键盘按下事件，用于提示用户是否开启大写锁定键
+        inputPasswordKeydown(event) {
+            let e = event || window.event;
+            let keyValue = e.keyCode ? e.keyCode : e.which;
+            this.shiftKey = e.shiftKey ? e.shiftKey : keyValue === 16;
         },
         // 忘记密码的文字按钮
         forgotPassword() {
@@ -1194,6 +1274,16 @@ export default {
     font-size: 20px;
     margin-bottom: 1vmax;
     margin-top: 1vmax;
+}
+
+/*大写提示*/
+.capitalizationHint {
+    // 独占一行
+    display: flex;
+    // 脱离文档流
+    position: absolute;
+    width: 24%;
+    margin-top: -12px;
 }
 
 /*邮箱和密码输入错误的警告*/
