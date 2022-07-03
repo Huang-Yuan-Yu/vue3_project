@@ -1,5 +1,7 @@
 # 待办事项项目
 
+[![OSCS Status](https://www.oscs1024.com/platform/badge/2690085099/vue3_project.git.svg?size=small)](https://www.murphysec.com/dr/GS72CaR6phOHqup2wy)
+
 <!--注意这里的网址最后不能加“/”，否则会有格式问题-->
 [待办事项](https://www.hyy666.top)，是一个基于前端框架 `Vue3`、后端框架 `ThinkPHP6`的前后端分离项目，会使用到JSON Web Token、Axios、Mitt、CryptoJS、Element-Plus等依赖。
 
