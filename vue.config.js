@@ -65,4 +65,19 @@ module.exports = {
             }),
         ],
     },
+    chainWebpack: (config) => {
+        // “npm install image-webpack-loader”，能够压缩图片
+        config.module
+            .rule("image")
+            .test(/\.(png|jpe?g|gif)(\?.*)?$/)
+            .use("image-webpack-loader")
+            .loader("image-webpack-loader")
+            .options({
+                // 此处为ture的时候不会启用压缩处理,目的是为了开发模式下调试速度更快
+                disable: process.env.NODE_ENV === "development",
+            })
+            .end();
+    },
+    // 生产环境禁用eslint
+    lintOnSave: !process.env.NODE_ENV !== "production",
 };
