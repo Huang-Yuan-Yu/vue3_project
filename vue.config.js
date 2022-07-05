@@ -52,7 +52,7 @@ module.exports = {
             msTileImage: "favicon.ico",
         },
     },
-    //其他配置（不能直接将plugins添加到下面，而是外面要有configureWebpack）
+    // 其他配置（不能直接将plugins添加到下面，而是外面要有configureWebpack）
     configureWebpack: {
         // 插件
         plugins: [

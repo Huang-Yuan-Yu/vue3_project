@@ -15,7 +15,6 @@
     "core-js": "^3.8.3",
     "element-plus": "^2.1.8",
     "image-webpack-loader": "^8.1.0",
-    "jsonwebtoken": "^8.5.1",
     "mitt": "^3.0.0",
     "register-service-worker": "^1.7.2",
     "vue": "^3.2.13",
@@ -44,7 +43,6 @@
     "jest": "^27.0.5",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
-    "terser-webpack-plugin": "^5.3.3",
     "unplugin-auto-import": "^0.8.7",
     "unplugin-vue-components": "^0.19.6"
   }

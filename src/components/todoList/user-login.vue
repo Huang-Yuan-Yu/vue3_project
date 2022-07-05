@@ -54,7 +54,7 @@
                             v-focus
                             v-model.trim="user.name"
                             :class="{ inputError: this.inputAccountError }"
-                            class="userAccountInput"
+                            class="noCodeUserAccountInput"
                             clearable
                             maxlength="40"
                             placeholder="请输入您的邮箱"
@@ -94,7 +94,7 @@
                         </el-input>
                         <!--大写提示-->
                         <template v-if="isFocusInputPassword">
-                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已打开</el-tag>
+                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已开启</el-tag>
                         </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：您的密码至少包括总共8位的英文和数字！
@@ -173,7 +173,7 @@
                         </el-input>
                         <!--大写提示-->
                         <template v-if="isFocusInputPassword">
-                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已打开</el-tag>
+                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已开启</el-tag>
                         </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：密码至少要包括总共8位的英文和数字！
@@ -273,7 +273,7 @@
                         </el-input>
                         <!--大写提示-->
                         <template v-if="isFocusInputPassword">
-                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已打开</el-tag>
+                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已开启</el-tag>
                         </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：密码至少要包括总共8位的英文和数字！
@@ -379,7 +379,7 @@ export default {
             bigChar: false,
             // 用于是否同时按住shift键，按下组合键：Shift+字母键，也能大写，但不会提示
             shiftKey: undefined,
-            // 是否聚焦到密码输入框
+            // 是否聚焦到密码输入框（用于提示大写的判断）
             isFocusInputPassword: false,
         };
     },
@@ -590,6 +590,7 @@ export default {
         },
         // 输入密码时失去焦点
         inputPasswordFocus() {
+            // 将错误提示临时取消
             this.inputPasswordError = false;
             this.isFocusInputPassword = true;
         },
@@ -1334,6 +1335,11 @@ export default {
     border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
     // 内阴影，充当边框，这样就不会占用空间
     box-shadow: 0 0 0 2px red inset;
+}
+
+/*无附带获取验证码按钮的邮箱输入框*/
+.noCodeUserAccountInput {
+    margin-bottom: 16px;
 }
 
 /*输入邮箱*/
