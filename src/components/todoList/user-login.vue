@@ -1223,7 +1223,7 @@ export default {
 }
 
 /*登录界面*/
-#wechatMiniProgramDiv {
+#loginUi {
     max-width: 370px;
     min-width: 10%;
     max-height: 350px;
