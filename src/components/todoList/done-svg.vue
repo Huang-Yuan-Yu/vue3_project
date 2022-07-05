@@ -1,7 +1,7 @@
 <template>
     <div class="doneSvg">
         <!--svg标签作为外框。viewBox：后两个参数分别是宽和高-->
-        <svg width="24" height="24" viewBox="0 0 400 400">
+        <svg height="24" viewBox="0 0 400 400" width="24">
             <transition name="doneSvg">
                 <!--v-if——根据父组件传下来的Boolean值，决定是否要显示
                 polyline标签：绘制多段线

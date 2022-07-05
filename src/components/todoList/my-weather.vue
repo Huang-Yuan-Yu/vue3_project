@@ -1,13 +1,20 @@
 <template>
-    <!--天气div-->
-    <div id="weatherLogoDiv">
-        <a><img id="weatherLogo" alt="天气图标" src="../../assets/weather.png" @mouseenter="userMouseEnter" /></a>
-    </div>
+    <div id="my-weather">
+        <!--天气div-->
+        <div id="weatherLogoDiv">
+            <a>
+                <!--当isShowWeather为true时，则开始展示天气面板，同时就禁用提示-->
+                <el-tooltip :disabled="isShowWeather" content="天气" effect="light" placement="bottom">
+                    <img id="weatherLogo" alt="天气图标" src="../../assets/weather.png" @click="userMouseEnter" />
+                </el-tooltip>
+            </a>
+        </div>
 
-    <!--天气组件的div-->
-    <div id="weatherDiv">
-        <!--引入第三方天气组件-->
-        <yy-weather v-show="isShowWeather"></yy-weather>
+        <!--天气组件的div-->
+        <div id="weatherDiv">
+            <!--引入第三方天气组件-->
+            <yy-weather v-show="isShowWeather"></yy-weather>
+        </div>
     </div>
 </template>
 
@@ -58,7 +65,6 @@ export default {
                 this.isShowWeather = true;
             }
         },
-        
     },
 };
 </script>
@@ -74,12 +80,22 @@ export default {
 /*天气图标*/
 #weatherLogo {
     width: 30px;
-    filter: drop-shadow(-20px -20px 14px rgb(51, 51, 51));
     margin-top: 3vh;
-    margin-left: 1.4vw;
+    margin-left: 14px;
+    /*为了让tooltip位于准确的地方*/
+    padding-right: 2px;
     /*禁止被选中*/
     user-select: none;
     /*从右边开始排列*/
     justify-content: flex-start;
+}
+
+#weatherLogo:hover {
+    cursor: url("../../assets/cursor/pointer.png"), pointer;
+}
+
+/*点击时的样式*/
+#weatherLogo:active {
+    filter: brightness(60%);
 }
 </style>

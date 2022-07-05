@@ -19,7 +19,7 @@ export default {
         });
         return encrypted.toString();
     },
-    
+
     /**
      * AES-256-ECB对称解密
      * @param textBase64 {string} 要解密的密文，Base64格式

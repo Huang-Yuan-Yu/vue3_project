@@ -2,7 +2,7 @@
 <template>
     <div id="my-test">
         <!--用于平滑刷新网页状态，v-if先是false，然后瞬间切换为true-->
-        <ToDoMvc v-if="isRouterAlive"/>
+        <ToDoMvc v-if="isRouterAlive" />
     </div>
 </template>
 

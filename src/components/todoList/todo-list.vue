@@ -10,7 +10,7 @@
             <img
                 v-show="showBackgroundImage"
                 id="backgroundImage"
-                :class="{ backgroundBlur: backgroundIsBlur }"
+                :class="{ backgroundBlur: $store.state.backgroundIsBlur }"
                 :src="require(`@/assets/scenery/${imageUrl}.jpg`)"
                 alt="背景图片"
                 draggable="false"
@@ -22,8 +22,10 @@
         <userLogin ref="userLogin"></userLogin>
         <!--引入包含天气组件的组件-->
         <my-weather ref="myWeather"></my-weather>
+        <!--引入侧边工具栏的组件-->
+        <side-toolbar></side-toolbar>
         <!--说明：单击左边圆形可标记为完成事项或取消，双击文字可修改内容，输入框按回车可添加事项-->
-        <el-form id="todoForm" :class="{ backgroundBlur: backgroundIsBlur }" @click="closeWindows">
+        <el-form id="todoForm" :class="{ backgroundBlur: $store.state.backgroundIsBlur }" @click="closeWindows">
             <p id="YyTodo">YY待办</p>
             <p v-if="serverStatus === '未知'" class="currentStatus" style="color: #909399">正在连接服务器中······</p>
             <!--如果服务器关闭了-->
@@ -45,10 +47,11 @@
 
             <label id="inputAndButton">
                 <!--isShowLineFeed：是否显示提示，在下面的方法里设置数秒后会禁用
-                userEquipment等于null，证明是PC端，不是null就是其他设备-->
+                userEquipment等于null，证明是PC端，不是null就是其他设备
+                $store.state.userEquipment是使用Vuex的state里的变量-->
                 <el-tooltip
+                    :content="$store.state.userEquipment === null ? 'Ctrl+Enter换行' : '回车键添加'"
                     :disabled="isShowLineFeed"
-                    :content="userEquipment === null ? 'Ctrl+Enter换行' : '回车键添加'"
                     effect="light"
                     placement="left"
                 >
@@ -64,14 +67,14 @@
                     <el-input
                         id="inputTodo"
                         ref="inputTodo"
-                        v-focus
                         v-model="userInput"
-                        :autosize="{ minRows: 2, maxRows: 4 }"
-                        @focus="inputFocus"
+                        v-focus
                         :[inputStatus]="inputStatus"
+                        :autosize="{ minRows: 2, maxRows: 4 }"
                         clearable
                         placeholder="请输入您的待办事项"
                         type="textarea"
+                        @focus="inputFocus"
                         @keyup.enter.exact="addToDo"
                         @keyup.ctrl.enter="lineFeed"
                         @focus.once="closeLineFeedTip"
@@ -80,6 +83,7 @@
                 <!--这里不能加:disabled="inputDisabled"，会覆盖自定义的光标样式
                 如果“userEquipment === null”，证明是PC端，就有一个添加按钮，不用改成换行按钮，因为PC可以用Ctrl+Enter组合键-->
                 <el-button
+                    v-if="$store.state.userEquipment === null"
                     id="addToDo"
                     :class="{
                         addToDoDisabledCursor: inputDisabled === true,
@@ -87,11 +91,11 @@
                     }"
                     type="primary"
                     @click="addToDo"
-                    v-if="userEquipment === null"
                     >添加
                 </el-button>
                 <!--换行按钮-->
                 <el-button
+                    v-if="$store.state.userEquipment !== null"
                     id="addToDo"
                     :class="{
                         addToDoDisabledCursor: inputDisabled === true,
@@ -99,7 +103,6 @@
                     }"
                     type="primary"
                     @click="lineFeed"
-                    v-if="userEquipment !== null"
                     >换行
                 </el-button>
             </label>
@@ -237,9 +240,9 @@
                                     <!--弹出“气泡卡片”——trigger：触发方式，hover则是鼠标悬停触发-->
                                     <el-popover
                                         ref="popover"
-                                        title="最近一次修改时间"
                                         :content="todo.time"
                                         placement="top"
+                                        title="最近一次修改时间"
                                         trigger="hover"
                                     >
                                         <template #reference>
@@ -261,6 +264,10 @@
                 </ul>
             </el-scrollbar>
         </el-form>
+        <footer id="beiAnFooter">
+            <span class="beiAnText">工信部备案号：</span
+            ><a class="beiAnText" href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2022064736号</a>
+        </footer>
     </div>
 </template>
 
@@ -302,12 +309,13 @@ import { InfoFilled } from "@element-plus/icons-vue";
 import emitter from "@/jsFunction/eventbus";
 // 引入天气组件
 import MyWeather from "@/components/todoList/my-weather";
+import SideToolbar from "@/components/todoList/side-toolbar";
 
 export default {
     name: "todo-list",
     // 注入my-test组件提供（provide）的reload依赖，用于刷新页面
     inject: ["reload"],
-    components: { MyWeather, userLogin, doneSvg },
+    components: { SideToolbar, MyWeather, userLogin, doneSvg },
     // Vue3特有的组合式API
     setup() {
         // 将UI库的图标信息暴露给模板，如果没有此操作，会报警告
@@ -317,10 +325,6 @@ export default {
     },
     data() {
         return {
-            // 用户设备
-            userEquipment: navigator.userAgent.match(
-                /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
-            ),
             // 引用图片用的随机数
             imageUrl: Math.floor(Math.random() * 3),
             // 服务器状态——未知、关闭或开启，默认为未知，如果出现网络错误，则赋值为“关闭”
@@ -439,10 +443,10 @@ export default {
                     this.$refs.userLogin.isShowResetPassword
                 );
             },
-            // 是否有打开登录、注册等窗口
+            // 是否有打开登录、注册等窗口（isOpen为布尔值）
             (isOpen) => {
-                // 如果有，那么就将背景虚化，否则就取消虚化
-                this.backgroundIsBlur = isOpen;
+                // 如果有，那么就将背景虚化，否则就取消虚化（backgroundIsBlur是actions里的一个变量，这里直接填字符串参数）
+                this.$store.dispatch("backgroundIsBlur", isOpen);
             }
         );
 
@@ -1120,7 +1124,6 @@ export default {
     background: rgba(30, 30, 30, 0.6);
     box-shadow: 0 0 6px rgba(60, 60, 60, 0.6);
     position: relative;
-    top: 10%;
     padding-left: 20px;
     padding-right: 20px;
     /*过渡时间*/
@@ -1377,5 +1380,25 @@ export default {
 /*修改事项用到的输入框*/
 ::v-deep(.revisedInputBox, .el-textarea__inner) {
     width: 20vw;
+}
+
+/*网站备案的Footer——类似于Div*/
+#beiAnFooter {
+    width: 100%;
+    position: absolute;
+    bottom: 1vh;
+    text-align: center;
+}
+
+/*网站备案*/
+.beiAnText {
+    font-size: 1vh;
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+}
+
+.beiAnText::selection {
+    color: #004da3;
+    background: white;
 }
 </style>

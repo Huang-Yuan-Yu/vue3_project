@@ -1,7 +1,7 @@
 <template>
     <!--过渡标签一定要在最外面-->
     <transition name="weatherTransition">
-        <div class="weather" @mouseleave="userMouseleave" @mouseenter="enterWeather">
+        <div class="weather" @mouseenter="enterWeather" @mouseleave="userMouseleave">
             <!--整个天气组件的div-->
             <div id="he-plugin-standard"></div>
         </div>
@@ -52,7 +52,6 @@ export default defineComponent({
             this.closeTimeout = setTimeout(() => {
                 emitter.emit("是否关闭天气模块", "是");
             }, 1500);
-            
         },
         // 鼠标移进天气模块
         enterWeather() {

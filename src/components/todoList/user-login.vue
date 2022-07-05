@@ -83,9 +83,9 @@
                             type="password"
                             @blur="checkPassword"
                             @focus="inputPasswordFocus"
-                            @keyup.enter="userLogin"
-                            @keyup="inputPasswordKeyup"
                             @keydown="inputPasswordKeydown"
+                            @keyup="inputPasswordKeyup"
+                            @keyup.enter="userLogin"
                         >
                             <template #prefix>
                                 <!--锁的图标-->
@@ -94,7 +94,7 @@
                         </el-input>
                         <!--大写提示-->
                         <template v-if="isFocusInputPassword">
-                            <el-tag class="capitalizationHint" v-show="bigChar" type="warning">大写锁定已打开</el-tag>
+                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已打开</el-tag>
                         </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：您的密码至少包括总共8位的英文和数字！
@@ -116,16 +116,16 @@
                                     v-focus
                                     v-model.trim="user.name"
                                     :class="{ inputError: this.inputAccountError }"
+                                    autocomplete="nope"
                                     class="userAccountInput"
                                     clearable
                                     maxlength="40"
-                                    type="email"
                                     placeholder="请输入您的邮箱（作为依据）"
                                     show-word-limit
+                                    type="email"
                                     @blur="checkAccount"
                                     @focus="this.inputAccountError = false"
                                     @keyup.enter="userRegistration"
-                                    autocomplete="nope"
                                 >
                                     <template #prefix>
                                         <el-icon :size="22" class="avatar"><avatar /></el-icon>
@@ -135,18 +135,18 @@
                             <el-col :span="5">
                                 <!--获取验证码的按钮，发送后60秒处于禁用状态（如果这里为button，则会导致回车事件页面刷新的BUG-->
                                 <input
+                                    v-if="getVerificationCode.loading === false"
+                                    :value="getVerificationCode.text"
                                     class="sendVerificationCode"
                                     type="button"
                                     @click="sendVerificationCode"
-                                    v-if="getVerificationCode.loading === false"
-                                    :value="getVerificationCode.text"
                                 />
                                 <!--包含获取中动画的按钮-->
                                 <el-button
-                                    type="primary"
+                                    v-if="getVerificationCode.loading === true"
                                     class="sendVerificationCode"
                                     loading
-                                    v-if="getVerificationCode.loading === true"
+                                    type="primary"
                                     >获取中
                                 </el-button>
                             </el-col>
@@ -163,9 +163,9 @@
                             type="password"
                             @blur="checkPassword"
                             @focus="inputPasswordFocus"
-                            @keyup.enter="userRegistration"
-                            @keyup="inputPasswordKeyup"
                             @keydown="inputPasswordKeydown"
+                            @keyup="inputPasswordKeyup"
+                            @keyup.enter="userRegistration"
                         >
                             <template #prefix>
                                 <el-icon :size="22" class="avatar"><lock /></el-icon>
@@ -173,7 +173,7 @@
                         </el-input>
                         <!--大写提示-->
                         <template v-if="isFocusInputPassword">
-                            <el-tag class="capitalizationHint" v-show="bigChar" type="warning">大写锁定已打开</el-tag>
+                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已打开</el-tag>
                         </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：密码至少要包括总共8位的英文和数字！
@@ -183,13 +183,13 @@
                                 <el-input
                                     v-model.trim="user.verificationCode"
                                     :class="{ inputError: this.inputVerificationCodeError }"
-                                    @focus="this.inputVerificationCodeError = false"
                                     class="userPasswordInput"
                                     clearable
                                     maxlength="6"
                                     placeholder="验证码"
                                     show-word-limit
                                     type="text"
+                                    @focus="this.inputVerificationCodeError = false"
                                     @keyup.enter="userRegistration"
                                 >
                                     <template #prefix>
@@ -216,16 +216,16 @@
                                     v-focus
                                     v-model.trim="user.name"
                                     :class="{ inputError: this.inputAccountError }"
+                                    autocomplete="nope"
                                     class="userAccountInput"
                                     clearable
                                     maxlength="40"
-                                    type="email"
                                     placeholder="请输入您的邮箱"
                                     show-word-limit
+                                    type="email"
                                     @blur="checkAccount"
                                     @focus="this.inputAccountError = false"
                                     @keyup.enter="userRegistration"
-                                    autocomplete="nope"
                                 >
                                     <template #prefix>
                                         <el-icon :size="22" class="avatar"><avatar /></el-icon>
@@ -235,18 +235,18 @@
                             <el-col :span="5">
                                 <!--获取验证码的按钮，发送后60秒处于禁用状态（如果这里为button，则会导致回车事件页面刷新的BUG-->
                                 <input
+                                    v-if="getVerificationCode.loading === false"
+                                    :value="getVerificationCode.text"
                                     class="sendVerificationCode"
                                     type="button"
                                     @click="sendVerificationCode"
-                                    v-if="getVerificationCode.loading === false"
-                                    :value="getVerificationCode.text"
                                 />
                                 <!--包含获取中动画的按钮-->
                                 <el-button
-                                    type="primary"
+                                    v-if="getVerificationCode.loading === true"
                                     class="sendVerificationCode"
                                     loading
-                                    v-if="getVerificationCode.loading === true"
+                                    type="primary"
                                     >获取中
                                 </el-button>
                             </el-col>
@@ -263,9 +263,9 @@
                             type="password"
                             @blur="checkPassword"
                             @focus="inputPasswordFocus"
-                            @keyup.enter="userRegistration"
-                            @keyup="inputPasswordKeyup"
                             @keydown="inputPasswordKeydown"
+                            @keyup="inputPasswordKeyup"
+                            @keyup.enter="userRegistration"
                         >
                             <template #prefix>
                                 <el-icon :size="22" class="avatar"><lock /></el-icon>
@@ -273,7 +273,7 @@
                         </el-input>
                         <!--大写提示-->
                         <template v-if="isFocusInputPassword">
-                            <el-tag class="capitalizationHint" v-show="bigChar" type="warning">大写锁定已打开</el-tag>
+                            <el-tag v-show="bigChar" class="capitalizationHint" type="warning">大写锁定已打开</el-tag>
                         </template>
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：密码至少要包括总共8位的英文和数字！
@@ -283,13 +283,13 @@
                                 <el-input
                                     v-model.trim="user.verificationCode"
                                     :class="{ inputError: this.inputVerificationCodeError }"
-                                    @focus="this.inputVerificationCodeError = false"
+                                    :placeholder="$store.state.userEquipment === null ? '请输入验证码' : '验证码'"
                                     class="userPasswordInput"
                                     clearable
                                     maxlength="6"
-                                    placeholder="验证码"
                                     show-word-limit
                                     type="text"
+                                    @focus="this.inputVerificationCodeError = false"
                                     @keyup.enter="userRegistration"
                                 >
                                     <template #prefix>
@@ -323,6 +323,8 @@ import { ElNotification } from "element-plus";
 import { loginTime } from "@/jsFunction/todoList";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
+// 从vuex中引入各个“辅助函数”，能够更方便地使用vuex
+import { mapGetters } from "vuex";
 
 export default {
     name: "user-login",
@@ -358,8 +360,8 @@ export default {
             inputVerificationCodeError: false,
             // 验证码
             getVerificationCode: {
-                // 按钮用的文本，会动态变化
-                text: "获取验证码",
+                // 按钮用的文本，会动态变化，这里引用Vuex的state变量
+                text: this.$store.state.userEquipment === null ? "获取验证码" : "取验证码",
                 // 获取到的验证码
                 verificationCode: null,
                 // 是否正在获取
@@ -389,6 +391,11 @@ export default {
             // 密码的锁图标
             Lock,
         };
+    },
+    // 计算属性
+    computed: {
+        // mapGetters是为了获取数据，这里使用对象展开运算符，将数组里的每个元素都展开成为每一个变量
+        ...mapGetters(["userEquipment"]),
     },
     // 当页面加载完毕时
     mounted() {
@@ -630,33 +637,49 @@ export default {
                         verificationCode: this.getVerificationCode.verificationCode,
                     })
                     .then((response) => {
+                        if (response.data === "已存在此用户，请更换邮箱地址！") {
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: response.data,
+                                type: "warning",
+                            });
+                        } else if (response.data === "验证码获取失败···") {
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: response.data,
+                                type: "error",
+                            });
+                        } else if (response.data === "验证码已发送到您的邮箱！") {
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: response.data,
+                                type: "success",
+                            });
+
+                            // 倒计时期间按钮不能单击（为true，按钮处于禁用状态）
+                            this.getVerificationCode.disabled = true;
+                            // 清除掉定时器
+                            this.getVerificationCode.timer && clearInterval(this.getVerificationCode.timer);
+                            // 开启定时器；注意！setInterval是间歇调用，这里是每1000毫秒（1秒）调用一次
+                            this.getVerificationCode.timer = setInterval(() => {
+                                const temporary = this.getVerificationCode.duration--;
+                                this.getVerificationCode.text = `${temporary}秒后重取`;
+                                if (temporary <= 0) {
+                                    // 清除掉定时器
+                                    clearInterval(this.getVerificationCode.timer);
+                                    this.getVerificationCode.duration = 60;
+                                    this.getVerificationCode.text = "重新获取";
+                                    // 设置按钮可以单击
+                                    this.getVerificationCode.disabled = false;
+                                }
+                            }, 1000);
+                        }
                         // 发送完毕，就将“获取中”的状态关闭
                         this.getVerificationCode.loading = false;
-                        ElMessage({
-                            // 显示关闭按钮
-                            showClose: true,
-                            message: response.data,
-                            type: "success",
-                        });
                     });
-
-                // 倒计时期间按钮不能单击（为true，按钮处于禁用状态）
-                this.getVerificationCode.disabled = true;
-                // 清除掉定时器
-                this.getVerificationCode.timer && clearInterval(this.getVerificationCode.timer);
-                // 开启定时器；注意！setInterval是间歇调用，这里是每1000毫秒（1秒）调用一次
-                this.getVerificationCode.timer = setInterval(() => {
-                    const temporary = this.getVerificationCode.duration--;
-                    this.getVerificationCode.text = `${temporary}秒后重取`;
-                    if (temporary <= 0) {
-                        // 清除掉定时器
-                        clearInterval(this.getVerificationCode.timer);
-                        this.getVerificationCode.duration = 60;
-                        this.getVerificationCode.text = "重新获取";
-                        // 设置按钮可以单击
-                        this.getVerificationCode.disabled = false;
-                    }
-                }, 1000);
             }
         },
         // 用户注册
@@ -1200,11 +1223,10 @@ export default {
 }
 
 /*登录界面*/
-#loginUi {
+#wechatMiniProgramDiv {
     max-width: 370px;
     min-width: 10%;
     max-height: 350px;
-    /*min-height: 200px;*/
     text-align: center;
     /*使div在屏幕居中*/
     position: absolute;
@@ -1214,10 +1236,8 @@ export default {
     bottom: 0;
     margin: auto;
     border-radius: 20px;
-    /*毛玻璃效果*/
     background: rgba(30, 30, 30, 0.6);
     box-shadow: 0 0 6px rgba(30, 30, 30, 0.6);
-    /*backdrop-filter: blur(10px);*/
     padding-left: 40px;
     padding-right: 40px;
     /*这里是用户图标展开后的div，解决动画期间，屏幕闪烁的Bug（注意！要用在<template>标签下面的第一个标签*/
