@@ -1,8 +1,12 @@
 一个公钥同时使用于GitHub和Gitee平台！
+origin/main：指的是远程分支的分支名称为main，在以前叫master，因为受到“Black Lives Matter”运动和民众情绪的影响，所以推荐改主分支名
 
 “git add .”：能够将项目下所有未提交到暂存区的文件提交
-“git status”：可以查看当前状态
 “git commit -m "本次提交的描述内容" ”：将暂存区的内容提交到本地仓库
 “git restore .”：丢弃更改所有更改，如果“.”换成文件名，就是丢弃某个文件的更改
 “git push”：将修改推送到远程仓库（如GitHub、Gitee等）
+“git remote set-url origin 仓库Git地址”：切换当前Git命令所操作的远程仓库
+
+“git status”：可以查看当前状态
 “git branch -a”：查看所有分支，第一个为本地分支，第二个为远程仓库分支gi
+“git remote -v”：查看远程仓库的地址
