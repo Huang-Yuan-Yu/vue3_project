@@ -1,13 +1,8 @@
-同时使用GitHub和Gitee平台：https://blog.csdn.net/qq_41621362/article/details/112140343
+一个公钥同时使用于GitHub和Gitee平台！
 
 “git add .”：能够将项目下所有未提交到暂存区的文件提交
 “git status”：可以查看当前状态
-“git commit -m "本次提交的描述内容"”：将暂存区的内容提交到本地仓库
+“git commit -m "本次提交的描述内容" ”：将暂存区的内容提交到本地仓库
 “git restore .”：丢弃更改所有更改，如果“.”换成文件名，就是丢弃某个文件的更改
 “git push”：将修改推送到远程仓库（如GitHub、Gitee等）
-
-解决推送时需要输入用户名、密码的问题，在项目根目录下输入以下命令：
-git remote set-url origin https://<your_token>@github.com/<USERNAME>/<REPO>.git
-<your_token>：换成你自己得到的token
-<USERNAME>：是你自己github的用户名
-<REPO>：是你的仓库名称
+“git branch -a”：查看所有分支，第一个为本地分支，第二个为远程仓库分支gi
