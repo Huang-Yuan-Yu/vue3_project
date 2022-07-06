@@ -8,6 +8,8 @@ git remote set-url origin https://填写你的密钥@gitee.com/HYY2690085099/vue
 <USERNAME>：是你自己github的用户名
 <REPO>：是你的仓库名称
 
+git remote set-url origin https://gitee.com/HYY2690085099/vue3_project.git
+
 “git add .”：能够将项目下所有未提交到暂存区的文件提交
 “git commit -m "本次提交的描述内容" ”：将暂存区的内容提交到本地仓库
 “git restore .”：丢弃更改所有更改，如果“.”换成文件名，就是丢弃某个文件的更改
