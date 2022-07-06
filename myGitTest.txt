@@ -1,0 +1,6 @@
+同时使用GitHub和Gitee平台：https://blog.csdn.net/qq_41621362/article/details/112140343
+
+“git add .”：能够将项目下所有未提交到暂存区的文件提交
+“git status”：可以查看当前状态
+“git commit -m "本次提交的描述内容"”：将暂存区的内容提交到本地仓库
+“git restore .”：丢弃更改所有更改，如果“.”换成文件名，就是丢弃某个文件的更改
