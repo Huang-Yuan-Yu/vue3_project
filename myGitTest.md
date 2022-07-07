@@ -33,22 +33,19 @@ git push
 ### 4. 丢弃更改所有更改，如果“.”换成文件名，就是丢弃某个文件的更改
 
 ```shell
-git restore
-.
+git restore .
 ```
 
 ### 5. 切换当前Git命令所操作的远程仓库
 
 ```shell
-git remote set-url origin 仓库Git地址
-.
+git remote set-url origin 仓库Git地址 .
 ```
 
 ### 6. 新建分支，并切换到新的分支
 
 ```shell
-git switch -c 分支名
-.
+git switch -c 分支名 .
 ```
 
 ### 7. 合并指定分支到当前分支
