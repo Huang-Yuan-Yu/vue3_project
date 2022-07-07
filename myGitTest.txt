@@ -29,3 +29,8 @@ git remote set-url origin https://gitee.com/HYY2690085099/vue3_project.gitgit
 在不同的机器上做提交的情况：
 远程分支上存在本地分支中不存在的提交，往往是多人协作开发过程中遇到的问题，可以先fetch再merge，也就是pull，把远程分支上的提交合并到本地分支之后再push。
 如果你确定远程分支上那些提交都不需要了，那么直接git push origin master -f，强行让本地分支覆盖远程分支
+
+将子分支合并到主分支：
+先切换到主分支：git checkout 主分支名称
+然后最好拉取主分支最新的代码：git pull
+然后将子分支合并到当前分支（主分支）：git merge 子分支名称
