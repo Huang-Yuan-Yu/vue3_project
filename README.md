@@ -15,7 +15,8 @@
 | 待办事项后端 | [https://thinkphp.hyy666.top](https://thinkphp.hyy666.top) | 2022-05-29 |
 | B站解说视频 | [https://www.bilibili.com/video/BV12S4y1i7Wg](https://www.bilibili.com/video/BV12S4y1i7Wg) | 2022-06-27 |
 | A站解说视频 | [https://www.acfun.cn/v/ac35445891](https://www.acfun.cn/v/ac35445891) | 2022-06-27 |
-| 后端代码位置 | [https://github.com/2690085099/php_project](https://github.com/2690085099/php_project) | 2022-07-03 |
+| 后端GitHub地址 | [https://github.com/2690085099/php_project](https://github.com/2690085099/php_project) | 2022-07-03 |
+| 后端Gitee地址 | [https://gitee.com/HYY2690085099/php_project](https://gitee.com/HYY2690085099/php_project) | 2022-07-07 |
 
 ## 如何使用
 **在根目录下执行安装依赖包的命令：**
