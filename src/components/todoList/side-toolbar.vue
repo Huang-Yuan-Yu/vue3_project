@@ -31,6 +31,10 @@
                     <el-image :src="require('@/assets/GitHub.png')" class="toolsLogo" fit="contain" />
                     <span class="toolsText">站长的Github</span>
                 </div>
+                <div class="tools" @click="toGitee">
+                    <el-image :src="require('@/assets/Gitee.png')" class="toolsLogo" fit="contain" />
+                    <span class="toolsText">站长的Gitee</span>
+                </div>
             </div>
         </el-drawer>
 
@@ -92,6 +96,10 @@ export default {
         toGitHub() {
             // 在新窗口打开外链接
             window.open("https://github.com/2690085099", "_blank");
+        },
+        // 跳转到我的Gitee首页
+        toGitee() {
+            window.open("https://gitee.com/HYY2690085099", "_blank");
         },
     },
 };

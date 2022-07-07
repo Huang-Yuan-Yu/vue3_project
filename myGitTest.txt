@@ -15,5 +15,15 @@ git remote set-url origin https://gitee.com/HYY2690085099/vue3_project.gitgit
 “git remote set-url origin 仓库Git地址”：切换当前Git命令所操作的远程仓库
 
 “git status”：可以查看当前状态
-“git branch -a”：查看所有分支，第一个为本地分支，第二个为远程仓库分支gi
+“git branch -a”：查看所有分支，白色字体为本地分支，红色字体为远程仓库分支，前面带星号的为当前分支
+“git branch“：查看本地仓库的分支——“git branch -r”：查看远程仓库的分支
+“git branch 分支名”：新建分支，但依然停留在当前分支
+“git checkout -b 分支名”：新建分支，并切换到新的分支
+“git merge 分支名”：合并指定分支到当前分支
+“git branch -d 分支名”：删除分支
+“git push origin --delete 分支名”+“git branch -dr 分支名”：删除远程分支
 “git remote -v”：查看远程仓库的地址
+
+在不同的机器上做提交的情况：
+远程分支上存在本地分支中不存在的提交，往往是多人协作开发过程中遇到的问题，可以先fetch再merge，也就是pull，把远程分支上的提交合并到本地分支之后再push。
+如果你确定远程分支上那些提交都不需要了，那么直接git push origin master -f，强行让本地分支覆盖远程分支
