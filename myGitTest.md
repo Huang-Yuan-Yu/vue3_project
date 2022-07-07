@@ -166,10 +166,23 @@ git pull
 git merge 子分支名称
 ```
 
+### 17. 从本地删除远程仓库地址
+
+```shell
+git remote rm 仓库名称（不是地址）
+```
+
 提交到远程仓库的一系列便捷操作：
+
 ```shell
 git add .
 git commit -m "完善文档"
 git push
 
+```
+
+### 18. 强制推送（解决“error: failed to push some refs to···）
+
+```shell
+git push -u origin 分支名称 -f 
 ```
