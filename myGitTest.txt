@@ -14,10 +14,10 @@ git remote set-url origin https://gitee.com/HYY2690085099/vue3_project.gitgit
 “git push”：将修改推送到远程仓库（如GitHub、Gitee等）
 
 “git remote set-url origin 仓库Git地址”：切换当前Git命令所操作的远程仓库
-“git checkout -b 分支名”：新建分支，并切换到新的分支
+“git switch -c 分支名”：新建分支，并切换到新的分支
 “git merge 分支名”：合并指定分支到当前分支
 “git branch -d 分支名”：删除分支
-“git checkout 分支名”：切换到指定分支
+“git switch 分支名”：切换到指定分支
 “git push origin --delete 分支名”+“git branch -dr 分支名”：删除远程分支
 
 “git status”：可以查看当前状态
@@ -35,4 +35,6 @@ git remote set-url origin https://gitee.com/HYY2690085099/vue3_project.gitgit
 然后最好拉取主分支最新的代码：git pull
 然后将子分支合并到当前分支（主分支）：git merge 子分支名称
 
-（我故意修改错的）
+回滚：
+先查看commitID：“git reflog”里的开头一串字符
+然后用“git checkout 提交ID”回滚代码到本地（此时远程仓库未回滚）
