@@ -30,6 +30,15 @@
                     </div>
                     <div v-if="loginSuccess" id="loginSuccess" class="scale-in-tr">
                         <p class="loginStatus">欢迎您 {{ myName }}</p>
+                        <el-button
+                            class="userButton"
+                            color="#1e1e1e"
+                            size="large"
+                            type="info"
+                            @click="openSetAvatarWindow"
+                        >
+                            设置头像
+                        </el-button>
                         <el-button class="userButton" color="#1e1e1e" size="large" type="info" @click="userLogout">
                             退出登录
                         </el-button>
@@ -37,8 +46,31 @@
                 </div>
             </transition>
 
-            <a><img id="userLogo" alt="用户图标" src="../../assets/userLogo.png" @mouseenter="userMouseEnter" /></a>
+            <!--未登录时显示未登录的头像-->
+            <a>
+                <img
+                    class="userLogo"
+                    alt="未登录时的用户头像"
+                    src="../../assets/userLogo.png"
+                    @mouseenter="userMouseEnter"
+                    v-if="loginSuccess === false"
+            /></a>
+            <!--登录后显示用户的头像，如果未设置头像，则显示默认头像-->
+            <a>
+                <img
+                    class="userLogo"
+                    alt="登录后的用户头像"
+                    :src="
+                        $store.state.userAvatarData === null
+                            ? require('@/assets/defaultAvatar.png')
+                            : $store.state.userAvatarData
+                    "
+                    @mouseenter="userMouseEnter"
+                    v-if="loginSuccess === true"
+            /></a>
         </div>
+        <!--设置用户头像的组件，将布尔值变量传入子组件，决定子组件是否要显示-->
+        <set-avatar :isShowSetAvatarWindow="isShowSetAvatarWindow" :myName="myName" ref="setAvatar"></set-avatar>
 
         <transition name="loginUi">
             <!--是否显示登录界面-->
@@ -323,17 +355,18 @@ import { ElNotification } from "element-plus";
 import { loginTime } from "@/jsFunction/todoList";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
-// 从vuex中引入各个“辅助函数”，能够更方便地使用vuex
-import { mapGetters } from "vuex";
+import SetAvatar from "@/components/todoList/set-avatar";
 
 export default {
     name: "user-login",
+    components: { SetAvatar },
     data() {
         return {
-            // 登录时，用户名和密码
+            // 用户信息
             user: {
                 name: "",
                 password: "",
+                // 验证码
                 verificationCode: "",
             },
             // 三元运算符，判断本地存储的name值是否为null，如果为null就证明用户未登录，未登录时myName就为null，登录后就获取对应的用户名
@@ -352,6 +385,8 @@ export default {
             isShowResetPassword: false,
             // 是否要显示注册窗口
             isShowRegistrationWindow: false,
+            // 是否要显示用户设置头像窗口
+            isShowSetAvatarWindow: false,
             // 输入的邮箱是否有误：
             inputAccountError: false,
             // 输入的邮箱是否有误：
@@ -392,17 +427,13 @@ export default {
             Lock,
         };
     },
-    // 计算属性
-    computed: {
-        // mapGetters是为了获取数据，这里使用对象展开运算符，将数组里的每个元素都展开成为每一个变量
-        ...mapGetters(["userEquipment"]),
-    },
     // 当页面加载完毕时
     mounted() {
         // 如果已登录，就对Token进行验证：
         if (this.loginSuccess === true) {
             this.$axios({
                 method: "post",
+                data: { name: localStorage.getItem("name") },
                 url: "/api/TodoList/verification",
                 // 每次请求都会在HTTP请求头中加上token的值
                 headers: {
@@ -417,6 +448,7 @@ export default {
                     localStorage.removeItem("jwt");
                     localStorage.removeItem("name");
                     localStorage.removeItem("password");
+                    localStorage.removeItem("userAvatarData");
                     // 将登录状态设置为false，将本地存储的用户名设置为空
                     this.loginSuccess = false;
                     this.myName = null;
@@ -444,6 +476,8 @@ export default {
                 }
                 // 如果Token认证成功
                 else {
+                    // 将头像的数据保存到Vuex的state中
+                    this.$store.dispatch("setShowAvatar", response.data.avatar);
                     this.myName = localStorage.getItem("name");
                     emitter.emit("Token认证", "认证成功");
                     // 趁现在还处于vue对象的作用域，先将data中myName变量保留下来，存储到一个变量中
@@ -497,6 +531,12 @@ export default {
                 if (!this.isFocusInputPassword) {
                     this.bigChar = !this.bigChar;
                 }
+            }
+        });
+
+        emitter.on("设置头像", (message) => {
+            if (message === "成功") {
+                this.isShowSetAvatarWindow = false;
             }
         });
     },
@@ -841,6 +881,8 @@ export default {
                             // 那么就本地存储token，jwt名称，值为服务器返回的jwt字符串（长长的那个）
                             localStorage.setItem("jwt", response.data.jwt);
                             localStorage.setItem("name", this.user.name);
+                            // 将头像的数据保存到Vuex的state中
+                            this.$store.dispatch("setShowAvatar", response.data.userAvatarData);
 
                             // 然后设置到HTTP请求头里面，字段名称就为“token”
                             this.$axios.defaults.headers.common["token"] = response.data.jwt;
@@ -1028,29 +1070,43 @@ export default {
                     });
             }
         },
-        // 注销
-        userLogout() {
-            if (this.loginSuccess === true) {
-                // 删除掉存储在本地的内容“jwt”
-                localStorage.removeItem("jwt");
-                localStorage.removeItem("name");
-                // 改为false，显示未登录
-                this.loginSuccess = false;
-                ElMessage({
-                    // 显示关闭按钮
-                    showClose: true,
-                    message: "已退出登录！",
-                    type: "success",
+        // 打开设置用户头像的窗口
+        openSetAvatarWindow() {
+            if (this.isShowSetAvatarWindow === false) {
+                // 为true则显示其组件
+                this.isShowSetAvatarWindow = true;
+                // 将背景模糊
+                this.$store.dispatch("backgroundIsBlur", true);
+                emitter.on("是否关闭设置头像的窗口", (message) => {
+                    if (message === "是") {
+                        this.isShowSetAvatarWindow = false;
+                    }
                 });
-                this.isShowCheckLogin = false;
             } else {
                 ElMessage({
                     // 显示关闭按钮
                     showClose: true,
-                    message: "您尚未登录···",
+                    message: "设置头像的窗口已正在显示！",
                     type: "warning",
                 });
             }
+            this.isShowCheckLogin = false;
+        },
+        // 退出登录
+        userLogout() {
+            // 删除掉存储在本地的内容
+            localStorage.removeItem("jwt");
+            localStorage.removeItem("name");
+            localStorage.removeItem("userAvatarData");
+            // 改为false，显示未登录
+            this.loginSuccess = false;
+            ElMessage({
+                // 显示关闭按钮
+                showClose: true,
+                message: "已退出登录！",
+                type: "success",
+            });
+            this.isShowCheckLogin = false;
         },
     },
     // 局部自定义指令
@@ -1107,7 +1163,7 @@ export default {
 }
 
 /*用户图标*/
-#userLogo {
+.userLogo {
     width: 30px;
     filter: drop-shadow(-20px -20px 14px rgb(51, 51, 51));
     margin-top: 3vh;

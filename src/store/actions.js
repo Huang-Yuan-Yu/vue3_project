@@ -6,3 +6,8 @@ export const backgroundIsBlur = function ({ commit }, isOpen) {
     // 调用方法并传参，并”提交commit“给调用此actions.js中“addFood”变量的组件
     commit(types.BACKGROUND_BLUR, isOpen);
 };
+
+export const setShowAvatar = function ({ commit }, userAvatar) {
+    // 调用方法并传参，并”提交commit“给调用此actions.js中“addFood”变量的组件
+    commit(types.SET_SHOW_AVATAR, userAvatar);
+};

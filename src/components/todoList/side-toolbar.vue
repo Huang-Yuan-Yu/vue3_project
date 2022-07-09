@@ -212,7 +212,7 @@ export default {
     z-index: 1;
 }
 
-/*窗口动画（注意！loginUi是HTML中的<transition>标签的name属性的值，而不是class名*/
+/*窗口动画*/
 .wechatMiniProgramTransition-enter-active {
     /*加入动画，此动画名为“scale-in-tr"*/
     animation: wechatMiniProgramTransition-animation 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);

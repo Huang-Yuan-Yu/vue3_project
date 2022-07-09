@@ -11,5 +11,14 @@ const mutations = {
     [types.BACKGROUND_BLUR](state, isOpen) {
         state.backgroundIsBlur = isOpen === true;
     },
+    
+    /**
+     * 将头像数据赋值给state中的变量
+     * @param state Vuex状态管理的数据源
+     * @param userAvatar 用户头像
+     */
+    [types.SET_SHOW_AVATAR](state, userAvatar) {
+        state.userAvatarData = userAvatar;
+    },
 };
 export default mutations;
