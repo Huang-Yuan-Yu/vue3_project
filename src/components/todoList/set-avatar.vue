@@ -7,10 +7,11 @@
                 <div>
                     <p class="wechatText">设置头像</p>
                     <!--action为后端地址；drag：支持拖拽上传；当未在裁剪时，就显示上传图片的组件；accept能限制用户上传文件的类型
-                    :http-request="httpRequest"为上传后自定义向后端发送请求的方法，这里action就不要用了-->
+                    :http-request="httpRequest"为上传后自定义向后端发送请求的方法，这里action就不要用了
+                    /api/TodoList/uploadAvatar-->
                     <el-upload
                         class="avatar-uploader"
-                        action="#"
+                        action=""
                         :http-request="httpRequest"
                         :show-file-list="false"
                         accept=".jpg,.jpeg,.png,.gif,.bmp"
@@ -48,8 +49,8 @@
                         }"
                         :presetMode="{
                             mode: 'round',
-                            width: 200,
-                            height: 200,
+                            width: 400,
+                            height: 400,
                         }"
                         imageSmoothingQuality="high"
                     />
@@ -151,11 +152,13 @@ export default defineComponent({
                 });
             }
         },
-        // 图片上传后准备进行裁剪
+        // 图片上传后先压缩再裁剪
         httpRequest(options) {
             let that = this;
             // 获取文件对象
             let file = options.file;
+            // 在还没压缩之前先赋值
+            this.userAvatarData = this.originalImage =  URL.createObjectURL(file);
             // 创建一个HTML5的FileReader对象
             let reader = new FileReader();
             // 创建一个img对象
@@ -197,18 +200,12 @@ export default defineComponent({
                     context.clearRect(0, 0, targetWidth, targetHeight);
                     // 图片压缩，第一个参数是创建的img对象；第二三个参数是左上角坐标，后面两个是画布区域宽高
                     context.drawImage(img, 0, 0, targetWidth, targetHeight);
-                    // 压缩后的base64文件
-                    that.userAvatarData = that.originalImage = canvas.toDataURL("image/jpeg", 0.92);
+                    // 压缩后的base64文件（“原始图像originalImage”备份用的不压缩）
+                    that.userAvatarData = canvas.toDataURL("image/jpeg", 0.92);
                 };
             };
             // 立即开始裁剪
             this.isCrop = true;
-            ElMessage({
-                // 显示关闭按钮
-                showClose: true,
-                message: "开始裁剪，可移动圆圈和图片！",
-                type: "success",
-            });
         },
         // 裁剪头像完毕
         cutFinished() {
@@ -228,6 +225,7 @@ export default defineComponent({
                 message: "裁剪成功！",
                 type: "success",
             });
+            // console.log(this.userAvatarData)
         },
         // 重新裁剪图片
         reCrop() {
