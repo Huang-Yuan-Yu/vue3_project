@@ -6,54 +6,58 @@
                 <p id="close" @click="closeWindows">✖</p>
                 <div>
                     <p class="wechatText">设置头像</p>
-                    <!--action为后端地址；drag：支持拖拽上传；当未在裁剪时，就显示上传图片的组件；accept能限制用户上传文件的类型
-                    :http-request="httpRequest"为上传后自定义向后端发送请求的方法，这里action就不要用了
-                    /api/TodoList/uploadAvatar-->
-                    <el-upload
-                        class="avatar-uploader"
-                        action=""
-                        :http-request="httpRequest"
-                        :show-file-list="false"
-                        accept=".jpg,.jpeg,.png,.gif,.bmp"
-                        :before-upload="beforeAvatarUpload"
-                        drag
-                        v-if="isCrop === false"
-                    >
-                        <div v-if="userAvatarData === null">
-                            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                            <div id="elUploadText">可拖拽上传或单击选择图片</div>
-                        </div>
-                        <div id="userAvatarDiv" v-if="userAvatarData">
-                            <img :src="userAvatarData" id="userAvatar" alt="用户头像" />
-                        </div>
-                        <template #tip v-if="isFirstCroppingCompleted === false">
-                            <div id="imageTip">图片格式只支持jpg/jpeg/png/gif/bmp</div>
-                        </template>
-                    </el-upload>
+                    <transition-group name="userAvatarDiv">
+                        <!--action为后端地址；drag：支持拖拽上传；当未在裁剪时，就显示上传图片的组件
+                        这里也不用accept，限制用户上传文件的类型的逻辑写在JavaScript代码中，否则会有BUG
+                        :http-request="httpRequest"为自定义的上传图片方法，这里并不自动上传
+                        这里action就不要用了，否则在未压缩情况下访问接口，会大量占用服务器带宽-->
+                        <el-upload
+                            class="avatar-uploader"
+                            action=""
+                            :http-request="httpRequest"
+                            :show-file-list="false"
+                            :before-upload="beforeAvatarUpload"
+                            drag
+                            v-if="isCrop === false"
+                        >
+                            <div v-if="userAvatarData === null">
+                                <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                                <div id="elUploadText">可拖拽上传或单击选择图片</div>
+                            </div>
 
-                    <!--图像裁剪组件：判断为开始裁剪，就显示可裁剪头像的组件。每次裁剪都使用原始图像裁剪——originalImage-->
-                    <vue-picture-cropper
-                        v-if="isCrop === true"
-                        :boxStyle="{
-                            width: '100%',
-                            height: '202px',
-                            backgroundColor: '#f8f8f8',
-                            marginBottom: '16px',
-                        }"
-                        :img="originalImage"
-                        :options="{
-                            viewMode: 1,
-                            dragMode: 'move',
-                            aspectRatio: 1,
-                            cropBoxResizable: false,
-                        }"
-                        :presetMode="{
-                            mode: 'round',
-                            width: 400,
-                            height: 400,
-                        }"
-                        imageSmoothingQuality="high"
-                    />
+                            <div id="userAvatarDiv" v-if="userAvatarData">
+                                <img :src="userAvatarData" id="userAvatar" alt="用户头像" />
+                            </div>
+
+                            <template #tip v-if="isFirstCroppingCompleted === false">
+                                <div id="imageTip">图片格式只支持jpg/png/gif/bmp</div>
+                            </template>
+                        </el-upload>
+
+                        <!--图像裁剪组件：判断为开始裁剪，就显示可裁剪头像的组件。每次裁剪都使用原始图像裁剪——originalImage-->
+                        <vue-picture-cropper
+                            v-if="isCrop === true"
+                            :boxStyle="{
+                                width: '100%',
+                                height: '202px',
+                                backgroundColor: '#f8f8f8',
+                                marginBottom: '16px',
+                            }"
+                            :img="originalImage"
+                            :options="{
+                                viewMode: 1,
+                                dragMode: 'move',
+                                aspectRatio: 1,
+                                cropBoxResizable: false,
+                            }"
+                            :presetMode="{
+                                mode: 'round',
+                                width: 400,
+                                height: 400,
+                            }"
+                            imageSmoothingQuality="high"
+                        />
+                    </transition-group>
 
                     <!--第一次裁剪后、正在裁剪中都会持久显示按钮-->
                     <el-row v-if="isFirstCroppingCompleted === true || isCrop === true">
@@ -139,7 +143,7 @@ export default defineComponent({
                 ElMessage({
                     // 显示关闭按钮
                     showClose: true,
-                    message: "图片格式只能为jpg/jpeg/png/gif/bmp",
+                    message: "图片格式只能为jpg/png/gif/bmp",
                     type: "error",
                 });
                 return false;
@@ -158,7 +162,7 @@ export default defineComponent({
             // 获取文件对象
             let file = options.file;
             // 在还没压缩之前先赋值
-            this.userAvatarData = this.originalImage =  URL.createObjectURL(file);
+            this.userAvatarData = this.originalImage = URL.createObjectURL(file);
             // 创建一个HTML5的FileReader对象
             let reader = new FileReader();
             // 创建一个img对象
@@ -320,6 +324,30 @@ export default defineComponent({
 #userAvatarDiv {
     /*投机取巧：在子元素中，使用负值的外边距就可以突破父元素的padding*/
     margin: -30px;
+    transition: all 1s ease;
+}
+
+.userAvatarDiv-enter-active {
+    opacity: 0;
+}
+
+/*事项div进入完毕*/
+.userAvatarDiv-enter-to {
+    opacity: 1;
+    transition: all 1s ease-in-out;
+}
+
+/*事项div开始离开*/
+.userAvatarDiv-leave-active {
+    /*需要让这个元素脱离标准流，不然后面的元素动不了*/
+    position: absolute;
+    /*不要显示消失的事项框*/
+    opacity: 0;
+}
+
+/*添加事项和删除事项的动画，移除元素时，让动画平滑一点*/
+.userAvatarDiv-move {
+    transition: all 1s ease;
 }
 
 /*显示用户上传的头像*/
