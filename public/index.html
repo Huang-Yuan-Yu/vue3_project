@@ -15,7 +15,8 @@
       <!--作者-->
     <meta name="author" content="黄元昱">
       <!--对该网站的简单描述-->
-    <meta name="description" content="TodoList、待办事项网站，可当作时间管理系统中的收集箱，保持工作、生活的条理性，另外还有天气、工具箱等扩展内容。此网站和青柠起始页相似，有异曲同工之妙，由黄元昱负责网站的建设与维护">
+    <meta name="description"
+          content="TodoList、待办事项网站，可当作时间管理系统中的收集箱，保持工作、生活的条理性，另外还有天气、工具箱等扩展内容。此网站和青柠起始页相似，有异曲同工之妙，由黄元昱负责网站的建设与维护">
     <meta content="width=device-width,initial-scale=1.0" name="viewport">
     <link href="<%= BASE_URL %>favicon.ico" rel="icon">
     <title>待办事项</title>
@@ -39,8 +40,99 @@
   
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong style="color:white;">您需要让浏览器打开运行JavaScript的权限，否则无法浏览此网页</strong>
     </noscript>
+    <!--用于判断浏览器是否支持运行本网页-->
+    <script>
+        (function () {
+            // 获取浏览器版本
+            function browserVersion() {
+                // 取得浏览器的userAgent字符串
+                var userAgent = navigator.userAgent;
+                // 判断是否为小于IE11的浏览器
+                var isLessIE11 = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+                // 判断是否为IE的Edge浏览器
+                var isEdge = userAgent.indexOf("Edge") > -1 && !isLessIE11;
+                // 判断是否为IE11浏览器
+                var isIE11 = userAgent.indexOf("Trident") > -1 && userAgent.indexOf("rv:11.0") > -1;
+                // 判断是否为火狐浏览器
+                var isFire = userAgent.indexOf("Mozilla") > -1 && userAgent.indexOf("Firefox") > -1;
+                // 判断是否为谷歌浏览器
+                var isChrome =
+                        userAgent.indexOf("Mozilla") > -1 && userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Edge") === -1;
+                var start = "";
+                if (isLessIE11) {
+                    var IEReg = new RegExp("MSIE (\\d+\\.\\d+);");
+                    // 正则表达式匹配浏览器的userAgent字符串中MSIE后的数字部分，，这一步不可省略！！！
+                    IEReg.test(userAgent);
+                    // 取正则表达式中第一个小括号里匹配到的值
+                    var IEVersionNum = parseFloat(RegExp["$1"]);
+                    if (IEVersionNum === 7) {
+                        window.location.href =
+                                "https://support.dmeng.net/upgrade-your-browser.html?referrer=" +
+                                encodeURIComponent(window.location.href);
+                        // IE7
+                        return "v-IE = 7";
+                    } else if (IEVersionNum === 8) {
+                        window.location.href =
+                                "https://support.dmeng.net/upgrade-your-browser.html?referrer=" +
+                                encodeURIComponent(window.location.href);
+                        // IE8
+                        return "v-IE = 8";
+                    } else if (IEVersionNum === 9) {
+                        window.location.href =
+                                "https://support.dmeng.net/upgrade-your-browser.html?referrer=" +
+                                encodeURIComponent(window.location.href);
+                        // IE9
+                        return "v-IE = 9";
+                    } else if (IEVersionNum === 10) {
+                        window.location.href =
+                                "https://support.dmeng.net/upgrade-your-browser.html?referrer=" +
+                                encodeURIComponent(window.location.href);
+                        // IE10
+                        return "v-IE = 10";
+                    } else {
+                        window.location.href =
+                                "https://support.dmeng.net/upgrade-your-browser.html?referrer=" +
+                                encodeURIComponent(window.location.href);
+                        // IE版本<7
+                        return "v-IE <= 6";
+                    }
+                } else if (isEdge) {
+                    // edge
+                    start = userAgent.indexOf("Edge");
+                    return "v-Edge = " + userAgent.substring(start + 5);
+                } else if (isIE11) {
+                    window.location.href =
+                            "https://support.dmeng.net/upgrade-your-browser.html?referrer=" +
+                            encodeURIComponent(window.location.href);
+                    // IE11
+                    return "v-IE = 11";
+                } else if (isFire) {
+                    // Firefox
+                    start = userAgent.indexOf("Firefox");
+                    return "v-Firefox = " + userAgent.substring(start + 8);
+                } else if (isChrome) {
+                    // Chrome
+                    start = userAgent.indexOf("Chrome");
+                    return "v-Chrome = " + userAgent.substring(start + 7, start + 13);
+                } else {
+                    // 不是主流浏览器
+                    return "browserInfo = " + userAgent;
+                }
+            }
+    
+            // 其实就是控制提醒内容在IE78的时候出现
+            var reg = /(\w+)\s=\s(\d+)/;
+            var version = browserVersion();
+            var res = reg.exec(version);
+            if (res[1] === "IE" && res[2] < 9) {
+                // IE 7 8 提示
+                var tips = document.getElementById("ieVersion");
+                tips.style.display = "block";
+            }
+        })();
+    </script>
     <div id="app"></div>
     <!--构建的文件将自动加载-->
   </body>
