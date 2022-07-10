@@ -6,21 +6,28 @@
                 <p id="close" @click="closeWindows">✖</p>
                 <div>
                     <p class="wechatText">设置头像</p>
-                    <!--action为后端地址；drag：支持拖拽上传；当未在裁剪时，就显示上传图片的组件-->
+                    <!--action为后端地址；drag：支持拖拽上传；当未在裁剪时，就显示上传图片的组件；accept能限制用户上传文件的类型
+                    :http-request="httpRequest"为上传后自定义向后端发送请求的方法，这里action就不要用了-->
                     <el-upload
                         class="avatar-uploader"
-                        action="/api/TodoList/uploadImage"
+                        action="#"
+                        :http-request="httpRequest"
                         :show-file-list="false"
-                        accept=".jpg,.png"
-                        :on-success="handleAvatarSuccess"
+                        accept=".jpg,.jpeg,.png,.gif,.bmp"
                         :before-upload="beforeAvatarUpload"
                         drag
                         v-if="isCrop === false"
                     >
+                        <div v-if="userAvatarData === null">
+                            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                            <div id="elUploadText">可拖拽上传或单击选择图片</div>
+                        </div>
                         <div id="userAvatarDiv" v-if="userAvatarData">
                             <img :src="userAvatarData" id="userAvatar" alt="用户头像" />
                         </div>
-                        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+                        <template #tip v-if="isFirstCroppingCompleted === false">
+                            <div id="imageTip">图片格式只支持jpg/jpeg/png/gif/bmp</div>
+                        </template>
                     </el-upload>
 
                     <!--图像裁剪组件：判断为开始裁剪，就显示可裁剪头像的组件。每次裁剪都使用原始图像裁剪——originalImage-->
@@ -110,28 +117,98 @@ export default defineComponent({
     methods: {
         // 关闭窗口
         closeWindows() {
+            // 清空数据
+            this.userAvatarData = null;
             emitter.emit("是否关闭设置头像的窗口", "是");
             // 取消背景模糊效果
             this.$store.dispatch("backgroundIsBlur", false);
         },
-        // 图片放置好的那一刻
-        handleAvatarSuccess(res, file) {
-            // 针对Blob对象生成一个临时URL
-            this.userAvatarData = URL.createObjectURL(file.raw);
-            this.originalImage = URL.createObjectURL(file.raw);
+        // 在上传图像之前，检查图片是否符合规格
+        beforeAvatarUpload(file) {
+            // 判断图片文件类型
+            if (
+                !(
+                    file.type === "image/jpeg" ||
+                    file.type === "image/png" ||
+                    file.type === "image/JPG" ||
+                    file.type === "image/gif" ||
+                    file.type === "image/bmp"
+                )
+            ) {
+                ElMessage({
+                    // 显示关闭按钮
+                    showClose: true,
+                    message: "图片格式只能为jpg/jpeg/png/gif/bmp",
+                    type: "error",
+                });
+                return false;
+            } else {
+                ElMessage({
+                    // 显示关闭按钮
+                    showClose: true,
+                    message: "开始裁剪，已启用图片压缩！",
+                    type: "success",
+                });
+            }
+        },
+        // 图片上传后准备进行裁剪
+        httpRequest(options) {
+            let that = this;
+            // 获取文件对象
+            let file = options.file;
+            // 创建一个HTML5的FileReader对象
+            let reader = new FileReader();
+            // 创建一个img对象
+            let img = new Image();
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+            reader.onload = (e) => {
+                img.src = e.target.result;
+                // base64地址图片加载完毕后执行
+                img.onload = function () {
+                    // 缩放图片需要的canvas（也可以在DOM中直接定义canvas标签，这样就能把压缩完的图片不转base64也能直接显示出来）
+                    let canvas = document.createElement("canvas");
+                    let context = canvas.getContext("2d");
+                    // 图片原始尺寸
+                    let originWidth = this.width;
+                    let originHeight = this.height;
+                    // 最大尺寸限制，可通过设置宽高来实现图片压缩程度
+                    let maxWidth = 400,
+                        maxHeight = 400;
+                    // 目标尺寸
+                    let targetWidth = originWidth,
+                        targetHeight = originHeight;
+                    // 图片尺寸超过最大尺寸的限制
+                    if (originWidth > maxWidth || originHeight > maxHeight) {
+                        if (originWidth / originHeight > maxWidth / maxHeight) {
+                            // 更改宽度，按照宽度限定尺寸
+                            targetWidth = maxWidth;
+                            targetHeight = Math.round(maxWidth * (originHeight / originWidth));
+                        } else {
+                            targetHeight = maxHeight;
+                            targetWidth = Math.round(maxHeight * (originWidth / originHeight));
+                        }
+                    }
+                    // 对图片进行缩放
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    // 清除画布
+                    context.clearRect(0, 0, targetWidth, targetHeight);
+                    // 图片压缩，第一个参数是创建的img对象；第二三个参数是左上角坐标，后面两个是画布区域宽高
+                    context.drawImage(img, 0, 0, targetWidth, targetHeight);
+                    // 压缩后的base64文件
+                    that.userAvatarData = that.originalImage = canvas.toDataURL("image/jpeg", 0.92);
+                };
+            };
             // 立即开始裁剪
             this.isCrop = true;
             ElMessage({
                 // 显示关闭按钮
                 showClose: true,
-                message: "图片初始化成功，开始裁剪！",
+                message: "开始裁剪，可移动圆圈和图片！",
                 type: "success",
             });
-        },
-        beforeAvatarUpload(/*file*/) {
-            //在头像上传之前需要做的判断，如判断文件格式
-            // const isJPG = file.type === "image/jpeg";
-            // const isLt2M = file.size / 1024 / 1024 < 2;
         },
         // 裁剪头像完毕
         cutFinished() {
@@ -158,7 +235,7 @@ export default defineComponent({
             ElMessage({
                 // 显示关闭按钮
                 showClose: true,
-                message: "正在进行重新裁剪！",
+                message: "正在进行重新裁剪···",
                 type: "success",
             });
         },
@@ -174,6 +251,8 @@ export default defineComponent({
                     type: "success",
                 });
             } else {
+                // 清空数据
+                this.userAvatarData = null;
                 ElMessage({
                     // 显示关闭按钮
                     showClose: true,
@@ -227,11 +306,16 @@ export default defineComponent({
 }
 
 /*中间的Logo以及显示上传图片*/
-.avatar-uploader-icon {
+.el-icon--upload {
     font-size: 28px;
     color: #8c939d;
-    height: 120px;
+    height: 80px;
     text-align: center;
+}
+
+/*图片上传框中间的文字说明*/
+#elUploadText {
+    color: rgb(168, 171, 178);
 }
 
 /*用户头像的div*/
@@ -247,6 +331,16 @@ export default defineComponent({
     /*使图片不变形*/
     object-fit: cover;
     margin: 0 auto;
+}
+
+/*上传照片前的提醒文字*/
+#imageTip {
+    text-align: left;
+    color: rgb(168, 171, 178);
+    font-size: 12px;
+    margin-top: -10px;
+    /*指定文字之间的间距*/
+    letter-spacing: 0.6px;
 }
 
 /*窗口*/
