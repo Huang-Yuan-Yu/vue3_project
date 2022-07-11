@@ -1,6 +1,10 @@
+// 为了兼容更多的浏览器而引入的插件
+import "core-js";
+import "regenerator-runtime/runtime";
+
 // 这里是从vue文件中导入一个变量，这个变量要用{}括起来，否则在使用时只会提示object类型
 // 叫“导入单个绑定”
-import {createApp} from "vue";
+import { createApp } from "vue";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";

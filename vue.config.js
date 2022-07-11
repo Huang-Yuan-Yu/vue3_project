@@ -6,6 +6,7 @@ const { ElementPlusResolver } = require("unplugin-vue-components/resolvers");
 module.exports = defineConfig({
     transpileDependencies: true,
 });
+const path = require("path");
 
 // 在构建时，会出现各种资源路径错误的情况，在本文件中重写打包后的基础路径为当前目录，就可以解决
 // 后来通过“npm install --save-dev compression-webpack-plugin”引入打包大小优化的依赖
@@ -54,6 +55,14 @@ module.exports = {
     },
     // 其他配置（不能直接将plugins添加到下面，而是外面要有configureWebpack）
     configureWebpack: {
+        resolve: {
+            alias: {
+                "@": path.resolve(__dirname, "./src"),
+                "@i": path.resolve(__dirname, "./src/assets"),
+            },
+            // 解决部分const等ES6语法未转换的难题
+            mainFields: ["main", "module"],
+        },
         // 插件
         plugins: [
             // 自动导入Element-plus
@@ -77,7 +86,72 @@ module.exports = {
                 disable: process.env.NODE_ENV === "development",
             })
             .end();
+
+        // 拆包
+        config.optimization.splitChunks({
+            chunks: "all",
+            maxInitialRequests: Infinity,
+            minSize: 30000, // 依赖包超过30000bit将被单独打包
+            automaticNameDelimiter: "-",
+            cacheGroups: {
+                vue: {
+                    name: "vue",
+                    test: /[\\/]node_modules[\\/]vue[\\/]/,
+                    priority: -10,
+                },
+                vuex: {
+                    name: "vuex",
+                    test: /[\\/]node_modules[\\/]vuex[\\/]/,
+                    priority: -10,
+                },
+                "vue-router": {
+                    name: "vue-router",
+                    test: /[\\/]node_modules[\\/]vue-router[\\/]/,
+                    priority: -10,
+                },
+                axios: {
+                    name: "axios",
+                    test: /[\\/]node_modules[\\/]axios[\\/]/,
+                    priority: -10,
+                },
+                "element-plus": {
+                    name: "element-plus",
+                    test: /[\\/]node_modules[\\/]element-plus[\\/]/,
+                    priority: -10,
+                },
+                // 提取重复引用公共库
+                common: {
+                    name: "chunk-common",
+                    chunks: "initial",
+                    minChunks: 2,
+                    maxInitialRequests: 5,
+                    minSize: 0,
+                    priority: 1,
+                    reuseExistingChunk: true,
+                    enforce: true,
+                },
+                vendors: {
+                    name: "vendors",
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                    enforce: true,
+                    minSize: 0, //大于0个字节
+                    minChunks: 2, //在分割之前，这个代码块最小应该被引用的次数
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                },
+            },
+        });
+        // 兼容更多的浏览器——ES6转ES5，转换后在本地打不开是正常的
+        config.entry("main").add("babel-polyfill");
+        config.entry.app = ["babel-polyfill", "./src/main.js"];
     },
+    // 语法转换也要包括第三方库
+    transpileDependencies: [/node_modules/],
     // 生产环境禁用eslint
     lintOnSave: !process.env.NODE_ENV !== "production",
 };

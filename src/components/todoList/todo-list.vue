@@ -1028,6 +1028,7 @@ export default {
     height: 30px;
     display: inline-block;
     margin-left: 1px;
+    padding-bottom: 2px;
 }
 
 @media (max-device-width: 300px) {
