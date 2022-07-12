@@ -60,7 +60,7 @@
                     </transition-group>
 
                     <!--第一次裁剪后、正在裁剪中都会持久显示按钮-->
-                    <el-row v-if="isFirstCroppingCompleted === true || isCrop === true">
+                    <el-row v-if="isFirstCroppingCompleted === true || isCrop === true" id="buttonElRow">
                         <el-col :span="12">
                             <!--只有当在裁剪中，且第一次裁剪之后才显示取消裁剪按钮-->
                             <el-button size="large" type="primary" @click="cancelCropping" v-if="isCrop === true">
@@ -367,6 +367,11 @@ export default defineComponent({
     margin-top: 6px;
     /*指定文字之间的间距*/
     letter-spacing: 0.4px;
+}
+
+/*窗口的功能按钮的el-row标签*/
+#buttonElRow {
+    margin-top: 16px;
 }
 
 /*窗口*/

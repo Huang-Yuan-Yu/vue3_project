@@ -5,7 +5,8 @@
         <div id="sideToolbarLogoDiv" @click="isOpenDrawer = true">
             <a>
                 <el-tooltip :disabled="isOpenDrawer" content="更多" effect="light" placement="bottom">
-                    <p id="sideToolbarLogo" style="color: white; font-weight: bold">···</p>
+                    <!--<p id="sideToolbarLogo" style="color: white; font-weight: bold">···</p>-->
+                    <img id="sideToolbarLogo" alt="天气图标" src="../../assets/hamburgerButton.png" />
                 </el-tooltip>
             </a>
         </div>
@@ -114,9 +115,9 @@ export default {
 
 /*”显示更多“图标*/
 #sideToolbarLogo {
-    width: 22px;
+    width: 28px;
     filter: drop-shadow(-20px -20px 14px rgb(51, 51, 51));
-    margin-top: 3.1vh;
+    margin-top: 3vh;
     margin-left: 60px;
     /*从右边开始排列*/
     justify-content: flex-start;

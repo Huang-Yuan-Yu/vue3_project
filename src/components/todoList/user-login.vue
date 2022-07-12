@@ -132,7 +132,7 @@
                             提示：您的密码至少包括总共8位的英文和数字！
                         </p>
                         <el-button
-                            class="loginOrRegisterButton"
+                            class="loginButton"
                             size="large"
                             type="primary"
                             @click="userLogin"
@@ -140,7 +140,12 @@
                             >登录
                         </el-button>
                         <!--包含登录中动画的按钮，如果正在登录，就显示此按钮-->
-                        <el-button v-if="isLogin === true" class="loginOrRegisterButton" loading type="primary" size="large"
+                        <el-button
+                            v-if="isLogin === true"
+                            class="loginButton"
+                            loading
+                            type="primary"
+                            size="large"
                             >登录中
                         </el-button>
                         <span class="forgetPassword" @click="forgotPassword">忘记密码？</span>
@@ -340,10 +345,9 @@
                                 </el-input>
                             </el-col>
                         </el-row>
-                        <el-button class="loginOrRegisterButton" size="large" type="primary" @click="userRegistration"
+                        <el-button class="registerButton" size="large" type="primary" @click="userRegistration"
                             >注册
                         </el-button>
-                        <span class="forgetPassword">手机号注册</span>
                     </form>
                 </div>
             </div>
@@ -1452,12 +1456,19 @@ export default {
     margin-bottom: 16px;
 }
 
-/*登录或注册按钮*/
-.loginOrRegisterButton {
+/*登录按钮*/
+.loginButton {
     width: 100px;
     border: whitesmoke;
     margin-top: 16px;
     margin-left: 80px;
+}
+
+/*注册按钮*/
+.registerButton {
+    width: 100px;
+    border: whitesmoke;
+    margin-top: 12px;
 }
 
 /*重置密码界面的确认按钮*/
@@ -1468,7 +1479,7 @@ export default {
 }
 
 @media (max-width: 350px) {
-    .loginOrRegisterButton {
+    .loginButton {
         margin-top: 0;
         margin-left: 0;
     }
@@ -1481,12 +1492,12 @@ export default {
 }
 
 /*指针移到登录或注册按钮上时*/
-.loginOrRegisterButton:hover {
+.loginButton:hover {
     background-color: #0ae2ed;
 }
 
 /*点击登录或注册按钮时*/
-.loginOrRegisterButton:active {
+.loginButton:active {
     background-color: #00f3ff;
 }
 
