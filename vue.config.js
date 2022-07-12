@@ -35,7 +35,8 @@ module.exports = {
                 ws: true,
                 // 允许跨域
                 changOrigin: true,
-                secure: false, // 如果是https接口，需要配置这个参数
+                // 若后端接口地址为https协议，就配置为true
+                secure: true,
                 pathRewrite: {
                     // 将地址栏中出现的api字样，重写为空字符串：
                     "^/api": "",

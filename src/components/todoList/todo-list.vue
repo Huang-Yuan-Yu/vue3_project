@@ -18,6 +18,7 @@
             />
         </div>
 
+        <click-special-effect></click-special-effect>
         <!--用户注册、登录模块-->
         <userLogin ref="userLogin"></userLogin>
         <!--引入包含天气组件的组件-->
@@ -265,8 +266,8 @@
             </el-scrollbar>
         </el-form>
         <footer id="beiAnFooter">
-            <span class="beiAnText">工信部备案号：</span
-            ><a class="beiAnText" href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2022064736号</a>
+            <span class="beiAnText">工信部备案号：</span>
+            <a class="beiAnText" href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2022064736号</a>
         </footer>
     </div>
 </template>
@@ -309,13 +310,16 @@ import { InfoFilled } from "@element-plus/icons-vue";
 import emitter from "@/jsFunction/eventbus";
 // 引入天气组件
 import MyWeather from "@/components/todoList/my-weather";
+// 侧边栏
 import SideToolbar from "@/components/todoList/side-toolbar";
+// 鼠标点击特效
+import ClickSpecialEffect from "@/components/todoList/click-special-effect";
 
 export default {
     name: "todo-list",
     // 注入my-test组件提供（provide）的reload依赖，用于刷新页面
     inject: ["reload"],
-    components: { SideToolbar, MyWeather, userLogin, doneSvg },
+    components: { ClickSpecialEffect, SideToolbar, MyWeather, userLogin, doneSvg },
     // Vue3特有的组合式API
     setup() {
         // 将UI库的图标信息暴露给模板，如果没有此操作，会报警告
@@ -1008,6 +1012,17 @@ export default {
     text-shadow: 0 0 10px white;
 }
 
+/*当前状态*/
+.currentStatus {
+    margin-top: 2vmax;
+    color: white;
+    font-size: 14px;
+    height: 20px;
+    display: inline-block;
+    margin-left: 1px;
+    padding-bottom: 4px;
+}
+
 /*选中文字后的颜色*/
 #YyTodo::selection,
 .currentStatus::selection {
@@ -1018,17 +1033,6 @@ export default {
 #YyTodo::-moz-selection.currentStatus::-moz-selection {
     color: #004da3;
     background: white;
-}
-
-/*当前状态*/
-.currentStatus {
-    margin-top: 2vmax;
-    color: white;
-    font-size: 14px;
-    height: 30px;
-    display: inline-block;
-    margin-left: 1px;
-    padding-bottom: 2px;
 }
 
 @media (max-device-width: 300px) {
@@ -1095,7 +1099,6 @@ export default {
 #inputAndButton {
     /*变为弹性布局*/
     display: flex;
-    margin-top: -4px;
 }
 
 /*缩放字体大小的动画*/

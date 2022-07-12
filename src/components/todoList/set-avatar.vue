@@ -294,17 +294,17 @@ export default defineComponent({
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    transition: all 0.4s ease-in-out;
 }
 
 .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
     cursor: url("../../assets/cursor/pointer.png"), pointer;
+    box-shadow: 0 0 10px #409eff inset;
 }
 
 /*头像上传框*/
 .el-upload-dragger {
     background-color: rgba(0, 0, 0, 0);
-    margin-bottom: 16px;
 }
 
 /*中间的Logo以及显示上传图片*/
@@ -364,9 +364,9 @@ export default defineComponent({
     text-align: left;
     color: rgb(168, 171, 178);
     font-size: 12px;
-    margin-top: -10px;
+    margin-top: 6px;
     /*指定文字之间的间距*/
-    letter-spacing: 0.6px;
+    letter-spacing: 0.4px;
 }
 
 /*窗口*/

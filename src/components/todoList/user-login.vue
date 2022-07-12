@@ -46,7 +46,6 @@
                 </div>
             </transition>
 
-            
             <!--未登录时显示未登录的头像-->
             <a>
                 <img
@@ -132,8 +131,17 @@
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：您的密码至少包括总共8位的英文和数字！
                         </p>
-                        <el-button class="loginOrRegisterButton" size="large" type="primary" @click="userLogin"
+                        <el-button
+                            class="loginOrRegisterButton"
+                            size="large"
+                            type="primary"
+                            @click="userLogin"
+                            v-if="isLogin === false"
                             >登录
+                        </el-button>
+                        <!--包含登录中动画的按钮，如果正在登录，就显示此按钮-->
+                        <el-button v-if="isLogin === true" class="loginOrRegisterButton" loading type="primary" size="large"
+                            >登录中
                         </el-button>
                         <span class="forgetPassword" @click="forgotPassword">忘记密码？</span>
                     </form>
@@ -382,6 +390,8 @@ export default {
             showTimeout: null,
             // 是否要显示登录窗口
             isShowLoginWindow: false,
+            // 是否正在登录
+            isLogin: false,
             // 是否显示重置密码的窗口
             isShowResetPassword: false,
             // 是否要显示注册窗口
@@ -873,6 +883,8 @@ export default {
                     type: "error",
                 });
             } else if (this.loginSuccess === false) {
+                // 表示正在登录
+                this.isLogin = true;
                 // 先将用户输入的信息传给后台，此信息是用户需要查询的信息：
                 this.$axios
                     .post("/api/TodoList/login", { name: this.user.name, password: aes.encrypt(this.user.password) })
@@ -921,6 +933,8 @@ export default {
                                 type: "error",
                             });
                         }
+                        // 结束登录状态
+                        this.isLogin = false;
                     });
             } else {
                 ElMessage({
