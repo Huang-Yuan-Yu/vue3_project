@@ -329,8 +329,8 @@ export default {
     },
     data() {
         return {
-            // 引用图片用的随机数
-            imageUrl: Math.floor(Math.random() * 3),
+            // 引用图片用的随机数（背景图片资源目录下有多少张图片，这里的数字就是多少）
+            imageUrl: Math.floor(Math.random() * 14),
             // 服务器状态——未知、关闭或开启，默认为未知，如果出现网络错误，则赋值为“关闭”
             serverStatus: "未知",
             // 是否缩放字体
@@ -892,7 +892,6 @@ export default {
         elScrollbarMaxHeight() {
             // 当前窗口的高度
             let innerHeight = window.innerHeight;
-            // alert(innerHeight)
             if (innerHeight > 2160) {
                 // 获取ref值为todoForm的div的高度
                 this.elScrollbarHeight = `${innerHeight / 1.7}px`;
@@ -907,6 +906,9 @@ export default {
             } else if (innerHeight > 230) {
                 this.elScrollbarHeight = `${innerHeight / 2.9}px`;
             }
+            // 获取ref值为todoForm的div的高度
+            // this.elScrollbarHeight = `${window.innerHeight / 1.7}px`;
+            // console.log(window.innerHeight * 0.8);
         },
     },
     // 局部自定义指令
@@ -1321,15 +1323,6 @@ export default {
 #elScrollbar {
     position: relative;
     bottom: 12px;
-}
-
-/*id为elScrollbar里面的ul元素*/
-#elScrollbar ul {
-    height: 0;
-}
-
-::v-deep(.el-scrollbar__wrap el-scrollbar__wrap--hidden-default) {
-    height: 200px;
 }
 
 /*事项元素开始进入*/

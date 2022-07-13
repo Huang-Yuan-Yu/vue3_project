@@ -7,6 +7,8 @@ module.exports = defineConfig({
     transpileDependencies: true,
 });
 const path = require("path");
+// Gzip压缩
+const CompressionPlugin = require("compression-webpack-plugin");
 
 // 在构建时，会出现各种资源路径错误的情况，在本文件中重写打包后的基础路径为当前目录，就可以解决
 // 后来通过“npm install --save-dev compression-webpack-plugin”引入打包大小优化的依赖
@@ -88,6 +90,17 @@ module.exports = {
             })
             .end();
 
+        // 在生产环境下，在打包时进行gzip压缩，就不用等服务器端动态压缩了，提高性能
+        if (process.env.NODE_ENV === "production") {
+            config.plugin("compression-webpack-plugin").use(
+                new CompressionPlugin({
+                    test: /\.js$|\.html$|\.css$/, // 匹配文件名
+                    threshold: 10240, // 对超过10k的数据压缩
+                    deleteOriginalAssets: true, // 删除源文件
+                })
+            );
+        }
+
         // 拆包
         config.optimization.splitChunks({
             chunks: "all",
@@ -100,19 +113,9 @@ module.exports = {
                     test: /[\\/]node_modules[\\/]vue[\\/]/,
                     priority: -10,
                 },
-                vuex: {
-                    name: "vuex",
-                    test: /[\\/]node_modules[\\/]vuex[\\/]/,
-                    priority: -10,
-                },
                 "vue-router": {
                     name: "vue-router",
                     test: /[\\/]node_modules[\\/]vue-router[\\/]/,
-                    priority: -10,
-                },
-                axios: {
-                    name: "axios",
-                    test: /[\\/]node_modules[\\/]axios[\\/]/,
                     priority: -10,
                 },
                 "element-plus": {

@@ -1184,7 +1184,7 @@ export default {
 /*用户图标*/
 .userLogo {
     width: 30px;
-    filter: drop-shadow(-20px -20px 14px rgb(51, 51, 51));
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0,.2));
     margin-top: 3vh;
     margin-right: 2vw;
     /*禁止被选中*/

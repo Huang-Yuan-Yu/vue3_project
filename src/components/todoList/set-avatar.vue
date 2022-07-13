@@ -62,9 +62,9 @@
                     <!--第一次裁剪后、正在裁剪中都会持久显示按钮-->
                     <el-row v-if="isFirstCroppingCompleted === true || isCrop === true" id="buttonElRow">
                         <el-col :span="12">
-                            <!--只有当在裁剪中，且第一次裁剪之后才显示取消裁剪按钮-->
+                            <!--只有当在裁剪中，且第一次裁剪之后才显示图片归位按钮-->
                             <el-button size="large" type="primary" @click="cancelCropping" v-if="isCrop === true">
-                                取消裁剪
+                                图片归位
                             </el-button>
                             <el-button size="large" type="primary" @click="reCrop" v-else>重新裁剪</el-button>
                         </el-col>
@@ -244,24 +244,13 @@ export default defineComponent({
         // 取消裁剪
         cancelCropping() {
             // 裁剪过一次才允许取消裁剪
-            if (this.isFirstCroppingCompleted === true) {
-                this.isCrop = false;
-                ElMessage({
-                    // 显示关闭按钮
-                    showClose: true,
-                    message: "已取消重新裁剪！",
-                    type: "success",
-                });
-            } else {
-                // 清空数据
-                this.userAvatarData = null;
-                ElMessage({
-                    // 显示关闭按钮
-                    showClose: true,
-                    message: "必须进行头像的圆形裁剪（方便显示）！",
-                    type: "warning",
-                });
-            }
+            cropper.reset();
+            ElMessage({
+                // 显示关闭按钮
+                showClose: true,
+                message: "图片位置还原成功！",
+                type: "success",
+            });
         },
         // 向后端发送图片
         sendImage() {
