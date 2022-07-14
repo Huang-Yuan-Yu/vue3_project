@@ -411,7 +411,7 @@ export default {
             // 验证码
             getVerificationCode: {
                 // 按钮用的文本，会动态变化，这里引用Vuex的state变量
-                text: this.$store.state.userEquipment === null ? "获取验证码" : "取验证码",
+                text: this.$store.getters.userEquipment === null ? "获取验证码" : "取验证码",
                 // 获取到的验证码
                 verificationCode: null,
                 // 是否正在获取

@@ -51,7 +51,7 @@
                 userEquipment等于null，证明是PC端，不是null就是其他设备
                 $store.state.userEquipment是使用Vuex的state里的变量-->
                 <el-tooltip
-                    :content="$store.state.userEquipment === null ? 'Ctrl+Enter换行' : '回车键添加'"
+                    :content="$store.getters.userEquipment === null ? 'Ctrl+Enter换行' : '回车键换行'"
                     :disabled="isShowLineFeed"
                     effect="light"
                     placement="left"
@@ -66,6 +66,7 @@
                     once：此事件在只触发一次，刷新后重置次数
                     :[inputStatus]="inputStatus"：动态绑定属性名和属性值-->
                     <el-input
+                        v-if="$store.getters.userEquipment === null"
                         id="inputTodo"
                         ref="inputTodo"
                         v-model="userInput"
@@ -80,11 +81,25 @@
                         @keyup.ctrl.enter="lineFeed"
                         @focus.once="closeLineFeedTip"
                     ></el-input>
+                    <!--上面是PC端用的输入框，下面是移动端用的（要注意回车本来就是换行，所以这里无需回车事件）-->
+                    <el-input
+                        v-else
+                        id="inputTodo"
+                        ref="inputTodo"
+                        v-model="userInput"
+                        v-focus
+                        :[inputStatus]="inputStatus"
+                        :autosize="{ minRows: 2, maxRows: 4 }"
+                        clearable
+                        placeholder="请输入您的待办事项"
+                        type="textarea"
+                        @focus="inputFocus"
+                        @focus.once="closeLineFeedTip"
+                    ></el-input>
                 </el-tooltip>
                 <!--这里不能加:disabled="inputDisabled"，会覆盖自定义的光标样式
                 如果“userEquipment === null”，证明是PC端，就有一个添加按钮，不用改成换行按钮，因为PC可以用Ctrl+Enter组合键-->
                 <el-button
-                    v-if="$store.state.userEquipment === null"
                     id="addToDo"
                     :class="{
                         addToDoDisabledCursor: inputDisabled === true,
@@ -93,18 +108,6 @@
                     type="primary"
                     @click="addToDo"
                     >添加
-                </el-button>
-                <!--换行按钮-->
-                <el-button
-                    v-if="$store.state.userEquipment !== null"
-                    id="addToDo"
-                    :class="{
-                        addToDoDisabledCursor: inputDisabled === true,
-                        addToDoNotDisabledCursor: inputDisabled === false,
-                    }"
-                    type="primary"
-                    @click="lineFeed"
-                    >换行
                 </el-button>
             </label>
 
@@ -1081,6 +1084,7 @@ export default {
 
 /*给添加事项的输入框修改指针样式*/
 ::v-deep(#inputTodo) {
+    height: 53px;
     cursor: url("../../assets/cursor/text.png"), text;
 }
 
@@ -1101,7 +1105,6 @@ export default {
 #inputAndButton {
     /*变为弹性布局*/
     display: flex;
-    height: 53px;
 }
 
 /*缩放字体大小的动画*/
@@ -1135,6 +1138,11 @@ export default {
     padding-right: 20px;
     /*过渡时间*/
     transition-duration: 1s;
+    /*内容超出时，会被修剪，并可以滚动*/
+    overflow: auto;
+    /*隐藏滚动条*/
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 @media (max-height: 250px) {
