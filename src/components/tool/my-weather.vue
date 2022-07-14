@@ -20,7 +20,7 @@
 
 <script>
 // 引入天气的组件
-import YyWeather from "@/components/todoList/yy-weather";
+import YyWeather from "@/components/tool/yy-weather";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
 

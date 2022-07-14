@@ -1,6 +1,6 @@
 <!--此组件是为课后练习而创建的-->
 <template>
-    <div id="my-test">
+    <div id="todo-root">
         <!--用于平滑刷新网页状态，v-if先是false，然后瞬间切换为true-->
         <ToDoMvc v-if="isRouterAlive" />
     </div>
@@ -12,7 +12,7 @@ import ToDoMvc from "@/components/todoList/todo-list";
 
 export default {
     // 首页组件的名称
-    name: "my-test",
+    name: "todo-root",
     components: {
         ToDoMvc,
     },

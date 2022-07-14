@@ -11,7 +11,7 @@ const router = createRouter({
         {
             path: "/",
             // “() => import()”是路由懒加载，即动态导入，对所有的路由都使用动态导入是个好主意
-            component: () => import("../root_components/my-test"),
+            component: () => import("../root_components/todo-root"),
             meta: {
                 title: "待办事项",
             },

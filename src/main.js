@@ -17,13 +17,13 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 // 引入axios
 import axios from "axios";
 // 根组件:
-import myTest from "@/root_components/my-test";
+import todoRoot from "@/root_components/todo-root";
 // import htmlEmail from "@/root_components/html-email"
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 // 创建Vue实例，并赋值给一个常量
-const nowPage = createApp(myTest).use(store).use(router);
+const nowPage = createApp(todoRoot).use(store).use(router);
 // Element-Plus的图标库
 for (let [key, component] of Object.entries(ElementPlusIconsVue)) {
     nowPage.component(key, component);

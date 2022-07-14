@@ -368,7 +368,7 @@ import { ElNotification } from "element-plus";
 import { loginTime } from "@/jsFunction/todoList";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
-import setAvatar from "@/components/todoList/set-avatar";
+import setAvatar from "@/components/user/set-avatar";
 
 export default {
     name: "user-login",

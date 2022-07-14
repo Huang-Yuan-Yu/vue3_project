@@ -119,6 +119,7 @@
                         :src="require('@/assets/showAll.png')"
                         alt="显示所有事项"
                         class="todoFunctionButton"
+                        fit="cover"
                         @click.stop="currentStatus = '显示所有事项'"
                     ></el-image>
                 </el-tooltip>
@@ -128,6 +129,7 @@
                         :src="require('@/assets/showFinish.png')"
                         alt="只显示已完成的事项"
                         class="todoFunctionButton"
+                        fit="cover"
                         @click.stop="currentStatus = '只显示已完成的事项'"
                     ></el-image>
                 </el-tooltip>
@@ -137,6 +139,7 @@
                         :src="require('@/assets/showIncomplete.png')"
                         alt="只显示未完成的事项"
                         class="todoFunctionButton"
+                        fit="cover"
                         @click.stop="currentStatus = '只显示未完成的事项'"
                     ></el-image>
                 </el-tooltip>
@@ -148,6 +151,7 @@
                         :src="require('@/assets/clearAllFinish.png')"
                         alt="清除已完成的事项"
                         class="todoFunctionButton"
+                        fit="cover"
                         @click.stop="clearCompleteTheTask"
                     ></el-image>
                 </el-tooltip>
@@ -158,6 +162,7 @@
                         :src="require('@/assets/doneAll.png')"
                         alt="完成所有事项"
                         class="todoFunctionButton"
+                        fit="cover"
                         @click.stop="finishAllTodo"
                     ></el-image>
                 </el-tooltip>
@@ -168,6 +173,7 @@
                         :src="require('@/assets/noDoneAll.png')"
                         alt="取消完成所有事项"
                         class="todoFunctionButton"
+                        fit="cover"
                         @click.stop="noFinishAllTodo"
                     ></el-image>
                 </el-tooltip>
@@ -301,7 +307,7 @@ import {
     ping,
 } from "@/jsFunction/todoList";
 // 用户登录、注册组件
-import userLogin from "@/components/todoList/user-login";
+import userLogin from "@/components/user/user-login";
 // 引入消息提示框，属于非模态提示框，不会打断用户操作
 import { ElMessage } from "element-plus";
 // 完成事项的Svg动态图标
@@ -311,11 +317,11 @@ import { InfoFilled } from "@element-plus/icons-vue";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
 // 引入天气组件
-import MyWeather from "@/components/todoList/my-weather";
+import MyWeather from "@/components/tool/my-weather";
 // 侧边栏
-import SideToolbar from "@/components/todoList/side-toolbar";
+import SideToolbar from "@/components/tool/side-toolbar";
 // 鼠标点击特效
-import ClickSpecialEffect from "@/components/todoList/click-special-effect";
+import ClickSpecialEffect from "@/components/tool/click-special-effect";
 import WebFooter from "@/components/todoList/web-footer";
 
 export default {
@@ -1300,16 +1306,17 @@ export default {
 
 /*待办事项功能按钮的div*/
 #functionIcon {
-    width: 100%;
-    height: auto;
-    margin-bottom: 5px;
-    margin-top: -2px;
+    display: flex;
+    /*平均分布*/
+    justify-content: space-between;
+    padding-left: 0.2vw;
+    padding-right: 0.2vw;
 }
 
 /*待办事项功能按钮*/
 .todoFunctionButton {
-    width: 30px;
-    margin-right: 2.6vmax;
+    display: flex;
+    height: 30px;
     /*默认未选中时的不透明度为50%*/
     opacity: 50%;
     /*加上过渡*/
@@ -1330,8 +1337,8 @@ export default {
 
 /*待办事项的滚动栏*/
 #elScrollbar {
-    position: relative;
-    bottom: 12px;
+    //position: relative;
+    //bottom: 12px;
 }
 
 /*事项元素开始进入*/
