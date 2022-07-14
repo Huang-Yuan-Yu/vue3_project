@@ -34,7 +34,8 @@
                             </template>
                         </el-upload>
 
-                        <!--图像裁剪组件：判断为开始裁剪，就显示可裁剪头像的组件。每次裁剪都使用原始图像裁剪——originalImage-->
+                        <!--图像裁剪组件：判断为开始裁剪，就显示可裁剪头像的组件。每次裁剪都使用原始图像裁剪——originalImage
+                        presetMode里指定的大小就相当于对图片进行压缩-->
                         <vue-picture-cropper
                             v-if="isCrop === true"
                             :boxStyle="{
@@ -52,8 +53,8 @@
                             }"
                             :presetMode="{
                                 mode: 'round',
-                                width: 400,
-                                height: 400,
+                                width: 200,
+                                height: 200,
                             }"
                             imageSmoothingQuality="high"
                         />
@@ -158,67 +159,15 @@ export default defineComponent({
         },
         // 图片上传后先压缩再裁剪
         httpRequest(options) {
-            let that = this;
-            // 获取文件对象
-            let file = options.file;
-            // 在还没压缩之前先赋值
-            this.userAvatarData = this.originalImage = URL.createObjectURL(file);
-            // 创建一个HTML5的FileReader对象
-            let reader = new FileReader();
-            // 创建一个img对象
-            let img = new Image();
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-            reader.onload = (e) => {
-                img.src = e.target.result;
-                // base64地址图片加载完毕后执行
-                img.onload = function () {
-                    // 缩放图片需要的canvas（也可以在DOM中直接定义canvas标签，这样就能把压缩完的图片不转base64也能直接显示出来）
-                    let canvas = document.createElement("canvas");
-                    let context = canvas.getContext("2d");
-                    // 图片原始尺寸
-                    let originWidth = this.width;
-                    let originHeight = this.height;
-                    // 最大尺寸限制，可通过设置宽高来实现图片压缩程度
-                    let maxWidth = 400,
-                        maxHeight = 400;
-                    // 目标尺寸
-                    let targetWidth = originWidth,
-                        targetHeight = originHeight;
-                    // 图片尺寸超过最大尺寸的限制
-                    if (originWidth > maxWidth || originHeight > maxHeight) {
-                        if (originWidth / originHeight > maxWidth / maxHeight) {
-                            // 更改宽度，按照宽度限定尺寸
-                            targetWidth = maxWidth;
-                            targetHeight = Math.round(maxWidth * (originHeight / originWidth));
-                        } else {
-                            targetHeight = maxHeight;
-                            targetWidth = Math.round(maxHeight * (originWidth / originHeight));
-                        }
-                    }
-                    // 对图片进行缩放
-                    canvas.width = targetWidth;
-                    canvas.height = targetHeight;
-                    // 清除画布
-                    context.clearRect(0, 0, targetWidth, targetHeight);
-                    // 图片压缩，第一个参数是创建的img对象；第二三个参数是左上角坐标，后面两个是画布区域宽高
-                    context.drawImage(img, 0, 0, targetWidth, targetHeight);
-                    // 压缩后的base64文件（“原始图像originalImage”备份用的不压缩）
-                    that.userAvatarData = canvas.toDataURL("image/jpeg", 0.92);
-                };
-            };
+            // 获取文件对象，先赋值给userAvatarData
+            this.userAvatarData = this.originalImage = URL.createObjectURL(options.file);
             // 立即开始裁剪
             this.isCrop = true;
         },
         // 裁剪头像完毕
         cutFinished() {
-            const size = {
-                width: 200,
-                height: 200,
-            };
             // 使用第三方库获取生成的base64图片地址，把base64赋给变量，便于展示
-            this.userAvatarData = cropper.getDataURL(size);
+            this.userAvatarData = cropper.getDataURL();
             // 隐藏裁切弹窗
             this.isCrop = false;
             // 确认第一次裁剪完成
@@ -229,7 +178,6 @@ export default defineComponent({
                 message: "裁剪成功！",
                 type: "success",
             });
-            // console.log(this.userAvatarData)
         },
         // 重新裁剪图片
         reCrop() {

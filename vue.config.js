@@ -78,84 +78,109 @@ module.exports = {
         ],
     },
     chainWebpack: (config) => {
-        // “npm install image-webpack-loader”，能够压缩图片
-        config.module
-            .rule("image")
-            .test(/\.(png|jpe?g|gif)(\?.*)?$/)
-            .use("image-webpack-loader")
-            .loader("image-webpack-loader")
-            .options({
-                // 此处为ture的时候不会启用压缩处理,目的是为了开发模式下调试速度更快
-                disable: process.env.NODE_ENV === "development",
-            })
-            .end();
-
+        // 打包可视化——npm install --save-dev webpack-bundle-analyzer
+        // config.plugin("webpack-bundle-analyzer").use(require("webpack-bundle-analyzer").BundleAnalyzerPlugin);
         // 在生产环境下，在打包时进行gzip压缩，就不用等服务器端动态压缩了，提高性能
         if (process.env.NODE_ENV === "production") {
+            // “npm install image-webpack-loader”，能够压缩图片
+            config.module
+                .rule("image")
+                .test(/\.(png|jpe?g|gif)(\?.*)?$/)
+                .use("image-webpack-loader")
+                .loader("image-webpack-loader")
+                .options({
+                    // 此处为ture的时候不会启用压缩处理,目的是为了开发模式下调试速度更快
+                    disable: process.env.NODE_ENV === "development",
+                })
+                .end();
+
+            // Gzip压缩
             config.plugin("compression-webpack-plugin").use(
                 new CompressionPlugin({
-                    test: /\.js$|\.html$|\.css$/, // 匹配文件名
-                    threshold: 10240, // 对超过10k的数据压缩
-                    deleteOriginalAssets: true, // 删除源文件
+                    // 匹配文件名
+                    test: /\.js$|\.html$|\.css$/,
+                    // 对超过10k的数据压缩，这里单位为字节
+                    threshold: 10240,
+                    // 不删除源文件
+                    deleteOriginalAssets: false,
+                    //只有压缩率比这个值小的文件才会被处理，压缩率=压缩大小/原始大小，如果压缩后和原始文件大小没有太大区别，就不用压缩
+                    minRatio: 0.8,
                 })
             );
-        }
 
-        // 拆包
-        config.optimization.splitChunks({
-            chunks: "all",
-            maxInitialRequests: Infinity,
-            minSize: 30000, // 依赖包超过30000bit将被单独打包
-            automaticNameDelimiter: "-",
-            cacheGroups: {
-                vue: {
-                    name: "vue",
-                    test: /[\\/]node_modules[\\/]vue[\\/]/,
-                    priority: -10,
+            // 拆包
+            config.optimization.splitChunks({
+                // 对于需要动态加载的内容，抽出来
+                chunks: "async",
+                maxInitialRequests: Infinity,
+                minSize: 30000, // 依赖包超过30000bit将被单独打包
+                automaticNameDelimiter: "-",
+                cacheGroups: {
+                    vue: {
+                        name: "vue",
+                        test: /[\\/]node_modules[\\/]vue[\\/]/,
+                        priority: -10,
+                    },
+                    "vue-router": {
+                        name: "vue-router",
+                        test: /[\\/]node_modules[\\/]vue-router[\\/]/,
+                        priority: -10,
+                    },
+                    "element-plus": {
+                        name: "element-plus",
+                        test: /[\\/]node_modules[\\/]element-plus[\\/]/,
+                        priority: -10,
+                    },
+                    // 提取重复引用公共库
+                    common: {
+                        name: "chunk-common",
+                        chunks: "initial",
+                        minChunks: 2,
+                        maxInitialRequests: 5,
+                        minSize: 0,
+                        priority: 1,
+                        reuseExistingChunk: true,
+                        enforce: true,
+                    },
+                    vendors: {
+                        name: "vendors",
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: -20,
+                        reuseExistingChunk: true,
+                        enforce: true,
+                        minSize: 0, //大于0个字节
+                        minChunks: 2, //在分割之前，这个代码块最小应该被引用的次数
+                    },
+                    default: {
+                        minChunks: 2,
+                        priority: -20,
+                        reuseExistingChunk: true,
+                    },
                 },
-                "vue-router": {
-                    name: "vue-router",
-                    test: /[\\/]node_modules[\\/]vue-router[\\/]/,
-                    priority: -10,
-                },
-                "element-plus": {
-                    name: "element-plus",
-                    test: /[\\/]node_modules[\\/]element-plus[\\/]/,
-                    priority: -10,
-                },
-                // 提取重复引用公共库
-                common: {
-                    name: "chunk-common",
-                    chunks: "initial",
-                    minChunks: 2,
-                    maxInitialRequests: 5,
-                    minSize: 0,
-                    priority: 1,
-                    reuseExistingChunk: true,
-                    enforce: true,
-                },
-                vendors: {
-                    name: "vendors",
-                    test: /[\\/]node_modules[\\/]/,
-                    priority: -20,
-                    reuseExistingChunk: true,
-                    enforce: true,
-                    minSize: 0, //大于0个字节
-                    minChunks: 2, //在分割之前，这个代码块最小应该被引用的次数
-                },
-                default: {
-                    minChunks: 2,
-                    priority: -20,
-                    reuseExistingChunk: true,
-                },
-            },
-        });
-        // 兼容更多的浏览器——ES6转ES5，转换后在本地打不开是正常的
-        config.entry("main").add("babel-polyfill");
-        config.entry.app = ["babel-polyfill", "./src/main.js"];
+            });
+            // 去掉调试信息
+            config.optimization.minimizer("terser").tap((args) => {
+                Object.assign(args[0].terserOptions.compress, {
+                    // 删除所有调式带有console的
+                    drop_console: true,
+                    drop_debugger: true,
+                    // 生产模式 console.log 去除
+                    pure_funcs: ["console.log", "console.table"],
+                });
+                return args;
+            });
+            // 兼容更多的浏览器——ES6转ES5，转换后在本地打不开是正常的
+            config.entry("main").add("babel-polyfill");
+            config.entry.app = ["babel-polyfill", "./src/main.js"];
+        }
+        // 如果在开发环境下
+        else {
+            // 优化速度
+            config.optimization.minimize(false);
+        }
     },
     // 语法转换也要包括第三方库
     transpileDependencies: [/node_modules/],
     // 生产环境禁用eslint
-    lintOnSave: !process.env.NODE_ENV !== "production",
+    lintOnSave: process.env.NODE_ENV !== "production",
 };

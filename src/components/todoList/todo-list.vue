@@ -265,10 +265,9 @@
                 </ul>
             </el-scrollbar>
         </el-form>
-        <footer id="beiAnFooter">
-            <span class="beiAnText">工信部备案号：</span>
-            <a class="beiAnText" href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2022064736号</a>
-        </footer>
+
+        <!--网站底部-->
+        <web-footer></web-footer>
     </div>
 </template>
 
@@ -314,12 +313,13 @@ import MyWeather from "@/components/todoList/my-weather";
 import SideToolbar from "@/components/todoList/side-toolbar";
 // 鼠标点击特效
 import ClickSpecialEffect from "@/components/todoList/click-special-effect";
+import WebFooter from "@/components/todoList/web-footer";
 
 export default {
     name: "todo-list",
     // 注入my-test组件提供（provide）的reload依赖，用于刷新页面
     inject: ["reload"],
-    components: { ClickSpecialEffect, SideToolbar, MyWeather, userLogin, doneSvg },
+    components: { WebFooter, ClickSpecialEffect, SideToolbar, MyWeather, userLogin, doneSvg },
     // Vue3特有的组合式API
     setup() {
         // 将UI库的图标信息暴露给模板，如果没有此操作，会报警告
@@ -1101,6 +1101,7 @@ export default {
 #inputAndButton {
     /*变为弹性布局*/
     display: flex;
+    height: 53px;
 }
 
 /*缩放字体大小的动画*/
@@ -1377,25 +1378,5 @@ export default {
 /*修改事项用到的输入框*/
 ::v-deep(.revisedInputBox, .el-textarea__inner) {
     width: 20vw;
-}
-
-/*网站备案的Footer——类似于Div*/
-#beiAnFooter {
-    width: 100%;
-    position: absolute;
-    bottom: 1vh;
-    text-align: center;
-}
-
-/*网站备案*/
-.beiAnText {
-    font-size: 1vh;
-    color: rgba(255, 255, 255, 0.4);
-    text-decoration: none;
-}
-
-.beiAnText::selection {
-    color: #004da3;
-    background: white;
 }
 </style>

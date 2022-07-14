@@ -1183,7 +1183,7 @@ export default {
 
 /*用户图标*/
 .userLogo {
-    width: 30px;
+    width: 26px;
     filter: drop-shadow(2px 2px 2px rgba(0, 0, 0,.2));
     margin-top: 3vh;
     margin-right: 2vw;
