@@ -33,6 +33,8 @@
               /*如果在vue中要隐藏滚动条，要在index.html里面设置，在组件中无法设置*/
               overflow-x: hidden;
               overflow-y: hidden;
+              /*全局字体样式*/
+              font: 14px/1.5 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
           }
       </style>
   </head>
@@ -41,7 +43,8 @@
     <noscript>
       <strong style="color:white;">您需要让浏览器打开运行JavaScript的权限，否则无法浏览此网页</strong>
     </noscript>
-    <script src = "https://cdn.jsdelivr.net/npm/proxy-polyfill@0.3.0/proxy.min.js"></script>
+    <!--构建的文件将自动加载-->
+    <div id="app"></div>
     <!--用于判断浏览器是否支持运行本网页-->
     <script>
         (function () {
@@ -121,7 +124,5 @@
             }
         })();
     </script>
-    <div id="app"></div>
-    <!--构建的文件将自动加载-->
   </body>
 </html>

@@ -5,7 +5,7 @@
             <div v-if="isShowSetAvatarWindow" id="setAvatarDiv">
                 <p id="close" @click="closeWindows">✖</p>
                 <div>
-                    <p class="wechatText">设置头像</p>
+                    <p class="windowTitle">设置头像</p>
                     <transition-group name="userAvatarDiv">
                         <!--action为后端地址；drag：支持拖拽上传；当未在裁剪时，就显示上传图片的组件
                         这里也不用accept，限制用户上传文件的类型的逻辑写在JavaScript代码中，否则会有BUG
@@ -303,7 +303,7 @@ export default defineComponent({
     font-size: 12px;
     margin-top: 6px;
     /*指定文字之间的间距*/
-    letter-spacing: 0.4px;
+    letter-spacing: 1px;
 }
 
 /*窗口的功能按钮的el-row标签*/
@@ -376,7 +376,7 @@ export default defineComponent({
 }
 
 /*窗口标题*/
-.wechatText {
+.windowTitle {
     color: white;
     font-size: 20px;
 }

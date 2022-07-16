@@ -129,7 +129,7 @@ module.exports = {
                     "element-plus": {
                         name: "element-plus",
                         test: /[\\/]node_modules[\\/]element-plus[\\/]/,
-                        priority: -10,
+                        priority: 10,
                     },
                     // 提取重复引用公共库
                     common: {
@@ -180,7 +180,7 @@ module.exports = {
         }
     },
     // 语法转换也要包括第三方库
-    transpileDependencies: [/node_modules/],
+    // transpileDependencies: [/node_modules/],
     // 生产环境禁用eslint
     lintOnSave: process.env.NODE_ENV !== "production",
 };

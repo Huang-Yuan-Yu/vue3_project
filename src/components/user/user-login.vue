@@ -25,7 +25,7 @@
                             type="info"
                             @click="showLoginWindow('注册')"
                         >
-                            注册
+                            免费注册
                         </el-button>
                     </div>
                     <div v-if="loginSuccess" id="loginSuccess" class="scale-in-tr">
@@ -85,7 +85,7 @@
                         <el-input
                             v-focus
                             v-model.trim="user.name"
-                            :class="{ inputError: this.inputAccountError }"
+                            :class="{ inputError: inputAccountError }"
                             class="noCodeUserAccountInput"
                             clearable
                             maxlength="40"
@@ -93,7 +93,7 @@
                             show-word-limit
                             type="email"
                             @blur="checkAccount"
-                            @focus="this.inputAccountError = false"
+                            @focus="inputAccountError = false"
                             @keyup.enter="userLogin"
                         >
                             <!--使用Element Plus（UI库）提供的插槽，这里“#prefix”表示从输入表单的开头插入-->
@@ -106,7 +106,7 @@
                         <!--show-password：显示密码-->
                         <el-input
                             v-model.trim="user.password"
-                            :class="{ inputError: this.inputPasswordError }"
+                            :class="{ inputError: inputPasswordError }"
                             class="userPasswordInput"
                             clearable
                             maxlength="15"
@@ -161,7 +161,7 @@
                                 <el-input
                                     v-focus
                                     v-model.trim="user.name"
-                                    :class="{ inputError: this.inputAccountError }"
+                                    :class="{ inputError: inputAccountError }"
                                     autocomplete="nope"
                                     class="userAccountInput"
                                     clearable
@@ -170,7 +170,7 @@
                                     show-word-limit
                                     type="email"
                                     @blur="checkAccount"
-                                    @focus="this.inputAccountError = false"
+                                    @focus="inputAccountError = false"
                                     @keyup.enter="userRegistration"
                                 >
                                     <template #prefix>
@@ -200,7 +200,7 @@
                         <p v-if="inputAccountError" class="loginInputErrorTips">提示：电子邮箱格式错误</p>
                         <el-input
                             v-model.trim="user.password"
-                            :class="{ inputError: this.inputPasswordError }"
+                            :class="{ inputError: inputPasswordError }"
                             class="userPasswordInput"
                             clearable
                             maxlength="15"
@@ -228,14 +228,14 @@
                             <el-col :span="12">
                                 <el-input
                                     v-model.trim="user.verificationCode"
-                                    :class="{ inputError: this.inputVerificationCodeError }"
+                                    :class="{ inputError: inputVerificationCodeError }"
                                     class="userPasswordInput"
                                     clearable
                                     maxlength="6"
                                     placeholder="验证码"
                                     show-word-limit
                                     type="text"
-                                    @focus="this.inputVerificationCodeError = false"
+                                    @focus="inputVerificationCodeError = false"
                                     @keyup.enter="userRegistration"
                                 >
                                     <template #prefix>
@@ -261,7 +261,7 @@
                                 <el-input
                                     v-focus
                                     v-model.trim="user.name"
-                                    :class="{ inputError: this.inputAccountError }"
+                                    :class="{ inputError: inputAccountError }"
                                     autocomplete="nope"
                                     class="userAccountInput"
                                     clearable
@@ -270,7 +270,7 @@
                                     show-word-limit
                                     type="email"
                                     @blur="checkAccount"
-                                    @focus="this.inputAccountError = false"
+                                    @focus="inputAccountError = false"
                                     @keyup.enter="userRegistration"
                                 >
                                     <template #prefix>
@@ -300,7 +300,7 @@
                         <p v-if="inputAccountError" class="loginInputErrorTips">提示：电子邮箱格式错误</p>
                         <el-input
                             v-model.trim="user.password"
-                            :class="{ inputError: this.inputPasswordError }"
+                            :class="{ inputError: inputPasswordError }"
                             class="userPasswordInput"
                             clearable
                             maxlength="15"
@@ -328,14 +328,14 @@
                             <el-col :span="12">
                                 <el-input
                                     v-model.trim="user.verificationCode"
-                                    :class="{ inputError: this.inputVerificationCodeError }"
+                                    :class="{ inputError: inputVerificationCodeError }"
                                     :placeholder="$store.state.userEquipment === null ? '请输入验证码' : '验证码'"
                                     class="userPasswordInput"
                                     clearable
                                     maxlength="6"
                                     show-word-limit
                                     type="text"
-                                    @focus="this.inputVerificationCodeError = false"
+                                    @focus="inputVerificationCodeError = false"
                                     @keyup.enter="userRegistration"
                                 >
                                     <template #prefix>

@@ -18,9 +18,10 @@
             />
         </div>
 
+        <!--鼠标点击特效-->
         <click-special-effect></click-special-effect>
         <!--用户注册、登录模块-->
-        <userLogin ref="userLogin"></userLogin>
+        <user-login ref="userLogin"></user-login>
         <!--引入包含天气组件的组件-->
         <my-weather ref="myWeather"></my-weather>
         <!--引入侧边工具栏的组件-->
@@ -119,8 +120,8 @@
                         :src="require('@/assets/showAll.png')"
                         alt="显示所有事项"
                         class="todoFunctionButton"
-                        fit="cover"
                         @click.stop="currentStatus = '显示所有事项'"
+                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="只显示已完成的事项" effect="light" placement="top">
@@ -129,8 +130,8 @@
                         :src="require('@/assets/showFinish.png')"
                         alt="只显示已完成的事项"
                         class="todoFunctionButton"
-                        fit="cover"
                         @click.stop="currentStatus = '只显示已完成的事项'"
+                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="只显示未完成的事项" effect="light" placement="top">
@@ -139,8 +140,8 @@
                         :src="require('@/assets/showIncomplete.png')"
                         alt="只显示未完成的事项"
                         class="todoFunctionButton"
-                        fit="cover"
                         @click.stop="currentStatus = '只显示未完成的事项'"
+                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="清除已完成的事项" effect="light" placement="top">
@@ -151,8 +152,8 @@
                         :src="require('@/assets/clearAllFinish.png')"
                         alt="清除已完成的事项"
                         class="todoFunctionButton"
-                        fit="cover"
                         @click.stop="clearCompleteTheTask"
+                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="完成所有事项" effect="light" placement="top">
@@ -162,8 +163,8 @@
                         :src="require('@/assets/doneAll.png')"
                         alt="完成所有事项"
                         class="todoFunctionButton"
-                        fit="cover"
                         @click.stop="finishAllTodo"
+                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="取消完成所有事项" effect="light" placement="top">
@@ -173,8 +174,8 @@
                         :src="require('@/assets/noDoneAll.png')"
                         alt="取消完成所有事项"
                         class="todoFunctionButton"
-                        fit="cover"
                         @click.stop="noFinishAllTodo"
+                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
             </div>
@@ -306,29 +307,31 @@ import {
     noFinishAllTodo,
     ping,
 } from "@/jsFunction/todoList";
-// 用户登录、注册组件
-import userLogin from "@/components/user/user-login";
 // 引入消息提示框，属于非模态提示框，不会打断用户操作
 import { ElMessage } from "element-plus";
-// 完成事项的Svg动态图标
-import doneSvg from "./done-svg";
 // 导入“帮助”的图标
 import { InfoFilled } from "@element-plus/icons-vue";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
-// 引入天气组件
-import MyWeather from "@/components/tool/my-weather";
-// 侧边栏
-import SideToolbar from "@/components/tool/side-toolbar";
-// 鼠标点击特效
-import ClickSpecialEffect from "@/components/tool/click-special-effect";
-import WebFooter from "@/components/todoList/web-footer";
 
 export default {
     name: "todo-list",
     // 注入my-test组件提供（provide）的reload依赖，用于刷新页面
     inject: ["reload"],
-    components: { WebFooter, ClickSpecialEffect, SideToolbar, MyWeather, userLogin, doneSvg },
+    components: {
+        // 页脚组件
+        "web-footer": () => import("@/components/todoList/web-footer"),
+        // 鼠标点击特效
+        "click-special-effect": () => import("@/components/tool/click-special-effect"),
+        // 侧边栏
+        "side-toolbar": () => import("@/components/tool/side-toolbar"),
+        // 引入天气组件
+        "my-weather": () => import("@/components/tool/my-weather"),
+        // 用户登录、注册组件
+        "user-login": () => import("@/components/user/user-login"),
+        // 完成事项的Svg动态图标
+        "done-svg": () => import("./done-svg"),
+    },
     // Vue3特有的组合式API
     setup() {
         // 将UI库的图标信息暴露给模板，如果没有此操作，会报警告
@@ -339,7 +342,7 @@ export default {
     data() {
         return {
             // 引用图片用的随机数（背景图片资源目录下有多少张图片，这里的数字就是多少）
-            imageUrl: Math.floor(Math.random() * 14),
+            imageUrl: Math.floor(Math.random() * 15),
             // 服务器状态——未知、关闭或开启，默认为未知，如果出现网络错误，则赋值为“关闭”
             serverStatus: "未知",
             // 是否缩放字体
@@ -1144,11 +1147,6 @@ export default {
     padding-right: 20px;
     /*过渡时间*/
     transition-duration: 1s;
-    /*内容超出时，会被修剪，并可以滚动*/
-    overflow: auto;
-    /*隐藏滚动条*/
-    overflow-x: hidden;
-    overflow-y: hidden;
 }
 
 @media (max-height: 250px) {
@@ -1306,17 +1304,16 @@ export default {
 
 /*待办事项功能按钮的div*/
 #functionIcon {
-    display: flex;
-    /*平均分布*/
-    justify-content: space-between;
-    padding-left: 0.2vw;
-    padding-right: 0.2vw;
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+    margin-top: -2px;
 }
 
 /*待办事项功能按钮*/
 .todoFunctionButton {
-    display: flex;
-    height: 30px;
+    width: 30px;
+    margin-right: 2.6vmax;
     /*默认未选中时的不透明度为50%*/
     opacity: 50%;
     /*加上过渡*/
@@ -1337,8 +1334,8 @@ export default {
 
 /*待办事项的滚动栏*/
 #elScrollbar {
-    //position: relative;
-    //bottom: 12px;
+    position: relative;
+    bottom: 12px;
 }
 
 /*事项元素开始进入*/

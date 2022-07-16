@@ -25,15 +25,15 @@
             <div id="drawerContent">
                 <div class="tools" @click="showWechatMiniProgram">
                     <!--fit="contain"：完整显示图片且不会变形-->
-                    <el-image :src="require('@/assets/WeChat.png')" class="toolsLogo" fit="contain" />
+                    <el-image :src="require('@/assets/WeChat.png')" class="toolsLogo" fit="contain" :lazy="true"/>
                     <span class="toolsText">轻型工具箱小程序</span>
                 </div>
                 <div class="tools" @click="toGitHub">
-                    <el-image :src="require('@/assets/GitHub.png')" class="toolsLogo" fit="contain" />
+                    <el-image :src="require('@/assets/GitHub.png')" class="toolsLogo" fit="contain" :lazy="true"/>
                     <span class="toolsText">站长的Github</span>
                 </div>
                 <div class="tools" @click="toGitee">
-                    <el-image :src="require('@/assets/Gitee.png')" class="toolsLogo" fit="contain" />
+                    <el-image :src="require('@/assets/Gitee.png')" class="toolsLogo" fit="contain" :lazy="true"/>
                     <span class="toolsText">站长的Gitee</span>
                 </div>
             </div>
@@ -49,6 +49,7 @@
                         :src="require('@/assets/WechatMiniProgram.png')"
                         class="wechatMiniProgram"
                         fit="contain"
+                        :lazy="true"
                     />
                 </div>
             </div>
