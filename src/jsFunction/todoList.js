@@ -183,7 +183,7 @@ export function zoomFont(that) {
         setTimeout(() => {
             that.isZoomFont = false;
             // 因为动画的时间为0.5秒，所以这里500ms=0.5s
-        }, 500);
+        }, 800);
     }
 }
 

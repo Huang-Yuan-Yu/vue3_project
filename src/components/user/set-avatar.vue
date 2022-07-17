@@ -292,7 +292,7 @@ export default defineComponent({
     height: 180px;
     display: block;
     /*使图片不变形*/
-    object-fit: cover;
+    object-fit: contain;
     margin: 0 auto;
 }
 

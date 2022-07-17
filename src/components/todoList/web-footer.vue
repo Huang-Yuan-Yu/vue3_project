@@ -44,7 +44,7 @@
                         <p class="websiteTime" v-show="isShowIntroduction">
                             待办事项已上线{{ distanceTime }}天
                             <br />
-                            最后更新：2022-7-16
+                            最后更新：2022-7-17
                         </p>
                     </transition>
                 </div>
@@ -58,6 +58,17 @@
                         :style="{ height: isShowIntroduction === false ? '140%' : '100%' }"
                         @scroll="scrollAnnouncementUl"
                     >
+                        <li class="announcementLi">
+                            <p>2022-7-17</p>
+                            <div>
+                                <span class="updateTag repair">修复</span>
+                                <span class="announcementText">部分设备显示错位的情况</span>
+                            </div>
+                            <div>
+                                <span class="updateTag improve">改进</span>
+                                <span class="announcementText">工具栏图标根据数量和设备尺寸进行响应式显示</span>
+                            </div>
+                        </li>
                         <li class="announcementLi">
                             <p>2022-7-16</p>
                             <div>

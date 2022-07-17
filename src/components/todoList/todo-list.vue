@@ -92,7 +92,7 @@
                         :[inputStatus]="inputStatus"
                         :autosize="{ minRows: 2, maxRows: 4 }"
                         clearable
-                        placeholder="请输入您的待办事项"
+                        placeholder="事项输入框"
                         type="textarea"
                         @focus="inputFocus"
                         @focus.once="closeLineFeedTip"
@@ -120,8 +120,8 @@
                         :src="require('@/assets/showAll.png')"
                         alt="显示所有事项"
                         class="todoFunctionButton"
+                        fit="contain"
                         @click.stop="currentStatus = '显示所有事项'"
-                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="只显示已完成的事项" effect="light" placement="top">
@@ -130,8 +130,8 @@
                         :src="require('@/assets/showFinish.png')"
                         alt="只显示已完成的事项"
                         class="todoFunctionButton"
+                        fit="contain"
                         @click.stop="currentStatus = '只显示已完成的事项'"
-                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="只显示未完成的事项" effect="light" placement="top">
@@ -140,8 +140,8 @@
                         :src="require('@/assets/showIncomplete.png')"
                         alt="只显示未完成的事项"
                         class="todoFunctionButton"
+                        fit="contain"
                         @click.stop="currentStatus = '只显示未完成的事项'"
-                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="清除已完成的事项" effect="light" placement="top">
@@ -152,8 +152,8 @@
                         :src="require('@/assets/clearAllFinish.png')"
                         alt="清除已完成的事项"
                         class="todoFunctionButton"
+                        fit="contain"
                         @click.stop="clearCompleteTheTask"
-                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="完成所有事项" effect="light" placement="top">
@@ -163,8 +163,8 @@
                         :src="require('@/assets/doneAll.png')"
                         alt="完成所有事项"
                         class="todoFunctionButton"
+                        fit="contain"
                         @click.stop="finishAllTodo"
-                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
                 <el-tooltip content="取消完成所有事项" effect="light" placement="top">
@@ -174,8 +174,8 @@
                         :src="require('@/assets/noDoneAll.png')"
                         alt="取消完成所有事项"
                         class="todoFunctionButton"
+                        fit="contain"
                         @click.stop="noFinishAllTodo"
-                        :lazy="true"
                     ></el-image>
                 </el-tooltip>
             </div>
@@ -183,96 +183,92 @@
             <!--滚动列表，定义最小大小和最大大小（注意！最大和最小的值都为百分比，且同样低，才能达到响应式的目的
             height="60%" -->
             <el-scrollbar id="elScrollbar" :max-height="elScrollbarHeight">
-                <ul>
-                    <!--“过渡标签组”，因为这里面会有很多个li元素，所以用<transition-group>包裹起来,tar指向无序列表-->
-                    <transition-group appear name="todo-li" tag="ul">
-                        <!--v-for是Vue的for循环，前面为元素，in后面为数组
-                        也可以在for中的in前面加上括号，然后填另一个参数，最后在v-bind:class中使用，
-                        当value变量为偶数时，样式就生效，否则不生效
-                        ！！！一定要记得在class=""里面要加{}
-                        还有在class=""之类的双引号内填入变量，不能使用{{}}，而是直接写
-                        
-                        另外，:key指令中的值，用于给for循环的每个元素一个唯一的表示
-                        
-                        completed是CSS中的类名，todoArray.done是Vue中data的值，为true时就应用completed样式，为false时就不应用
-                        elementIndex是列表里的索引，每一个元素会有不同的index，index可以标识元素的位置
-                        @click="completeTheTask(elementIndex)"的作用：上面v-for遍历到哪里，都会有一个索引传入completeTheTask()中
-                        ，在Vue的代码中就可以根据这个索引找到用户点击的元素，然后进行done值的改变（true变false等）
-                        
-                        踩坑日记：completed确实是CSS的类名，但后面的todo.done不是todoSome.done，这里指的是单一元素而不是整个数组
-                        注意！！！v-for中的filterMethod是methods里自定义的方法，不是过滤器！
-                        
-                        可以以事项内容作为唯一标识，因为是唯一的，这里没有id，id只存在于数据库中-->
-                        <li v-for="todo in filterMethod(todoArray)" :key="todo.mission">
-                            <div
-                                :class="{ todoDoneBorder: todo.done === 1, todoNotDoneBorder: todo.done === 0 }"
-                                class="todoListElement"
-                            >
-                                <!--用于完成或取消完成事项-->
-                                <g class="svgContainer" @click="completeTheTask(todo)">
-                                    <!--这里的父组件传向子组件-->
-                                    <done-svg :isShow="todo.done === 1"></done-svg>
-                                    <!--循环会将每一个元素填进<li>列表里，调用mission名称，结果是任务的名称-->
-                                </g>
-                                <!--存放事项内容的div，双击此div就可以修改内容-->
-                                <div class="todoDiv" @dblclick="beginModification(todo)">
-                                    <!--label用于显示事项内容。:class后面的内容，判断文字的颜色是否改为绿色（完成则为绿色）
+                <!--“过渡标签组”，因为这里面会有很多个li元素，所以用<transition-group>包裹起来,tar指向无序列表-->
+                <transition-group appear name="todo-li" tag="ul">
+                    <!--v-for是Vue的for循环，前面为元素，in后面为数组
+                    也可以在for中的in前面加上括号，然后填另一个参数，最后在v-bind:class中使用，
+                    当value变量为偶数时，样式就生效，否则不生效
+                    ！！！一定要记得在class=""里面要加{}
+                    还有在class=""之类的双引号内填入变量，不能使用{{}}，而是直接写
+                    
+                    另外，:key指令中的值，用于给for循环的每个元素一个唯一的表示
+                    
+                    completed是CSS中的类名，todoArray.done是Vue中data的值，为true时就应用completed样式，为false时就不应用
+                    elementIndex是列表里的索引，每一个元素会有不同的index，index可以标识元素的位置
+                    @click="completeTheTask(elementIndex)"的作用：上面v-for遍历到哪里，都会有一个索引传入completeTheTask()中
+                    ，在Vue的代码中就可以根据这个索引找到用户点击的元素，然后进行done值的改变（true变false等）
+                    
+                    踩坑日记：completed确实是CSS的类名，但后面的todo.done不是todoSome.done，这里指的是单一元素而不是整个数组
+                    注意！！！v-for中的filterMethod是methods里自定义的方法，不是过滤器！
+                    
+                    可以以事项内容作为唯一标识，因为是唯一的，这里没有id，id只存在于数据库中-->
+                    <li v-for="todo in filterMethod(todoArray)" :key="todo.mission">
+                        <div
+                            :class="{ todoDoneBorder: todo.done === 1, todoNotDoneBorder: todo.done === 0 }"
+                            class="todoListElement"
+                        >
+                            <!--用于完成或取消完成事项-->
+                            <g class="svgContainer" @click="completeTheTask(todo)">
+                                <!--这里的父组件传向子组件-->
+                                <done-svg :isShow="todo.done === 1"></done-svg>
+                                <!--循环会将每一个元素填进<li>列表里，调用mission名称，结果是任务的名称-->
+                            </g>
+                            <!--存放事项内容的div，双击此div就可以修改内容-->
+                            <div class="todoDiv" @dblclick="beginModification(todo)">
+                                <!--label用于显示事项内容。:class后面的内容，判断文字的颜色是否改为绿色（完成则为绿色）
                                     beginModification：开始修改事项内容；originallyContent：原先的内容
                                     如果当前内容与正要修改的内容不一样，证明不是要修改的，就显示
                                     “|| isRevised === false”表示没有在修改，也会显示，只要其中一个为true，那就显示
                                     v-html能够渲染HTML有的标签，比如<br>-->
-                                    <p
-                                        v-if="todo.mission !== originallyContent || isRevised === false"
-                                        :class="{ completed: todo.done, noCompleted: !todo.done }"
-                                        v-html="todo.mission"
-                                    ></p>
-                                    <!--双击之后就会显示此输入框，失去焦点和按下回车键都会保存，是否显示取决于使用的CSS
-                                    v-focus是自定义指令，用于自动聚焦到输入框。isRevised === true表示正在修改
-                                    -->
-                                    <el-input
-                                        v-if="todo.mission === originallyContent && isRevised === true"
-                                        ref="revisedInputBox"
-                                        v-model="inputRevisedContent"
-                                        v-focus
-                                        :autosize="{ maxRows: elScrollbarHeight }"
-                                        class="revisedInputBox"
-                                        clearable
-                                        type="textarea"
-                                        @blur="saveInput(todo, $event)"
-                                        @keyup.esc.stop="saveInput(todo, $event)"
-                                        @keyup.enter.exact="saveInput(todo, $event)"
-                                        @keyup.ctrl.enter="revisedLineFeed"
-                                    />
-                                </div>
-
-                                <div class="liEndDiv">
-                                    <!--<span></span>-->
-                                    <span class="deleteTodo" type="button" @click="deleteTodo(todo)">✖</span>
-                                    <!--弹出“气泡卡片”——trigger：触发方式，hover则是鼠标悬停触发-->
-                                    <el-popover
-                                        ref="popover"
-                                        :content="todo.time"
-                                        placement="top"
-                                        title="最近一次修改时间"
-                                        trigger="hover"
-                                    >
-                                        <template #reference>
-                                            <el-button
-                                                class="showModificationTime"
-                                                color="#330C82"
-                                                size="large"
-                                                type="info"
-                                            >
-                                                <!--用户图标，:size为图标大小-->
-                                                <el-icon :size="22"><Timer /></el-icon>
-                                            </el-button>
-                                        </template>
-                                    </el-popover>
-                                </div>
+                                <p
+                                    v-if="todo.mission !== originallyContent || isRevised === false"
+                                    :class="{ completed: todo.done, noCompleted: !todo.done }"
+                                    v-html="todo.mission"
+                                ></p>
+                                <!--双击之后就会显示此输入框，失去焦点和按下回车键都会保存，是否显示取决于使用的CSS
+                                    v-focus是自定义指令，用于自动聚焦到输入框。isRevised === true表示正在修改-->
+                                <el-input
+                                    v-if="todo.mission === originallyContent && isRevised === true"
+                                    ref="revisedInputBox"
+                                    v-model="inputRevisedContent"
+                                    v-focus
+                                    :autosize="{ maxRows: elScrollbarHeight }"
+                                    class="revisedInputBox"
+                                    clearable
+                                    type="textarea"
+                                    @blur="saveInput(todo, $event)"
+                                    @keyup.esc.stop="saveInput(todo, $event)"
+                                    @keyup.enter.exact="saveInput(todo, $event)"
+                                    @keyup.ctrl.enter="revisedLineFeed"
+                                />
                             </div>
-                        </li>
-                    </transition-group>
-                </ul>
+
+                            <div class="liEndDiv">
+                                <span class="deleteTodo" type="button" @click="deleteTodo(todo)">✖</span>
+                                <!--弹出“气泡卡片”——trigger：触发方式，hover则是鼠标悬停触发-->
+                                <el-popover
+                                    ref="popover"
+                                    :content="todo.time"
+                                    placement="top"
+                                    title="最近一次修改时间"
+                                    trigger="hover"
+                                >
+                                    <template #reference>
+                                        <el-button
+                                            class="showModificationTime"
+                                            color="#330C82"
+                                            size="large"
+                                            type="info"
+                                        >
+                                            <!--用户图标，:size为图标大小-->
+                                            <el-icon :size="22"><Timer /></el-icon>
+                                        </el-button>
+                                    </template>
+                                </el-popover>
+                            </div>
+                        </div>
+                    </li>
+                </transition-group>
             </el-scrollbar>
         </el-form>
 
@@ -334,8 +330,8 @@ export default {
     },
     // Vue3特有的组合式API
     setup() {
-        // 将UI库的图标信息暴露给模板，如果没有此操作，会报警告
         return {
+            // 将UI库的图标信息暴露给模板，如果没有此操作，会报警告
             InfoFilled,
         };
     },
@@ -1049,31 +1045,6 @@ export default {
     background: white;
 }
 
-@media (max-device-width: 300px) {
-    .currentStatus {
-        height: 40px;
-    }
-}
-
-@media (max-device-height: 740px) {
-    .currentStatus {
-        height: 40px;
-    }
-}
-
-@media (max-width: 350px) {
-    .currentStatus {
-        font-size: 2px;
-        position: relative;
-        top: 2px;
-        margin: 0 0 8px;
-    }
-
-    #YyTodo {
-        margin-top: -18px;
-    }
-}
-
 .el-row {
     margin-bottom: 20px;
 }
@@ -1093,7 +1064,7 @@ export default {
 
 /*给添加事项的输入框修改指针样式*/
 ::v-deep(#inputTodo) {
-    height: 53px;
+    min-height: 53px;
     cursor: url("../../assets/cursor/text.png"), text;
 }
 
@@ -1105,8 +1076,6 @@ export default {
 
 ::v-deep(#inputTodo::-webkit-scrollbar-thumb) {
     border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
     background-color: #d4d7de;
 }
 
@@ -1118,7 +1087,8 @@ export default {
 
 /*缩放字体大小的动画*/
 .zoomFont {
-    animation: textSize 0.5s;
+    animation: textSize 0.8s;
+    transition: all 0.8s ease-in-out;
 }
 
 /*字体由小到大、再到小*/
@@ -1128,7 +1098,7 @@ export default {
     }
     50% {
         font-size: 16px;
-        font-weight: bold;
+        text-shadow: 0 0 4px white;
     }
     100% {
         font-size: 14px;
@@ -1306,6 +1276,12 @@ export default {
 #functionIcon {
     width: 100%;
     height: auto;
+    display: flex;
+    justify-content: space-between;
+    // 自动换行
+    flex-flow: wrap;
+    // 对齐
+    align-self: baseline;
     margin-bottom: 5px;
     margin-top: -2px;
 }
@@ -1313,7 +1289,6 @@ export default {
 /*待办事项功能按钮*/
 .todoFunctionButton {
     width: 30px;
-    margin-right: 2.6vmax;
     /*默认未选中时的不透明度为50%*/
     opacity: 50%;
     /*加上过渡*/
@@ -1321,21 +1296,10 @@ export default {
     cursor: url("../../assets/cursor/pointer.png"), pointer;
 }
 
-@media (max-width: 526px) {
-    #functionIcon {
-        margin-top: 2px;
-        margin-bottom: 1vh;
-    }
-
-    .todoFunctionButton {
-        width: 10%;
-    }
-}
-
 /*待办事项的滚动栏*/
 #elScrollbar {
     position: relative;
-    bottom: 12px;
+    bottom: 6px;
 }
 
 /*事项元素开始进入*/
