@@ -9,6 +9,12 @@ module.exports = defineConfig({
 const path = require("path");
 // Gzip压缩
 const CompressionPlugin = require("compression-webpack-plugin");
+// Node.js用的
+const os = require("os");
+// 启用多线程打包，加快打包速度
+const HappyPack = require("happypack");
+// CPU能有多少线程，就用多少
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 // 在构建时，会出现各种资源路径错误的情况，在本文件中重写打包后的基础路径为当前目录，就可以解决
 // 后来通过“npm install --save-dev compression-webpack-plugin”引入打包大小优化的依赖
@@ -80,6 +86,18 @@ module.exports = {
     chainWebpack: (config) => {
         // 打包可视化——npm install --save-dev webpack-bundle-analyzer
         // config.plugin("webpack-bundle-analyzer").use(require("webpack-bundle-analyzer").BundleAnalyzerPlugin);
+
+        // 加速打包——缓存+多线程打包
+        config.cache(true);
+        // npm install happypack --save-dev
+        config.plugin("happypack").use(
+            new HappyPack({
+                id: "happy-babel-js",
+                loaders: ["babel-loader?cacheDirectory=true"],
+                threadPool: happyThreadPool,
+            })
+        );
+
         // 在生产环境下，在打包时进行gzip压缩，就不用等服务器端动态压缩了，提高性能
         if (process.env.NODE_ENV === "production") {
             // “npm install image-webpack-loader”，能够压缩图片
