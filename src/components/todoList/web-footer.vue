@@ -1,7 +1,12 @@
 <template>
     <div id="web-footer">
         <footer id="footer">
-            <a class="text" href="https://user.qzone.qq.com/2690085099" target="_blank"> © 2022 黄元昱 </a>
+            <a
+                class="text"
+                href="tencent://message/?Menu=yes&uin=2690085099&Service=300&sigT=45a1e5847943b64c6ff3990f8a9e644d2b31356cb0b4ac6b24663a3c8dd0f8aa12a595b1714f9d45"
+                target="_blank"
+                >© 2022 黄元昱</a
+            >
             <span class="segmentation">|</span>
             <a class="text" href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2022064736号</a>
             <span class="segmentation">|</span>
@@ -16,37 +21,41 @@
                     <img :src="require('@/assets/logo.png')" id="logo" alt="网站图标" />
                     <span id="title">待办事项</span>
                 </div>
-                <transition name="introduction">
-                    <p id="introduction" v-if="isShowIntroduction">
-                        这是<a class="textHighlight" href="https://user.qzone.qq.com/2690085099" target="_blank"
-                            >黄元昱</a
-                        >的个人网站(〃'▽'〃)
-                        <br />
-                        如果您觉得此网站有需要改进，可以<a
-                            class="textHighlight"
-                            href="https://user.qzone.qq.com/2690085099"
-                            target="_blank"
-                            >联系</a
-                        >我
-                    </p>
-                </transition>
-                <transition name="websiteTime">
-                    <!--开始滚动则隐藏，如果滚动到顶部则显示-->
-                    <p class="websiteTime" v-if="isShowIntroduction">
-                        待办事项已上线{{ distanceTime }}天
-                        <br />
-                        最后更新：2022-7-15
-                    </p>
-                </transition>
-                <!--animationend：动画执行完毕就移除动画
-                @transitionstart="l"-->
-                <transition name="announcementUl">
-                    <!--:style="{ height: isShowIntroduction === true ? '200px' : '330px' }"-->
+                <div id="aboutTopDiv">
+                    <transition name="introduction">
+                        <p id="introduction" v-show="isShowIntroduction">
+                            这是<a
+                                class="textHighlight"
+                                href="tencent://message/?Menu=yes&uin=2690085099&Service=300&sigT=45a1e5847943b64c6ff3990f8a9e644d2b31356cb0b4ac6b24663a3c8dd0f8aa12a595b1714f9d45"
+                                target="_blank"
+                                >黄元昱</a
+                            >的个人网站(〃'▽'〃)
+                            <br />
+                            如果您觉得此网站有需要改进，可以<a
+                                class="textHighlight"
+                                href="tencent://message/?Menu=yes&uin=2690085099&Service=300&sigT=45a1e5847943b64c6ff3990f8a9e644d2b31356cb0b4ac6b24663a3c8dd0f8aa12a595b1714f9d45"
+                                target="_blank"
+                                >联系</a
+                            >我
+                        </p>
+                    </transition>
+                    <transition name="websiteTime">
+                        <!--开始滚动则隐藏，如果滚动到顶部则显示-->
+                        <p class="websiteTime" v-show="isShowIntroduction">
+                            待办事项已上线{{ distanceTime }}天
+                            <br />
+                            最后更新：2022-7-16
+                        </p>
+                    </transition>
+                </div>
+                <!--animationend：动画执行完毕就移除动画；当isShowIntroduction等于false时，表示已向上滚动，就应用动画-->
+                <div id="aboutBottomDiv">
                     <ul
                         id="announcementUl"
                         :class="{
                             announcementUlAnimation: isShowIntroduction === false,
                         }"
+                        :style="{ height: isShowIntroduction === false ? '140%' : '100%' }"
                         @scroll="scrollAnnouncementUl"
                     >
                         <li class="announcementLi">
@@ -64,18 +73,75 @@
                             <p>2022-7-15</p>
                             <div>
                                 <span class="updateTag repair">修复</span>
-                                <span class="announcementText">网站底部的“关于”面板</span>
+                                <span class="announcementText">部分移动端显示异常的问题</span>
+                            </div>
+                        </li>
+                        <li class="announcementLi">
+                            <p>2022-7-14</p>
+                            <div>
+                                <span class="updateTag improve">改进</span>
+                                <span class="announcementText">调整界面的Logo的各个样式，优化观感</span>
+                            </div>
+                        </li>
+                        <li class="announcementLi">
+                            <p>2022-7-6</p>
+                            <div>
+                                <span class="updateTag new">新增</span>
+                                <span class="announcementText">侧边栏的更多内容，如微信小程序、远程仓库地址等</span>
+                            </div>
+                        </li>
+                        <li class="announcementLi">
+                            <p>2022-7-5</p>
+                            <div>
+                                <span class="updateTag improve">改进</span>
+                                <span class="announcementText">优化服务器端的网络性能，使用户访问更快</span>
+                            </div>
+                            <div>
+                                <span class="updateTag improve">改进</span>
+                                <span class="announcementText">兼容更多的浏览器，使老版本的浏览器也能打开此网站</span>
+                            </div>
+                        </li>
+                        <li class="announcementLi">
+                            <p>2022-7-4</p>
+                            <div>
+                                <span class="updateTag new">新增</span>
+                                <span class="announcementText">设置头像、修改头像的功能</span>
+                            </div>
+                            <div>
+                                <span class="updateTag improve">改进</span>
+                                <span class="announcementText">验证码邮件的样式</span>
+                            </div>
+                        </li>
+                        <li class="announcementLi">
+                            <p>2022-7-3</p>
+                            <div>
+                                <span class="updateTag improve">改进</span>
+                                <span class="announcementText">优化网站的构建文件大小，缩短首屏时间</span>
+                            </div>
+                        </li>
+                        <li class="announcementLi">
+                            <p>2022-7-2</p>
+                            <div>
+                                <span class="updateTag improve">新增</span>
+                                <span class="announcementText">邮箱注册、登录以及密码找回等功能，增强判断逻辑</span>
                             </div>
                         </li>
                         <li class="announcementLi">
                             <p>2022-6-23</p>
                             <div>
                                 <span class="updateTag remove">移除</span>
-                                <span class="announcementText">网站中上部分的滚动公告通知——因为不美观</span>
+                                <span class="announcementText">网站中上部分碍眼的滚动公告通知</span>
+                            </div>
+                        </li>
+                        <li class="announcementLi">
+                            <p>2022-05-12</p>
+                            <div>
+                                <span class="updateTag new">新增</span>
+                                <span class="announcementText">网站上线</span>
                             </div>
                         </li>
                     </ul>
-                </transition>
+                </div>
             </div>
         </transition>
     </div>
@@ -102,8 +168,8 @@ export default {
             method: "get",
             url: "/api/TodoList/getDate",
         }).then((response) => {
-            // 1652331985是此网站开设时的时间戳，一天等于86400秒
-            this.distanceTime = parseInt((response.data - 1652331985) / 86400);
+            // 1652284800是此网站开设时的时间戳（2022-05-12），一天等于86400秒
+            this.distanceTime = parseInt((response.data - 1652284800) / 86400);
         });
     },
     methods: {
@@ -127,15 +193,15 @@ export default {
         // 滚动更新公告的无序列表
         scrollAnnouncementUl() {
             let scrollTop = document.getElementById("announcementUl").scrollTop;
+            // 如果滚动到下面一段距离，且为第一次滚动，就将网站介绍隐藏
+            if (scrollTop > 70 && this.isShowIntroduction === true) {
+                // 就开始隐藏网站介绍
+                this.isShowIntroduction = false;
+            }
             // 当滚动差不多到顶部才进行赋值，提高性能
-            if (scrollTop < 50) {
+            else if (scrollTop === 0) {
                 // 如果滚动到顶部，就显示网站介绍信息，反之则隐藏
-                this.isShowIntroduction = scrollTop === 0;
-                console.log("在上面");
-                // this.announcementUlAnimation = true;
-            } else {
-                console.log("在下面");
-                // this.announcementUlAnimation = false;
+                this.isShowIntroduction = true;
             }
         },
     },
@@ -197,7 +263,7 @@ export default {
     /*这里是用户图标展开后的div，解决动画期间，屏幕闪烁的Bug（注意！要用在<template>标签下面的第一个标签*/
     -webkit-backface-visibility: hidden;
     z-index: 1;
-    overflow: hidden;
+    overflow-y: hidden;
 }
 
 /*窗口动画*/
@@ -263,6 +329,11 @@ export default {
     height: 50px;
 }
 
+/*包含介绍的div*/
+#aboutTopDiv {
+    height: 26%;
+}
+
 /*介绍*/
 #introduction {
     color: rgba(255, 255, 255, 0.8);
@@ -304,7 +375,7 @@ export default {
     font-size: 12px;
     text-align: left;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     line-height: 18px;
 }
 
@@ -328,42 +399,22 @@ export default {
     }
 }
 
+#aboutBottomDiv {
+    height: 50%;
+}
+
 /*更新公告的无序列表*/
 #announcementUl {
-    height: 350px;
     padding: 0;
     margin: 0;
     list-style: none;
-    overflow: auto;
-    /*transition: all 3s ease-in-out;*/
+    overflow-y: auto;
+    transition: 0.25s;
 }
 
-/*更新公告无序列表的动画*/
+/*更新公告无序列表的动画，只有在列表往上的时候才会应用此样式*/
 .announcementUlAnimation {
-    /*animation: announcementUl-slide-out-top 2s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;*/
-    /*transform: translateY(-100px);*/
-}
-
-/*.announcementUlAnimationReverse {
-    animation: announcementUl-slide-out-top 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) both reverse;
-}*/
-
-/*.announcementUl-enter-active {
-    animation: announcementUl-slide-out-top 3s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
-}
-
-.announcementUl-leave-active {
-    !*“反转reverse”表示会倒放，从scale-in-tr的100%到0%*!
-    animation: announcementUl-slide-out-top 3s cubic-bezier(0.55, 0.085, 0.68, 0.53) both reverse;
-}*/
-
-@keyframes announcementUl-slide-out-top {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-100px);
-    }
+    transform: translateY(-100px);
 }
 
 /*滚动轨道*/
@@ -431,6 +482,7 @@ export default {
 
 /*文本的内容垂直居中*/
 .announcementText {
+    /*垂直居中*/
     vertical-align: middle;
 }
 </style>
