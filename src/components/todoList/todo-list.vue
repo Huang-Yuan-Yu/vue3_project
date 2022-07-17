@@ -1093,15 +1093,9 @@ export default {
 
 /*字体由小到大、再到小*/
 @keyframes textSize {
-    0% {
-        font-size: 14px;
-    }
     50% {
-        font-size: 16px;
-        text-shadow: 0 0 4px white;
-    }
-    100% {
-        font-size: 14px;
+        text-shadow: 0 0 20px white;
+        transform: scale(1.1);
     }
 }
 
@@ -1164,7 +1158,7 @@ export default {
 .completed {
     color: #67c23a;
     text-decoration: line-through;
-    opacity: 30%;
+    opacity: 0.3;
 }
 
 /*输入框外边的div（在UI库中）*/
@@ -1289,8 +1283,8 @@ export default {
 /*待办事项功能按钮*/
 .todoFunctionButton {
     width: 30px;
-    /*默认未选中时的不透明度为50%*/
-    opacity: 50%;
+    /*默认未选中时的不透明度为40%（注意不能用百分比，否则在移动端无效）*/
+    opacity: 0.4;
     /*加上过渡*/
     transition: all 0.5s ease-in-out;
     cursor: url("../../assets/cursor/pointer.png"), pointer;
@@ -1328,7 +1322,7 @@ export default {
 
 /*使图标显示完全而不会透明，当选中时就会应用此样式*/
 .opacity100 {
-    opacity: 100%;
+    opacity: 1;
 }
 
 /*光标的样式为：禁止*/

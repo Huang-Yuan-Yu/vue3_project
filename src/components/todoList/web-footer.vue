@@ -62,7 +62,7 @@
                             <p>2022-7-17</p>
                             <div>
                                 <span class="updateTag repair">修复</span>
-                                <span class="announcementText">部分设备显示错位的情况</span>
+                                <span class="announcementText">部分移动设备显示错位和不全的情况</span>
                             </div>
                             <div>
                                 <span class="updateTag improve">改进</span>
