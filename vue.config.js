@@ -31,7 +31,7 @@ module.exports = {
         host: "127.0.0.1",
         // 端口（HTTPS用的是443）
         port: 443,
-        // 是否为HTTPS协议，这里为否
+        // 是否为HTTPS协议，这里为是
         https: true,
         // 下面为需要跨域的，proxy为“代理”的意思：
         proxy: {

@@ -27,7 +27,7 @@
         <!--引入侧边工具栏的组件-->
         <side-toolbar></side-toolbar>
         <!--说明：单击左边圆形可标记为完成事项或取消，双击文字可修改内容，输入框按回车可添加事项-->
-        <el-form id="todoForm" :class="{ backgroundBlur: $store.state.backgroundIsBlur }" @click="closeWindows">
+        <div id="todoForm" :class="{ backgroundBlur: $store.state.backgroundIsBlur }" @click="closeWindows">
             <p id="YyTodo">YY待办</p>
             <p v-if="serverStatus === '未知'" class="currentStatus" style="color: #909399">正在连接服务器中······</p>
             <!--如果服务器关闭了-->
@@ -181,8 +181,8 @@
             </div>
 
             <!--滚动列表，定义最小大小和最大大小（注意！最大和最小的值都为百分比，且同样低，才能达到响应式的目的
-            height="60%" -->
-            <el-scrollbar id="elScrollbar" :max-height="elScrollbarHeight">
+            height="60%"-->
+            <el-scrollbar id="elScrollbar" :noresize="true" :max-height="elScrollbarHeight">
                 <!--“过渡标签组”，因为这里面会有很多个li元素，所以用<transition-group>包裹起来,tar指向无序列表-->
                 <transition-group appear name="todo-li" tag="ul">
                     <!--v-for是Vue的for循环，前面为元素，in后面为数组
@@ -270,7 +270,7 @@
                     </li>
                 </transition-group>
             </el-scrollbar>
-        </el-form>
+        </div>
 
         <!--网站底部-->
         <web-footer></web-footer>
@@ -948,7 +948,7 @@ export default {
     width: 100%;
     height: 100%;
     /*使用100%,100%会导致图片变形，因为图片比例不是1:1（图片分辨率1920x1080），而cover则会原样显示*/
-    position: fixed;
+    //position: fixed;
     /*自定义指针样式（注意！图片分辨率应为30x30，太大会没有效果）*/
     cursor: url("../../assets/cursor/default.png"), default;
 }
@@ -1116,17 +1116,16 @@ export default {
 @media (max-height: 250px) {
     #todoForm {
         width: 80%;
-        margin-top: -120px;
-        height: 200vh;
+        margin-top: -80px;
         transform: scale(0.6);
     }
 }
 
 @media (max-height: 150px) {
     #todoForm {
-        margin-top: -100px;
-        transform: scale(0.4);
-        height: 176vh;
+        margin-top: -90px;
+        padding: 0;
+        transform: scale(0.5);
     }
 }
 
@@ -1199,7 +1198,7 @@ export default {
     /*垂直轴上居中，即上下距离都相等 */
     align-items: center;
     justify-content: space-between;
-    margin: 10px 10px 10px 0;
+    margin-bottom: 10px;
     text-align: center;
     border-radius: 4px;
     background: var(--el-color-primary-light-9);
@@ -1209,31 +1208,13 @@ export default {
 /*完成事项后的边框样式*/
 .todoDoneBorder {
     border: 1px solid #67c23a;
-    animation: todoDoneBorderAnimation 1s infinite alternate ease;
-}
-
-@keyframes todoDoneBorderAnimation {
-    from {
-        box-shadow: 0 0 0 #67c23a;
-    }
-    to {
-        box-shadow: 0 0 6px #67c23a;
-    }
+    box-shadow: 0 0 6px #67c23a;
 }
 
 /*事项未完成时的边框样式*/
 .todoNotDoneBorder {
     border: 1px solid #409eff;
-    animation: todoNotDoneBorderAnimation 1s infinite alternate ease;
-}
-
-@keyframes todoNotDoneBorderAnimation {
-    from {
-        box-shadow: 0 0 0 #409eff;
-    }
-    to {
-        box-shadow: 0 0 6px #409eff;
-    }
+    box-shadow: 0 0 6px #409eff;
 }
 
 /*列表中后面的div*/
@@ -1292,8 +1273,7 @@ export default {
 
 /*待办事项的滚动栏*/
 #elScrollbar {
-    position: relative;
-    bottom: 6px;
+    padding-bottom: 20px;
 }
 
 /*事项元素开始进入*/

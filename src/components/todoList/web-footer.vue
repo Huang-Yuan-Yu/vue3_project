@@ -3,7 +3,7 @@
         <footer id="footer">
             <a
                 class="text"
-                href="tencent://message/?Menu=yes&uin=2690085099&Service=300&sigT=45a1e5847943b64c6ff3990f8a9e644d2b31356cb0b4ac6b24663a3c8dd0f8aa12a595b1714f9d45"
+                href="http://wpa.qq.com/msgrd?v=3&uin=2690085099&site=qq&menu=yes"
                 target="_blank"
                 >© 2022 黄元昱</a
             >
@@ -26,14 +26,14 @@
                         <p id="introduction" v-show="isShowIntroduction">
                             这是<a
                                 class="textHighlight"
-                                href="tencent://message/?Menu=yes&uin=2690085099&Service=300&sigT=45a1e5847943b64c6ff3990f8a9e644d2b31356cb0b4ac6b24663a3c8dd0f8aa12a595b1714f9d45"
+                                href="http://wpa.qq.com/msgrd?v=3&uin=2690085099&site=qq&menu=yes"
                                 target="_blank"
                                 >黄元昱</a
                             >的个人网站(〃'▽'〃)
                             <br />
                             如果您觉得此网站有需要改进，可以<a
                                 class="textHighlight"
-                                href="tencent://message/?Menu=yes&uin=2690085099&Service=300&sigT=45a1e5847943b64c6ff3990f8a9e644d2b31356cb0b4ac6b24663a3c8dd0f8aa12a595b1714f9d45"
+                                href="http://wpa.qq.com/msgrd?v=3&uin=2690085099&site=qq&menu=yes"
                                 target="_blank"
                                 >联系</a
                             >我
@@ -44,7 +44,7 @@
                         <p class="websiteTime" v-show="isShowIntroduction">
                             待办事项已上线{{ distanceTime }}天
                             <br />
-                            最后更新：2022-7-17
+                            最后更新：2022-7-18
                         </p>
                     </transition>
                 </div>
@@ -58,6 +58,13 @@
                         :style="{ height: isShowIntroduction === false ? '140%' : '100%' }"
                         @scroll="scrollAnnouncementUl"
                     >
+                        <li class="announcementLi">
+                            <p>2022-7-18</p>
+                            <div>
+                                <span class="updateTag repair">修复</span>
+                                <span class="announcementText">事项列表超出div以及显示高度不够的问题</span>
+                            </div>
+                        </li>
                         <li class="announcementLi">
                             <p>2022-7-17</p>
                             <div>
@@ -205,7 +212,7 @@ export default {
         scrollAnnouncementUl() {
             let scrollTop = document.getElementById("announcementUl").scrollTop;
             // 如果滚动到下面一段距离，且为第一次滚动，就将网站介绍隐藏
-            if (scrollTop > 70 && this.isShowIntroduction === true) {
+            if (scrollTop > 100 && this.isShowIntroduction === true) {
                 // 就开始隐藏网站介绍
                 this.isShowIntroduction = false;
             }
