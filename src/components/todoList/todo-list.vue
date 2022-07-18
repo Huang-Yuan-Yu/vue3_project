@@ -303,6 +303,18 @@ import {
     noFinishAllTodo,
     ping,
 } from "@/jsFunction/todoList";
+// 页脚组件
+import webFooter from "@/components/todoList/web-footer";
+// 鼠标点击特效
+import clickSpecialEffect from "@/components/tool/click-special-effect";
+// 侧边栏
+import sideToolbar from "@/components/tool/side-toolbar";
+// 引入天气组件
+import myWeather from "@/components/tool/my-weather";
+// 用户登录、注册组件
+import userLogin from "@/components/user/user-login";
+// 完成事项的Svg动态图标
+import doneSvg from "./done-svg";
 // 引入消息提示框，属于非模态提示框，不会打断用户操作
 import { ElMessage } from "element-plus";
 // 导入“帮助”的图标
@@ -315,18 +327,12 @@ export default {
     // 注入my-test组件提供（provide）的reload依赖，用于刷新页面
     inject: ["reload"],
     components: {
-        // 页脚组件
-        "web-footer": () => import("@/components/todoList/web-footer"),
-        // 鼠标点击特效
-        "click-special-effect": () => import("@/components/tool/click-special-effect"),
-        // 侧边栏
-        "side-toolbar": () => import("@/components/tool/side-toolbar"),
-        // 引入天气组件
-        "my-weather": () => import("@/components/tool/my-weather"),
-        // 用户登录、注册组件
-        "user-login": () => import("@/components/user/user-login"),
-        // 完成事项的Svg动态图标
-        "done-svg": () => import("./done-svg"),
+        webFooter,
+        clickSpecialEffect,
+        sideToolbar,
+        myWeather,
+        userLogin,
+        doneSvg,
     },
     // Vue3特有的组合式API
     setup() {
