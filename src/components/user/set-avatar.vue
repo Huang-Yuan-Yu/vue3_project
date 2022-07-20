@@ -268,13 +268,11 @@ export default defineComponent({
     opacity: 0;
 }
 
-/*事项div进入完毕*/
 .userAvatarDiv-enter-to {
     opacity: 1;
     transition: all 1s ease-in-out;
 }
 
-/*事项div开始离开*/
 .userAvatarDiv-leave-active {
     /*需要让这个元素脱离标准流，不然后面的元素动不了*/
     position: absolute;
@@ -282,7 +280,6 @@ export default defineComponent({
     opacity: 0;
 }
 
-/*添加事项和删除事项的动画，移除元素时，让动画平滑一点*/
 .userAvatarDiv-move {
     transition: all 1s ease;
 }

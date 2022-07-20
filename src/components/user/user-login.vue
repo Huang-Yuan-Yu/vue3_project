@@ -8,7 +8,7 @@
                 <div v-if="isShowCheckLogin" class="loginAndRegistration" @mouseenter="userMouseEnter">
                     <div v-if="!loginSuccess" id="noLogin" class="scale-in-tr">
                         <p class="loginStatus">您尚未登录</p>
-                        <p id="persuasionLogin">登录后，可存储您的待办列表和个性化设置</p>
+                        <p id="persuasionLogin">正式登录后，可跨设备存储您的各种信息</p>
                         <el-button
                             class="userButton"
                             color="#1e1e1e"
@@ -29,7 +29,7 @@
                         </el-button>
                     </div>
                     <div v-if="loginSuccess" id="loginSuccess" class="scale-in-tr">
-                        <p class="loginStatus">欢迎您 {{ myName }}</p>
+                        <p class="loginStatus">欢迎您 {{ isLoginAnonymously === "游客" ? "游客" : myName }}</p>
                         <el-button
                             class="userButton"
                             color="#1e1e1e"
@@ -140,12 +140,7 @@
                             >登录
                         </el-button>
                         <!--包含登录中动画的按钮，如果正在登录，就显示此按钮-->
-                        <el-button
-                            v-if="isLogin === true"
-                            class="loginButton"
-                            loading
-                            type="primary"
-                            size="large"
+                        <el-button v-if="isLogin === true" class="loginButton" loading type="primary" size="large"
                             >登录中
                         </el-button>
                         <span class="forgetPassword" @click="forgotPassword">忘记密码？</span>
@@ -382,6 +377,8 @@ export default {
                 // 验证码
                 verificationCode: "",
             },
+            // 登录的方式
+            isLoginAnonymously: localStorage.getItem("登录方式") === "游客" ? "游客" : "正式用户",
             // 三元运算符，判断本地存储的name值是否为null，如果为null就证明用户未登录，未登录时myName就为null，登录后就获取对应的用户名
             myName: localStorage.getItem("name") === null ? null : localStorage.getItem("name"),
             // 是否登录成功：
@@ -446,9 +443,11 @@ export default {
     mounted() {
         // 如果已登录，就对Token进行验证：
         if (this.loginSuccess === true) {
+            let name = localStorage.getItem("name");
+            let loginMethod = localStorage.getItem("登录方式");
             this.$axios({
                 method: "post",
-                data: { name: localStorage.getItem("name") },
+                data: { name: name },
                 url: "/api/TodoList/verification",
                 // 每次请求都会在HTTP请求头中加上token的值
                 headers: {
@@ -464,6 +463,7 @@ export default {
                     localStorage.removeItem("name");
                     localStorage.removeItem("password");
                     localStorage.removeItem("userAvatarData");
+                    localStorage.removeItem("登录方式");
                     // 将登录状态设置为false，将本地存储的用户名设置为空
                     this.loginSuccess = false;
                     this.myName = null;
@@ -493,39 +493,48 @@ export default {
                 else {
                     // 将头像的数据保存到Vuex的state中
                     this.$store.dispatch("setShowAvatar", response.data.avatar);
-                    this.myName = localStorage.getItem("name");
+                    this.myName = name;
                     emitter.emit("Token认证", "认证成功");
+
                     // 趁现在还处于vue对象的作用域，先将data中myName变量保留下来，存储到一个变量中
                     let myName = this.myName;
                     // 使用“匿名函数+直接调用”的方式，将函数定义为同步执行，这样才使获取的时间不为undefined
                     (async function () {
-                        // 如果未登录（备份：myName !== null && ）
+                        // 如果未登录
                         let time = await loginTime(myName);
                         // 用于计算当前时间，然后做判断，最后问候用户
                         let currentTime = new Date(time["本次登录时间"]).getHours();
-                        // 时间段
-                        let timeFrame = null;
-                        if (currentTime <= 5) {
-                            timeFrame = `凌晨了，${myName}，要注意休息啊！`;
-                        } else if (currentTime <= 8) {
-                            timeFrame = `早晨好！${myName}，一日之计在于晨！`;
-                        } else if (currentTime <= 11) {
-                            timeFrame = `上午好！${myName}，每天要吃早餐哦~`;
-                        } else if (currentTime <= 13) {
-                            timeFrame = `中午好！${myName}，太阳当空照~`;
-                        } else if (currentTime <= 16) {
-                            timeFrame = `下午好！${myName}，多喝下午茶哦~`;
-                        } else if (currentTime <= 18) {
-                            timeFrame = `傍晚好！${myName}，夕阳无限好！`;
-                        } else if (currentTime <= 24) {
-                            timeFrame = `晚上好！${myName}，早点睡哦~`;
+                        if (loginMethod === "正式用户") {
+                            // 时间段
+                            let timeFrame = null;
+                            if (currentTime <= 5) {
+                                timeFrame = `凌晨了，${myName}，要注意休息啊！`;
+                            } else if (currentTime <= 8) {
+                                timeFrame = `早晨好！${myName}，一日之计在于晨！`;
+                            } else if (currentTime <= 11) {
+                                timeFrame = `上午好！${myName}，每天要吃早餐哦~`;
+                            } else if (currentTime <= 13) {
+                                timeFrame = `中午好！${myName}，太阳当空照~`;
+                            } else if (currentTime <= 16) {
+                                timeFrame = `下午好！${myName}，多喝下午茶哦~`;
+                            } else if (currentTime <= 18) {
+                                timeFrame = `傍晚好！${myName}，夕阳无限好！`;
+                            } else if (currentTime <= 24) {
+                                timeFrame = `晚上好！${myName}，早点睡哦~`;
+                            }
+                            // 弹出提示框
+                            ElNotification({
+                                title: timeFrame,
+                                message: `上次登录时间：${time["上次登录时间"]}`,
+                                position: "bottom-right",
+                            });
+                        } else if (loginMethod === "游客") {
+                            ElNotification({
+                                title: "正式登录后才能跨设备同步数据哦~",
+                                message: `上次登录时间：${time["上次登录时间"]}`,
+                                position: "bottom-right",
+                            });
                         }
-                        // 弹出提示框
-                        ElNotification({
-                            title: timeFrame,
-                            message: `上次登录时间：${time["上次登录时间"]}`,
-                            position: "bottom-right",
-                        });
                     })();
                 }
             });
@@ -553,6 +562,44 @@ export default {
             if (message === "成功") {
                 this.isShowSetAvatarWindow = false;
             }
+        });
+
+        // 游客登录——visitorId是浏览器指纹
+        emitter.on("游客登录", (visitorId) => {
+            // 使用axios的post方法，向后端传递数据
+            this.$axios
+                // 游客注册没有设置密码，且用户名为浏览器指纹
+                .post("/api/TodoList/loginAnonymously", { name: visitorId })
+                .then((res) => {
+                    if (res.data.result === "登录成功") {
+                        // 那么就本地存储token，jwt名称，值为服务器返回的jwt字符串（长长的那个）
+                        localStorage.setItem("jwt", res.data.jwt);
+                        localStorage.setItem("name", visitorId);
+                        // 将头像的数据保存到Vuex的state中
+                        this.$store.dispatch("setShowAvatar", res.data.avatar);
+                        // 然后设置到HTTP请求头里面，字段名称就为“token”
+                        this.$axios.defaults.headers.common["token"] = res.data.jwt;
+                        // 将loginSuccess的布尔值改为true，方便上面HTML显示登录成功
+                        this.loginSuccess = true;
+                        this.myName = visitorId;
+                        ElMessage({
+                            // 显示关闭按钮
+                            showClose: true,
+                            message: "您以游客的身份登录成功了！",
+                            type: "success",
+                        });
+                        // 存储信息，用于判断
+                        localStorage.setItem("登录方式", "游客");
+                        // 第一次要手动赋值
+                        this.isLoginAnonymously = "游客";
+                    } else if (res.data.result === "抱歉，您的设备不支持游客登录···") {
+                        ElMessage({
+                            showClose: true,
+                            message: res.data.result,
+                            type: "error",
+                        });
+                    }
+                });
         });
     },
     methods: {
@@ -898,6 +945,8 @@ export default {
                             // 那么就本地存储token，jwt名称，值为服务器返回的jwt字符串（长长的那个）
                             localStorage.setItem("jwt", response.data.jwt);
                             localStorage.setItem("name", this.user.name);
+                            // 将名称赋值给显示的内容
+                            this.isLoginAnonymously = this.user.name;
                             // 将头像的数据保存到Vuex的state中
                             this.$store.dispatch("setShowAvatar", response.data.userAvatarData);
 
@@ -937,7 +986,7 @@ export default {
                                 type: "error",
                             });
                         }
-                        // 结束登录状态
+                        // 结束登录中的状态
                         this.isLogin = false;
                     });
             } else {
@@ -1117,6 +1166,7 @@ export default {
             localStorage.removeItem("jwt");
             localStorage.removeItem("name");
             localStorage.removeItem("userAvatarData");
+            localStorage.removeItem("登录方式");
             // 改为false，显示未登录
             this.loginSuccess = false;
             ElMessage({
@@ -1184,7 +1234,7 @@ export default {
 /*用户图标*/
 .userLogo {
     width: 26px;
-    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0,.2));
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
     margin-top: 3vh;
     margin-right: 2vw;
     /*禁止被选中*/

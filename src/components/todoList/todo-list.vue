@@ -55,7 +55,7 @@
                     :content="$store.getters.userEquipment === null ? 'Ctrl+Enter换行' : '回车键换行'"
                     :disabled="isShowLineFeed"
                     effect="light"
-                    placement="left"
+                    placement="top"
                 >
                     <!--v-model：表单输入绑定，可以使用v-model指令在表单（input、textarea以及select）元素创建双向数据绑定，
                     它会根据控件类型自动选取正确的方法来更新元素
@@ -179,6 +179,19 @@
                     ></el-image>
                 </el-tooltip>
             </div>
+
+            <transition name="visitorLogin">
+                <!--游客登录按钮-->
+                <el-button
+                    size="large"
+                    type="primary"
+                    class="visitorLogin"
+                    v-if="serverStatus === '未登录'"
+                    :loading="isLogin === true"
+                    @click="visitorLogin"
+                    >{{ anonymousLoginButtonText }}</el-button
+                >
+            </transition>
 
             <!--滚动列表，定义最小大小和最大大小（注意！最大和最小的值都为百分比，且同样低，才能达到响应式的目的
             height="60%"-->
@@ -321,6 +334,8 @@ import { ElMessage } from "element-plus";
 import { InfoFilled } from "@element-plus/icons-vue";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
+// 导入获取“浏览器指纹（唯一标识）”的依赖（安装：npm i @fingerprintjs/fingerprintjs -S）
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 export default {
     name: "todo-list",
@@ -347,6 +362,10 @@ export default {
             imageUrl: Math.floor(Math.random() * 15),
             // 服务器状态——未知、关闭或开启，默认为未知，如果出现网络错误，则赋值为“关闭”
             serverStatus: "未知",
+            // 用于判断是否正在匿名登录W
+            isLogin: false,
+            // 登录中的按钮文本
+            anonymousLoginButtonText: "游客登录",
             // 是否缩放字体
             isZoomFont: false,
             // 待办事项输入框的不可用性，false表示可用，true表示不可用，默认为不可用，待服务器开启后才设置为可用
@@ -920,9 +939,25 @@ export default {
             } else if (innerHeight > 230) {
                 this.elScrollbarHeight = `${innerHeight / 2.9}px`;
             }
-            // 获取ref值为todoForm的div的高度
-            // this.elScrollbarHeight = `${window.innerHeight / 1.7}px`;
-            // console.log(window.innerHeight * 0.8);
+        },
+        // 游客登录按钮
+        visitorLogin() {
+            // 表示正在登录
+            this.isLogin = true;
+            this.anonymousLoginButtonText = "登录中";
+            // 获取浏览器指纹
+            FingerprintJS.load().then((fp) => {
+                fp.get().then((result) => {
+                    // 按钮呈现的文本
+                    this.anonymousLoginButtonText = "登录成功";
+                    // 让负责用户信息的组件去处理登录问题，这里顺便将浏览器指纹传过去，充当用户名
+                    emitter.emit("游客登录", result.visitorId);
+                    // 结束登录中的状态
+                    this.isLogin = false;
+                    // 延迟还原
+                    setTimeout(() => (this.anonymousLoginButtonText = "游客登录"), 500);
+                });
+            });
         },
     },
     // 局部自定义指令
@@ -953,8 +988,6 @@ export default {
 #todo-list {
     width: 100%;
     height: 100%;
-    /*使用100%,100%会导致图片变形，因为图片比例不是1:1（图片分辨率1920x1080），而cover则会原样显示*/
-    //position: fixed;
     /*自定义指针样式（注意！图片分辨率应为30x30，太大会没有效果）*/
     cursor: url("../../assets/cursor/default.png"), default;
 }
@@ -1108,15 +1141,14 @@ export default {
 /*待办事项最大的表单标签*/
 #todoForm {
     width: 50%;
-    height: 80%;
     margin: 0 auto;
     background: rgba(30, 30, 30, 0.6);
     box-shadow: 0 0 6px rgba(60, 60, 60, 0.6);
     position: relative;
     padding-left: 20px;
     padding-right: 20px;
-    /*过渡时间*/
-    transition-duration: 1s;
+    // 缩放时的过渡
+    transition: all 1s ease-in-out;
 }
 
 @media (max-height: 250px) {
@@ -1177,11 +1209,13 @@ export default {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     padding-top: 6px;
+    font-size: 10pt;
 }
 
 /*待办事项输入框，要修改UI库的样式，得使用深度选择器才能成功*/
 #addToDo {
-    height: 53px;
+    /*高度一定要选择继承，才能与输入框的高度同步*/
+    height: inherit;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     /*使按钮响应式的的放大和缩小*/
@@ -1275,6 +1309,31 @@ export default {
     /*加上过渡*/
     transition: all 0.5s ease-in-out;
     cursor: url("../../assets/cursor/pointer.png"), pointer;
+}
+
+/*游客登录按钮*/
+.visitorLogin {
+    width: 100%;
+    display: flex;
+    opacity: 0.8;
+    transition: 0.25s;
+}
+
+.visitorLogin-enter-active {
+    opacity: 0;
+}
+
+.visitorLogin-enter-to {
+    opacity: 0.8;
+    transition: all 1s ease-in-out;
+}
+
+.visitorLogin-leave-active {
+    /*不透明度、高度和字体在渐变下慢慢变为0*/
+    opacity: 0;
+    height: 0;
+    font-size: 0;
+    transition: all 1s ease-in-out;
 }
 
 /*待办事项的滚动栏*/
