@@ -144,6 +144,10 @@
                             >登录中
                         </el-button>
                         <span class="forgetPassword" @click="forgotPassword">忘记密码？</span>
+                        <div id="thirdPartyLoginDiv">
+                            <span id="thirdPartyLogin">第三方登录：</span>
+                            <img :src="require('@/assets/qqLogo.png')" alt="QQ登录" id="qqLogin" @click="qqLogin" />
+                        </div>
                     </form>
                 </div>
 
@@ -364,6 +368,8 @@ import { loginTime } from "@/jsFunction/todoList";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
 import setAvatar from "@/components/user/set-avatar";
+// 引入QQ互联登录
+// import QC from 'QC';
 
 export default {
     name: "user-login",
@@ -1177,6 +1183,12 @@ export default {
             });
             this.isShowCheckLogin = false;
         },
+        // 用QQ登录
+        qqLogin() {
+            console.log("QQ");
+            // 直接弹出授权页面，授权过后跳转到回调页面进行登录处理
+            window.open("https://thinkphp.hyy666.top/TodoList/qqCallback", "_blank");
+        },
     },
     // 局部自定义指令
     directives: {
@@ -1559,5 +1571,28 @@ export default {
     left: 52px;
     cursor: url("../../assets/cursor/pointer.png"), pointer;
     text-align: right;
+}
+
+#thirdPartyLoginDiv {
+    display: flex;
+    margin-top: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+#thirdPartyLogin {
+    color: white;
+}
+
+/*QQ登录图标*/
+#qqLogin {
+    width: 30px;
+    object-fit: contain;
+    transition: 0.25s;
+}
+
+#qqLogin:hover {
+    cursor: url("../../assets/cursor/pointer.png"), pointer;
+    filter: brightness(120%);
 }
 </style>

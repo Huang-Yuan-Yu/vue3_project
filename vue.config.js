@@ -198,7 +198,7 @@ module.exports = {
         }
     },
     // 语法转换也要包括第三方库
-    transpileDependencies: [/node_modules/],
+    // transpileDependencies: [/node_modules/],
     // 生产环境禁用eslint
     lintOnSave: process.env.NODE_ENV !== "production",
 };
