@@ -152,8 +152,8 @@
                                     >登录中
                                 </el-button>
                             </template>
-                            <!--滑块验证组件——accuracy表示允许的误差，范围从1到10
-                            @success事件：验证成功就登录-->
+                            <!--滑块验证组件——accuracy表示允许的误差，范围从1到10；@success事件：验证成功就登录
+                            interval：节流属性，这里不节流，能提高滑动流畅度-->
                             <slide-verify
                                 ref="block"
                                 slider-text="向右滑动 →"
@@ -161,6 +161,7 @@
                                 @again="onAgain"
                                 @success="userLogin"
                                 @fail="onFail"
+                                :interval="0"
                             ></slide-verify>
                         </el-popover>
                         <span class="forgetPassword" @click="forgotPassword">忘记密码？</span>
@@ -393,7 +394,7 @@ import { ref } from "vue";
 import SlideVerify from "vue3-slide-verify";
 import "vue3-slide-verify/dist/style.css";
 // QQ互联
-import QC from "qc";
+// import QC from "qc";
 
 export default {
     name: "user-login",
@@ -1254,15 +1255,15 @@ export default {
             ElMessage({
                 // 显示关闭按钮
                 showClose: true,
-                message: "功能正在测试中···",
+                message: "功能正在开发中···",
                 type: "warning",
             });
             // 102014855 https://www.hyy666.top/qqLogin
             // eslint-disable-next-line
-            QC.Login.showPopup({
+            /*QC.Login.showPopup({
                 appId: "102014855",
                 redirectURI: "https://www.hyy666.top/qqLogin",
-            });
+            });*/
         },
     },
     // 局部自定义指令
