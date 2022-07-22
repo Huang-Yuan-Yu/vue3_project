@@ -16,7 +16,7 @@
                             type="info"
                             @click="showLoginWindow('登录')"
                         >
-                            登录
+                            正式登录
                         </el-button>
                         <el-button
                             class="userButton"
@@ -94,7 +94,7 @@
                             type="email"
                             @blur="checkAccount"
                             @focus="inputAccountError = false"
-                            @keyup.enter="userLogin"
+                            @keyup.enter="showVerification"
                         >
                             <!--使用Element Plus（UI库）提供的插槽，这里“#prefix”表示从输入表单的开头插入-->
                             <template #prefix>
@@ -117,7 +117,7 @@
                             @focus="inputPasswordFocus"
                             @keydown="inputPasswordKeydown"
                             @keyup="inputPasswordKeyup"
-                            @keyup.enter="userLogin"
+                            @keyup.enter="showVerification"
                         >
                             <template #prefix>
                                 <!--锁的图标-->
@@ -131,18 +131,38 @@
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：您的密码至少包括总共8位的英文和数字！
                         </p>
-                        <el-button
-                            class="loginButton"
-                            size="large"
-                            type="primary"
-                            @click="userLogin"
-                            v-if="isLogin === false"
-                            >登录
-                        </el-button>
-                        <!--包含登录中动画的按钮，如果正在登录，就显示此按钮-->
-                        <el-button v-if="isLogin === true" class="loginButton" loading type="primary" size="large"
-                            >登录中
-                        </el-button>
+                        <!--使用v-model:visible控制是否要显示-->
+                        <el-popover placement="top" :width="310" trigger="click" v-model:visible="isShowSlideVerify">
+                            <template #reference>
+                                <el-button
+                                    class="loginButton"
+                                    size="large"
+                                    type="primary"
+                                    @click="showVerification"
+                                    v-if="isLogin === false"
+                                    >登录
+                                </el-button>
+                                <!--包含登录中动画的按钮，如果正在登录，就显示此按钮-->
+                                <el-button
+                                    v-if="isLogin === true"
+                                    class="loginButton"
+                                    loading
+                                    type="primary"
+                                    size="large"
+                                    >登录中
+                                </el-button>
+                            </template>
+                            <!--滑块验证组件——accuracy表示允许的误差，范围从1到10
+                            @success事件：验证成功就登录-->
+                            <slide-verify
+                                ref="block"
+                                slider-text="向右滑动 →"
+                                :accuracy="5"
+                                @again="onAgain"
+                                @success="userLogin"
+                                @fail="onFail"
+                            ></slide-verify>
+                        </el-popover>
                         <span class="forgetPassword" @click="forgotPassword">忘记密码？</span>
                         <div id="thirdPartyLoginDiv">
                             <span id="thirdPartyLogin">第三方登录：</span>
@@ -368,12 +388,53 @@ import { loginTime } from "@/jsFunction/todoList";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
 import setAvatar from "@/components/user/set-avatar";
-// 引入QQ互联登录
-// import QC from 'QC';
+import { ref } from "vue";
+// 引入滑块验证的依赖——npm i vue3-slide-verify
+import SlideVerify from "vue3-slide-verify";
+import "vue3-slide-verify/dist/style.css";
+// QQ互联
+import QC from "qc";
 
 export default {
     name: "user-login",
-    components: { SetAvatar: setAvatar },
+    components: { "set-avatar": setAvatar, "slide-verify": SlideVerify },
+    // 在Vue3中，新引入的Avatar, Lock要注册到全局，使之变成响应式，最好不要在components里注册
+    setup() {
+        // 滑动验证要用到的，block用于刷新验证
+        const block = ref();
+        const onAgain = () => {
+            ElMessage({
+                showClose: true,
+                message: "检测到非人为操作，请再试一次哦~",
+                type: "error",
+            });
+            // 刷新
+            block.value?.refresh();
+        };
+        const onFail = () => {
+            ElMessage({
+                showClose: true,
+                message: "验证不通过，请再拼图一次哦~",
+                type: "error",
+            });
+        };
+        // 刷新验证码
+        const refreshVerification = () => {
+            block.value?.refresh();
+        };
+
+        return {
+            // 用户图标
+            Avatar,
+            // 密码的锁图标
+            Lock,
+            // 滑动验证要用到的
+            block,
+            onAgain,
+            onFail,
+            refreshVerification,
+        };
+    },
     data() {
         return {
             // 用户信息
@@ -399,6 +460,8 @@ export default {
             isShowLoginWindow: false,
             // 是否正在登录
             isLogin: false,
+            // 是否显示登录验证模块
+            isShowSlideVerify: false,
             // 是否显示重置密码的窗口
             isShowResetPassword: false,
             // 是否要显示注册窗口
@@ -434,15 +497,6 @@ export default {
             shiftKey: undefined,
             // 是否聚焦到密码输入框（用于提示大写的判断）
             isFocusInputPassword: false,
-        };
-    },
-    // 在Vue3中，新引入的Avatar, Lock要注册到全局，使之变成响应式，最好不要在components里注册
-    setup() {
-        return {
-            // 用户图标
-            Avatar,
-            // 密码的锁图标
-            Lock,
         };
     },
     // 当页面加载完毕时
@@ -907,8 +961,8 @@ export default {
                     });
             }
         },
-        // 用户登录
-        userLogin() {
+        // 点击登录按钮，开始进行验证
+        showVerification() {
             if (this.user.name === "") {
                 ElMessage({
                     // 显示关闭按钮
@@ -940,6 +994,21 @@ export default {
                     type: "error",
                 });
             } else if (this.loginSuccess === false) {
+                // 展示登录验证模块
+                this.isShowSlideVerify = true;
+            }
+        },
+        // 用户登录
+        userLogin(times) {
+            ElMessage({
+                showClose: true,
+                message: `验证成功！耗时${(times / 1000).toFixed(1)}秒`,
+                type: "success",
+            });
+            // 先等待一会，让用户反应过来
+            setTimeout(() => {
+                // 关闭展示登录验证模块
+                this.isShowSlideVerify = false;
                 // 表示正在登录
                 this.isLogin = true;
                 // 先将用户输入的信息传给后台，此信息是用户需要查询的信息：
@@ -983,6 +1052,8 @@ export default {
                                 message: response.data.result,
                                 type: "error",
                             });
+                            // 刷新验证码
+                            this.refreshVerification();
                         } else {
                             ElMessage({
                                 // 显示关闭按钮
@@ -991,18 +1062,13 @@ export default {
                                 message: response.data.msg,
                                 type: "error",
                             });
+                            // 刷新验证码
+                            this.refreshVerification();
                         }
                         // 结束登录中的状态
                         this.isLogin = false;
                     });
-            } else {
-                ElMessage({
-                    // 显示关闭按钮
-                    showClose: true,
-                    message: "您已经登录过了！",
-                    type: "warning",
-                });
-            }
+            }, 800);
         },
         // 用于密码输入框的键盘弹起事件，用于提示用户是否开启大写锁定键
         inputPasswordKeyup(event) {
@@ -1185,9 +1251,18 @@ export default {
         },
         // 用QQ登录
         qqLogin() {
-            console.log("QQ");
-            // 直接弹出授权页面，授权过后跳转到回调页面进行登录处理
-            window.open("https://thinkphp.hyy666.top/TodoList/qqCallback", "_blank");
+            ElMessage({
+                // 显示关闭按钮
+                showClose: true,
+                message: "功能正在测试中···",
+                type: "warning",
+            });
+            // 102014855 https://www.hyy666.top/qqLogin
+            // eslint-disable-next-line
+            QC.Login.showPopup({
+                appId: "102014855",
+                redirectURI: "https://www.hyy666.top/qqLogin",
+            });
         },
     },
     // 局部自定义指令
@@ -1523,7 +1598,7 @@ export default {
     width: 100px;
     border: whitesmoke;
     margin-top: 16px;
-    margin-left: 80px;
+    margin-left: 76px;
 }
 
 /*注册按钮*/

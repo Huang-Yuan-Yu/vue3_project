@@ -82,6 +82,10 @@ module.exports = {
                 resolvers: [ElementPlusResolver()],
             }),
         ],
+        // 导入模块为qc变量名为QC，导入qc将不做打包——QQ互联
+        externals: {
+            qc: "QC",
+        },
     },
     chainWebpack: (config) => {
         // 打包可视化——npm install --save-dev webpack-bundle-analyzer
@@ -109,6 +113,15 @@ module.exports = {
                 .options({
                     // 此处为ture的时候不会启用压缩处理,目的是为了开发模式下调试速度更快
                     disable: process.env.NODE_ENV === "development",
+                    // 自定义压缩规则
+                    mozjpeg: { progressive: true, quality: 65 },
+                    optipng: { enabled: true },
+                    pngquant: { quality: [0.65, 0.9], speed: 4 },
+                    gifsicle: { interlaced: false },
+                    // 对webp格式的图片也进行压缩
+                    webp: {
+                        quality: 75,
+                    },
                 })
                 .end();
 
@@ -119,7 +132,7 @@ module.exports = {
                     test: /\.js$|\.html$|\.css$/,
                     // 对超过10k的数据压缩，这里单位为字节
                     threshold: 10240,
-                    // 不删除源文件
+                    // 为true表示删除源文件
                     deleteOriginalAssets: false,
                     //只有压缩率比这个值小的文件才会被处理，压缩率=压缩大小/原始大小，如果压缩后和原始文件大小没有太大区别，就不用压缩
                     minRatio: 0.8,
@@ -131,7 +144,7 @@ module.exports = {
                 // 对于需要动态加载的内容，抽出来
                 chunks: "async",
                 maxInitialRequests: Infinity,
-                minSize: 30000, // 依赖包超过30000bit将被单独打包
+                minSize: 300000, // 依赖包超过30000bit将被单独打包
                 automaticNameDelimiter: "-",
                 cacheGroups: {
                     vue: {
@@ -147,7 +160,7 @@ module.exports = {
                     "element-plus": {
                         name: "element-plus",
                         test: /[\\/]node_modules[\\/]element-plus[\\/]/,
-                        priority: 10,
+                        priority: -10,
                     },
                     // 提取重复引用公共库
                     common: {

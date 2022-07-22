@@ -1,5 +1,5 @@
 // 为了兼容更多的浏览器而引入的插件
-import 'core-js/stable'
+import "core-js/stable";
 import "regenerator-runtime/runtime";
 
 // 这里是从vue文件中导入一个变量，这个变量要用{}括起来，否则在使用时只会提示object类型
@@ -16,6 +16,10 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 
 // 引入axios
 import axios from "axios";
+
+// 提高滚动性能——npm i default-passive-events -S
+import "default-passive-events";
+
 // 根组件:
 import todoRoot from "@/root_components/todo-root";
 // import htmlEmail from "@/root_components/html-email"

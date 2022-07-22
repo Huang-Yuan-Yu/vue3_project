@@ -44,7 +44,7 @@
                         <p class="websiteTime" v-show="isShowIntroduction">
                             待办事项已上线{{ distanceTime }}天
                             <br />
-                            最后更新：2022-7-20
+                            最后更新：2022-7-22
                         </p>
                     </transition>
                 </div>
@@ -58,6 +58,13 @@
                         :style="{ height: isShowIntroduction === false ? '140%' : '100%' }"
                         @scroll="scrollAnnouncementUl"
                     >
+                        <li class="announcementLi">
+                            <p>2022-7-22</p>
+                            <div>
+                                <span class="updateTag new">新增</span>
+                                <span class="announcementText">登录时需进行滑动拼图验证</span>
+                            </div>
+                        </li>
                         <li class="announcementLi">
                             <p>2022-7-20</p>
                             <div>
