@@ -286,7 +286,7 @@
                                     class="userAccountInput"
                                     clearable
                                     maxlength="40"
-                                    placeholder="请输入您的邮箱"
+                                    placeholder="请输入您作为注册的邮箱"
                                     show-word-limit
                                     type="email"
                                     @blur="checkAccount"

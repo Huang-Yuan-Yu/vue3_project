@@ -5,13 +5,13 @@
     <!--包含X-Content-Type-Options，可以防止黑客在浏览器进行MIME类型的嗅探-->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff;"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <!--网站标题-->
+    <!--网站标题-->
     <meta name="title" content="待办事项-生活清单">
     <meta name="application name" content="待办事项-黄元昱的个人网站">
     <meta name="keywords" content="待办事项, todolist, 备忘录">
-      <!--作者-->
+    <!--作者-->
     <meta name="author" content="黄元昱">
-      <!--对该网站的简单描述-->
+    <!--对该网站的简单描述-->
     <meta name="description"
           content="TodoList、待办事项网站，可当作时间管理系统中的收集箱，保持工作、生活的条理性，另外还有天气、工具箱等扩展内容。此网站和青柠起始页相似，有异曲同工之妙，由黄元昱负责网站的建设与维护">
     <meta content="width=device-width,initial-scale=1.0" name="viewport">
@@ -34,6 +34,90 @@
               /*全局字体样式*/
               font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
           }
+
+          /*外层div*/
+          #fatherDiv {
+              width: 100%;
+              text-align: center;
+              position: fixed;
+              top: 30%;
+              animation: fatherDivAnimation 0.5s ease-in-out;
+          }
+
+          /*逐渐显现的动画*/
+          @keyframes fatherDivAnimation {
+              0% {
+                  opacity: 0
+              }
+              100% {
+                  opacity: 1;
+              }
+          }
+
+          /*下面是首屏加载动画要用到的CSS，spinner是动画主体的画布（较小）*/
+          .spinner {
+              height: 50px;
+          }
+
+          /*里面的小div*/
+          .spinner > div {
+              background-color: #409EFF;
+              height: 100%;
+              width: 6px;
+              margin-left: 2px;
+              margin-right: 2px;
+              display: inline-block;
+              -webkit-animation: stretchDelay 1.2s infinite ease-in-out;
+              animation: stretchDelay 1.2s infinite ease-in-out;
+          }
+
+          .spinner .rect2 {
+              -webkit-animation-delay: -1.1s;
+              animation-delay: -1.1s;
+          }
+
+          .spinner .rect3 {
+              -webkit-animation-delay: -1.0s;
+              animation-delay: -1.0s;
+          }
+
+          .spinner .rect4 {
+              -webkit-animation-delay: -0.9s;
+              animation-delay: -0.9s;
+          }
+
+          .spinner .rect5 {
+              -webkit-animation-delay: -0.8s;
+              animation-delay: -0.8s;
+          }
+
+          @-webkit-keyframes stretchDelay {
+              0%, 40%, 100% {
+                  -webkit-transform: scaleY(0.4)
+              }
+              20% {
+                  -webkit-transform: scaleY(1.0)
+              }
+          }
+
+          @keyframes stretchDelay {
+              0%, 40%, 100% {
+                  transform: scaleY(0.4);
+                  -webkit-transform: scaleY(0.4);
+              }
+              20% {
+                  transform: scaleY(1.0);
+                  -webkit-transform: scaleY(1.0);
+              }
+          }
+
+          /*加载中的字体*/
+          #loading {
+              color: #59abff;
+              font-size: 2em;
+              margin-top: 12px;
+              margin-bottom: 0;
+          }
       </style>
   </head>
   
@@ -42,7 +126,18 @@
       <strong style="color:white;">此网站需要允许浏览器运行JavaScript，否则无法浏览此网页</strong>
     </noscript>
     <!--构建的文件将自动加载-->
-    <div id="app"></div>
+    <div id="app">
+        <div id="fatherDiv">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+            <p id="loading">加载中</p>
+        </div>
+    </div>
     <!--用于判断浏览器是否支持运行本网页-->
     <script>
         (function () {
