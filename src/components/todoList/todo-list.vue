@@ -336,6 +336,8 @@ import { InfoFilled } from "@element-plus/icons-vue";
 import emitter from "@/jsFunction/eventbus";
 // 导入获取“浏览器指纹（唯一标识）”的依赖（安装：npm i @fingerprintjs/fingerprintjs -S）
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+// QQ互联
+import QC from "qc";
 
 export default {
     name: "todo-list",
@@ -412,6 +414,42 @@ export default {
             .catch();
     },
     mounted() {
+        // 如果QQ登录成功
+        if (QC.Login.check()) {
+            let that = this;
+            // 获取登录凭证（Access Token以及OpenID）
+            QC.Login.getMe(function (openId) {
+                if (openId !== undefined) {
+                    // 获取用户信息
+                    QC.api("get_user_info")
+                        // 指定接口访问成功的接收函数，s为成功返回Response对象
+                        .success(function (user) {
+                            let name = localStorage.getItem("name");
+                            // 从服务器接口获取数据
+                            getObjectArray(name === null ? user.data.nickname : name)
+                                .then((response) => {
+                                    // 获取返回的待办事项数组
+                                    that.todoArray = response;
+                                    // “服务器状态serverStatus”只用于动态显示，没有其他功能：
+                                    that.serverStatus = "开启";
+                                    // inputDisabled用于控制输入框和按钮是否可用，获取得到数据，才将“不可用性”设置为“否false”，表示可用：
+                                    that.inputDisabled = false;
+                                    // 注意！要获取完列表之后，再自动将焦点聚焦到事项输入框里
+                                    that.$nextTick(() => {
+                                        // 多行文本框的聚焦，在ref值为“inputTodo”的后面不能
+                                        that.$refs.inputTodo.focus();
+                                    });
+                                })
+                                // 如果服务器未开启，则会报错——网络错误Network Error
+                                .catch(() => {
+                                    // 那么将serverStatus设置为“关闭”，上面template中的<p>会使用v-if做出相应的判断
+                                    that.serverStatus = "关闭";
+                                });
+                        });
+                }
+            });
+        }
+
         // 监听子组件的消息
         emitter.on("Token认证", (message) => {
             let myName = localStorage.getItem("name");

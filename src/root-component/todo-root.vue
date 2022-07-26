@@ -2,19 +2,19 @@
 <template>
     <div id="todo-root">
         <!--用于平滑刷新网页状态，v-if先是false，然后瞬间切换为true-->
-        <ToDoMvc v-if="isRouterAlive" />
+        <todo-list v-if="isRouterAlive" />
     </div>
 </template>
 
 <script>
 // 要导入自己需要的“组件components“
-import ToDoMvc from "@/components/todoList/todo-list";
+import todoList from "@/components/todoList/todo-list";
 
 export default {
     // 首页组件的名称
     name: "todo-root",
     components: {
-        ToDoMvc,
+        "todo-list": todoList,
     },
     // 高阶组件里的内容，能够返回一个对象
     provide() {

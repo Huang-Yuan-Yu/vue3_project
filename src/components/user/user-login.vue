@@ -394,7 +394,7 @@ import { ref } from "vue";
 import SlideVerify from "vue3-slide-verify";
 import "vue3-slide-verify/dist/style.css";
 // QQ互联
-// import QC from "qc";
+import QC from "qc";
 
 export default {
     name: "user-login",
@@ -502,8 +502,47 @@ export default {
     },
     // 当页面加载完毕时
     mounted() {
+        // 回来后在钩子函数这里检查是否登录成功，这里的代码块每次看到首页都会触发
+        if (QC.Login.check()) {
+            // 保存作用域，提供给下面用，否则下面的代码用this是无法访问Vue实例的
+            let that = this;
+            // 获取登录凭证（Access Token以及OpenID）
+            QC.Login.getMe(function (openId) {
+                if (openId !== undefined) {
+                    // 获取用户信息
+                    QC.api("get_user_info")
+                        // 指定接口访问成功的接收函数，s为成功返回Response对象
+                        .success(function (user) {
+                            // 将QQ昵称保存到本地
+                            localStorage.setItem("name", user.data.nickname);
+                            // 显示的昵称
+                            that.myName = user.data.nickname;
+                            // 将头像的数据保存到Vuex的state中
+                            that.$store.dispatch("setShowAvatar", user.data.figureurl_2);
+                        })
+                        // 指定接口访问失败的接收函数
+                        .error(function () {
+                            ElMessage({
+                                // 显示关闭按钮
+                                showClose: true,
+                                message: "QQ授权失败了···",
+                                type: "error",
+                            });
+                        });
+                } else {
+                    ElMessage({
+                        // 显示关闭按钮
+                        showClose: true,
+                        message: "QQ授权失败了···",
+                        type: "error",
+                    });
+                }
+            });
+            // 开启登录模式
+            this.loginSuccess = true;
+        }
         // 如果已登录，就对Token进行验证：
-        if (this.loginSuccess === true) {
+        else if (this.loginSuccess === true) {
             let name = localStorage.getItem("name");
             let loginMethod = localStorage.getItem("登录方式");
             this.$axios({
@@ -1021,7 +1060,7 @@ export default {
                             // 那么就本地存储token，jwt名称，值为服务器返回的jwt字符串（长长的那个）
                             localStorage.setItem("jwt", response.data.jwt);
                             localStorage.setItem("name", this.user.name);
-                            // 将名称赋值给显示的内容
+                            // 将名称赋值给登录的类型
                             this.isLoginAnonymously = this.user.name;
                             // 将头像的数据保存到Vuex的state中
                             this.$store.dispatch("setShowAvatar", response.data.userAvatarData);
@@ -1213,7 +1252,14 @@ export default {
         },
         // 打开设置用户头像的窗口
         openSetAvatarWindow() {
-            if (this.isShowSetAvatarWindow === false) {
+            if (QC.Login.check()) {
+                ElMessage({
+                    // 显示关闭按钮
+                    showClose: true,
+                    message: "您应该通过修改QQ头像来设置头像！",
+                    type: "warning",
+                });
+            } else if (this.isshowsetavatarwindow === false) {
                 // 为true则显示其组件
                 this.isShowSetAvatarWindow = true;
                 // 将背景模糊
@@ -1235,6 +1281,11 @@ export default {
         },
         // 退出登录
         userLogout() {
+            // 如果检查到是以QQ登录
+            if (QC.Login.check()) {
+                // 则退出QQ登录
+                QC.Login.signOut();
+            }
             // 删除掉存储在本地的内容
             localStorage.removeItem("jwt");
             localStorage.removeItem("name");
@@ -1252,18 +1303,24 @@ export default {
         },
         // 用QQ登录
         qqLogin() {
-            ElMessage({
-                // 显示关闭按钮
-                showClose: true,
-                message: "功能正在开发中···",
-                type: "warning",
-            });
-            // 102014855 https://www.hyy666.top/qqLogin
-            // eslint-disable-next-line
-            /*QC.Login.showPopup({
-                appId: "102014855",
-                redirectURI: "https://www.hyy666.top/qqLogin",
-            });*/
+            // 如果处于未登录，才能进行登录操作
+            if (this.loginSuccess === false) {
+                // 打开授权页面
+                /*QC.Login.showPopup({
+                    appId: "102014855",
+                    redirectURI: "https://www.hyy666.top/qqlogin",
+                });*/
+                // 赋值上面打开后的授权链接，这里直接在原标签页打开，而不是在新标签页打开
+                window.location.href =
+                    "https://graph.qq.com/oauth2.0/show?which=Login&display=pc&client_id=102014855&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fwww.hyy666.top%2Fqqlogin";
+            } else {
+                ElMessage({
+                    // 显示关闭按钮
+                    showClose: true,
+                    message: "您已处于登录状态，不能再进行QQ登录！",
+                    type: "warning",
+                });
+            }
         },
     },
     // 局部自定义指令
@@ -1327,6 +1384,7 @@ export default {
     margin-right: 2vw;
     /*禁止被选中*/
     user-select: none;
+    border-radius: 100%;
 }
 
 /*未登录时*/
@@ -1414,7 +1472,7 @@ export default {
     }
 }
 
-/*登录后，用户的各种选项按钮*/
+/*登录前、后，用户的各种选项按钮*/
 .userButton {
     width: 100%;
     margin-top: 10px;
@@ -1425,8 +1483,7 @@ export default {
 .userButton:hover {
     background: #353535;
     color: white;
-    /*默认边框为白色，这里改为与background颜色相同，相当于去掉边框*/
-    border: 0 #292929;
+    border-color: #292929;
     transition-duration: 0.7s;
 }
 

@@ -20,14 +20,13 @@ import axios from "axios";
 // 提高滚动性能——npm i default-passive-events -S
 import "default-passive-events";
 
-// 根组件:
-import todoRoot from "@/root_components/todo-root";
-// import htmlEmail from "@/root_components/html-email"
+// 视图
+import App from "@/views/App";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 // 创建Vue实例，并赋值给一个常量
-const nowPage = createApp(todoRoot).use(store).use(router);
+const nowPage = createApp(App).use(store).use(router);
 // Element-Plus的图标库
 for (let [key, component] of Object.entries(ElementPlusIconsVue)) {
     nowPage.component(key, component);

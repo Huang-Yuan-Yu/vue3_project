@@ -19,7 +19,7 @@ const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 // 在构建时，会出现各种资源路径错误的情况，在本文件中重写打包后的基础路径为当前目录，就可以解决
 // 后来通过“npm install --save-dev compression-webpack-plugin”引入打包大小优化的依赖
 module.exports = {
-    // 公共路径为“./”：
+    // 公共路径
     publicPath: "./",
     // 是否为生产环境构建生成sourceMap，为false则在控制台不显示来源于代码的何处
     productionSourceMap: false,
@@ -28,7 +28,7 @@ module.exports = {
         // 这里的ip和端口是我们本机的
         open: true,
         // 本机的主机名或IP地址
-        host: "127.0.0.1",
+        host: "localhost",
         // 端口（HTTPS用的是443）
         port: 443,
         // 是否为HTTPS协议，这里为是
@@ -49,7 +49,14 @@ module.exports = {
                     // 将地址栏中出现的api字样，重写为空字符串：
                     "^/api": "",
                 },
+                headers: {
+                    Referer: "https://thinkphp.hyy666.top/",
+                },
             },
+        },
+        // history模式下的url会请求到服务器端，但是服务器端并没有这一个资源文件，就会返回404，所以需要配置这一项
+        historyApiFallback: {
+            index: "/",
         },
     },
     // 想要修改icon，必须要加上下面这些代码，否则修改无效
