@@ -1306,13 +1306,13 @@ export default {
             // 如果处于未登录，才能进行登录操作
             if (this.loginSuccess === false) {
                 // 打开授权页面
-                /*QC.Login.showPopup({
+                QC.Login.showPopup({
                     appId: "102014855",
                     redirectURI: "https://www.hyy666.top/qqlogin",
-                });*/
+                });
                 // 赋值上面打开后的授权链接，这里直接在原标签页打开，而不是在新标签页打开
-                window.location.href =
-                    "https://graph.qq.com/oauth2.0/show?which=Login&display=pc&client_id=102014855&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fwww.hyy666.top%2Fqqlogin";
+                // window.location.href =
+                //     "https://graph.qq.com/oauth2.0/show?which=Login&display=pc&client_id=102014855&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fwww.hyy666.top%2Fqqlogin";
             } else {
                 ElMessage({
                     // 显示关闭按钮
