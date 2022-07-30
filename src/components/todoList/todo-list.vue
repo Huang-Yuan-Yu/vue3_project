@@ -1335,8 +1335,7 @@ export default {
     flex-flow: wrap;
     // 对齐
     align-self: baseline;
-    margin-bottom: 5px;
-    margin-top: -2px;
+    margin: 1px 0;
 }
 
 /*待办事项功能按钮*/

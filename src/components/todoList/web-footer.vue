@@ -1,10 +1,7 @@
 <template>
     <div id="web-footer">
         <footer id="footer">
-            <a
-                class="text"
-                href="http://wpa.qq.com/msgrd?v=3&uin=2690085099&site=qq&menu=yes"
-                target="_blank"
+            <a class="text" href="http://wpa.qq.com/msgrd?v=3&uin=2690085099&site=qq&menu=yes" target="_blank"
                 >© 2022 黄元昱</a
             >
             <span class="segmentation">|</span>
@@ -42,9 +39,9 @@
                     <transition name="websiteTime">
                         <!--开始滚动则隐藏，如果滚动到顶部则显示-->
                         <p class="websiteTime" v-show="isShowIntroduction">
-                            待办事项已上线{{ distanceTime }}天
+                            待办事项已上线{{ parseInt(distanceTime / 86400) }}天
                             <br />
-                            最后更新：2022-7-22
+                            最后更新：2022-7-30
                         </p>
                     </transition>
                 </div>
@@ -58,6 +55,20 @@
                         :style="{ height: isShowIntroduction === false ? '140%' : '100%' }"
                         @scroll="scrollAnnouncementUl"
                     >
+                        <li class="announcementLi">
+                            <p>2022-7-30</p>
+                            <div>
+                                <span class="updateTag repair">修复</span>
+                                <span class="announcementText">无法设置头像的问题</span>
+                            </div>
+                        </li>
+                        <li class="announcementLi">
+                            <p>2022-7-26</p>
+                            <div>
+                                <span class="updateTag new">新增</span>
+                                <span class="announcementText">QQ第三方登录功能</span>
+                            </div>
+                        </li>
                         <li class="announcementLi">
                             <p>2022-7-22</p>
                             <div>
@@ -186,7 +197,7 @@ export default {
         return {
             // 是否显示“关于“面板
             isShowAbout: false,
-            // 从网站开设到现在距离的天数
+            // 从网站开设到现在距离的时间戳
             distanceTime: null,
             // 是否展示网站介绍和创办时间等信息
             isShowIntroduction: true,
@@ -201,7 +212,7 @@ export default {
             url: "/api/TodoList/getDate",
         }).then((response) => {
             // 1652284800是此网站开设时的时间戳（2022-05-12），一天等于86400秒
-            this.distanceTime = parseInt((response.data - 1652284800) / 86400);
+            this.distanceTime = response.data - 1652284800;
         });
     },
     methods: {

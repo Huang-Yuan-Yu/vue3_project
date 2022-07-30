@@ -1259,7 +1259,7 @@ export default {
                     message: "您应该通过修改QQ头像来设置头像！",
                     type: "warning",
                 });
-            } else if (this.isshowsetavatarwindow === false) {
+            } else if (this.isShowSetAvatarWindow === false) {
                 // 为true则显示其组件
                 this.isShowSetAvatarWindow = true;
                 // 将背景模糊
@@ -1310,9 +1310,6 @@ export default {
                     appId: "102014855",
                     redirectURI: "https://www.hyy666.top/qqlogin",
                 });
-                // 赋值上面打开后的授权链接，这里直接在原标签页打开，而不是在新标签页打开
-                // window.location.href =
-                //     "https://graph.qq.com/oauth2.0/show?which=Login&display=pc&client_id=102014855&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fwww.hyy666.top%2Fqqlogin";
             } else {
                 ElMessage({
                     // 显示关闭按钮
