@@ -186,8 +186,8 @@ module.exports = {
                         priority: -20,
                         reuseExistingChunk: true,
                         enforce: true,
-                        minSize: 0, //大于0个字节
-                        minChunks: 2, //在分割之前，这个代码块最小应该被引用的次数
+                        minSize: 0, // 大于0个字节
+                        minChunks: 2, // 在分割之前，这个代码块最小应该被引用的次数
                     },
                     default: {
                         minChunks: 2,
