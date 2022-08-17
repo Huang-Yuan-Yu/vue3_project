@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<!--lang="zh-CN"用于声明“本网页的主语言是中文，便于外国人进入此网页时，提示此网页是中文，应该翻译成其他语言  -->
+<html lang="zh-CN">
+  <head>
+    <!--包含X-Content-Type-Options，可以防止黑客在浏览器进行MIME类型的嗅探-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff;"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--网站标题-->
+    <meta name="title" content="待办事项-生活清单">
+    <meta name="application name" content="待办事项-黄元昱的个人网站">
+    <meta name="keywords" content="待办事项, todolist, 备忘录">
+    <!--作者-->
+    <meta name="author" content="黄元昱">
+    <!--对该网站的简单描述-->
+    <meta name="description"
+          content="TodoList、待办事项网站，可当作时间管理系统中的收集箱，保持工作、生活的条理性，另外还有天气、工具箱等扩展内容。此网站和青柠起始页相似，有异曲同工之妙，由黄元昱负责网站的建设与维护">
+    <meta content="width=device-width,initial-scale=1.0" name="viewport">
+    <link href="<%= BASE_URL %>favicon.ico" rel="icon">
+    <title>待办事项</title>
+      <style>
+          html {
+              width: 100%;
+              height: 100%;
+          }
+
+          /*注意！解决其他组件在放置背景图片时，上边和左边会出现白边的问题
+          在待办事项项目中，可以将这里的background改为黑色，这样网页初始化时就是黑色的，不会导致白色闪烁
+          备份：;background: #333333*/
+          body {
+              /*让外边距为0，才不会出现边框*/
+              margin: 0;
+              background: linear-gradient(to top right, #222 0%, #444 75%, #333 100%);
+              /*白色背景，注释掉，作为备份*/
+              /*background: #fff;*/
+              /*如果在vue中要隐藏滚动条，要在index.html里面设置，在组件中无法设置*/
+              overflow-x: hidden;
+              overflow-y: hidden;
+              /*全局字体样式*/
+              font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+          }
+
+          /*外层div*/
+          #fatherDiv {
+              width: 100%;
+              text-align: center;
+              position: fixed;
+              top: 30%;
+              animation: fatherDivAnimation 0.5s ease-in-out;
+              filter: drop-shadow(0px 0px 8px rgba(89, 171, 255, 0.3));
+          }
+
+          /*逐渐显现的动画*/
+          @keyframes fatherDivAnimation {
+              0% {
+                  opacity: 0
+              }
+              100% {
+                  opacity: 1;
+              }
+          }
+
+          /*下面是首屏加载动画要用到的CSS，spinner是动画主体的画布（较小）*/
+          .spinner {
+              height: 50px;
+          }
+
+          /*里面的小div*/
+          .spinner > div {
+              background-color: #40c3ff;
+              height: 100%;
+              width: 6px;
+              margin-left: 2px;
+              margin-right: 2px;
+              display: inline-block;
+              -webkit-animation: stretchDelay 1.2s infinite ease-in-out;
+              animation: stretchDelay 1.2s infinite ease-in-out;
+          }
+
+          .spinner .rect2 {
+              -webkit-animation-delay: -1.1s;
+              animation-delay: -1.1s;
+          }
+
+          .spinner .rect3 {
+              -webkit-animation-delay: -1.0s;
+              animation-delay: -1.0s;
+          }
+
+          .spinner .rect4 {
+              -webkit-animation-delay: -0.9s;
+              animation-delay: -0.9s;
+          }
+
+          .spinner .rect5 {
+              -webkit-animation-delay: -0.8s;
+              animation-delay: -0.8s;
+          }
+
+          @-webkit-keyframes stretchDelay {
+              0%, 40%, 100% {
+                  -webkit-transform: scaleY(0.4)
+              }
+              20% {
+                  -webkit-transform: scaleY(1.0)
+              }
+          }
+
+          @keyframes stretchDelay {
+              0%, 40%, 100% {
+                  transform: scaleY(0.4);
+                  -webkit-transform: scaleY(0.4);
+              }
+              20% {
+                  transform: scaleY(1.0);
+                  -webkit-transform: scaleY(1.0);
+              }
+          }
+
+          /*加载中的字体*/
+          #loading {
+              color: #40c3ff;
+              font-size: 2em;
+              margin-top: 12px;
+              margin-bottom: 0;
+          }
+
+          /*去掉自动填充的背景颜色*/
+          input:-webkit-autofill {
+              -webkit-box-shadow: 0 0 0 1000px white inset;
+              -webkit-text-fill-color: #333;
+          }
+      </style>
+  </head>
+  
+  <body>
+    <noscript>
+      <strong style="color:white;">此网站需要允许浏览器运行JavaScript，否则无法浏览此网页</strong>
+    </noscript>
+    <!--构建的文件将自动加载-->
+    <div id="app">
+        <div id="fatherDiv">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+            <p id="loading">加载中</p>
+        </div>
+    </div>
+    <!--用于判断是否为IE浏览器，如果是就会跳转到“浏览器升级提示页”-->
+    <script>
+        // 取得浏览器的userAgent字符串
+        var userAgent = navigator.userAgent;
+        // 判断是否为小于IE11的浏览器
+        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1) {
+            // 正则表达式匹配浏览器的userAgent字符串中MSIE后的数字部分，，这一步不可省略！！！
+            // var IEReg = new RegExp("MSIE (\\d+\\.\\d+);").test(userAgent);
+            // 取正则表达式中第一个小括号里匹配到的值
+            var IEVersionNum = parseFloat(RegExp["$1"]);
+            if (6 <= IEVersionNum && IEVersionNum <= 11) {
+                window.location.href =
+                        "https://support.dmeng.net/upgrade-your-browser.html?referrer=" +
+                        encodeURIComponent(window.location.href);
+            }
+        }
+        // 判断是否为IE11浏览器
+        else if (userAgent.indexOf("Trident") > -1 && userAgent.indexOf("rv:11.0") > -1) {
+            window.location.href =
+                    "https://support.dmeng.net/upgrade-your-browser.html?referrer=" +
+                    encodeURIComponent(window.location.href);
+        }
+    </script>
+    <!--QQ登录用的：data-callback="true"的作用是在在授权完成后会自动关掉回调页面-->
+    <script type="text/javascript" charset="utf-8"
+            src="https://connect.qq.com/qc_jssdk.js"
+            data-appid="102014855"
+            data-redirecturi="https://www.hyy666.top/qqlogin"
+    ></script>
+    <!--百度网站统计-->
+    <script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?83bbaf3a1179e4b87c2abfddb994fd89";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  </body>
+</html>
