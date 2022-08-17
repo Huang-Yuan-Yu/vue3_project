@@ -146,7 +146,7 @@ module.exports = {
                 })
             );
 
-            // 拆包
+            // 分包
             config.optimization.splitChunks({
                 // 对于需要动态加载的内容，抽出来
                 chunks: "async",

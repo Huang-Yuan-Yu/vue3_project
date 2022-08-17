@@ -186,3 +186,9 @@ git push
 ```shell
 git push -u origin 分支名称 -f 
 ```
+
+### 19. 撤销全局配置（重点在--unset，即取消设置）
+
+```shell
+git config --global --unset 具体命令内容
+```
