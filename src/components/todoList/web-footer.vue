@@ -312,12 +312,12 @@ export default {
 /*窗口动画*/
 .aboutTransition-enter-active {
     /*加入动画，此动画名为“scale-in-tr"*/
-    animation: aboutTransition-animation 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: aboutTransition-animation 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .aboutTransition-leave-active {
     /*“反转reverse”表示会倒放，从scale-in-tr的100%到0%*/
-    animation: aboutTransition-animation 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) reverse;
+    animation: aboutTransition-animation 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) reverse;
 }
 
 @keyframes aboutTransition-animation {

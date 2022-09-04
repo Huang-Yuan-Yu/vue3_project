@@ -1097,7 +1097,7 @@ export default {
 /*使背景图片虚化，这个class是动态调用的，当打开某些窗口时，背景图片会虚化*/
 .backgroundBlur {
     /*将div放大*/
-    transform: scale(1.08);
+    transform: scale(1.04);
     filter: blur(1rem);
 }
 
@@ -1250,9 +1250,9 @@ export default {
 
 /*如果已完成，则列表文字的颜色改为绿色*/
 .completed {
-    color: #67c23a;
+    color: #67C23A;
     text-decoration: line-through;
-    opacity: 0.3;
+    opacity: 0.6;
 }
 
 /*输入框外边的div（在UI库中）*/
