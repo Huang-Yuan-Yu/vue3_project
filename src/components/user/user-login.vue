@@ -2,7 +2,7 @@
     <!--如果单击空白处，则右侧的用户提示框立即消失-->
     <div id="user-login">
         <!--登录、注册模块-->
-        <div id="login" @mouseleave="userMouseleave">
+        <header id="login" @mouseleave="userMouseleave">
             <transition name="checkLogin">
                 <!--指针移入，则isShowCheckLogin为true，true就显示-->
                 <div v-if="isShowCheckLogin" class="loginAndRegistration" @mouseenter="userMouseEnter">
@@ -68,7 +68,7 @@
                     class="userLogo"
                     @mouseenter="userMouseEnter"
             /></a>
-        </div>
+        </header>
         <!--设置用户头像的组件，将布尔值变量传入子组件，决定子组件是否要显示-->
         <set-avatar ref="setAvatar" :isShowSetAvatarWindow="isShowSetAvatarWindow" :myName="myName"></set-avatar>
 
@@ -1375,6 +1375,11 @@ export default {
     /*禁止被选中*/
     user-select: none;
     border-radius: 100%;
+    transition: all 0.5s ease-in-out;
+}
+
+.userLogo:hover {
+    filter: drop-shadow(0 0 2px white);
 }
 
 /*未登录时*/

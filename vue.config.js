@@ -37,7 +37,7 @@ module.exports = {
         proxy: {
             // 配置跨域，这里的api为自定义的，如果使用其他网络上的接口，则这里填的是对应的其他值
             "/api": {
-                // 这里后台的地址模拟的;应该填写真实的后台地址
+                // 这里是后台的地址，应该填写真实的后台地址或自己的测试地址
                 target: "https://thinkphp.hyy666.top/",
                 // 是否支持webSocket，默认为true
                 ws: true,
@@ -89,7 +89,7 @@ module.exports = {
                 resolvers: [ElementPlusResolver()],
             }),
         ],
-        // 导入模块为qc变量名为QC，导入qc将不做打包——QQ互联
+        // 导入模块为qc变量名为QC，导入qc将不做打包——QQ互联（用于QQ第三方登录）
         externals: {
             qc: "QC",
         },

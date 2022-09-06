@@ -1,5 +1,6 @@
 <template>
-    <div id="my-weather">
+    <!--aside标签：定义article标签外的内容，可用作文章的侧边栏-->
+    <aside id="my-weather">
         <!--天气div-->
         <div id="weatherLogoDiv">
             <a>
@@ -15,7 +16,7 @@
             <!--引入第三方天气组件-->
             <yy-weather v-show="isShowWeather"></yy-weather>
         </div>
-    </div>
+    </aside>
 </template>
 
 <script>

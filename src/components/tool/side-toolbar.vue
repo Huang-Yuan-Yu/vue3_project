@@ -1,6 +1,7 @@
 <template>
-    <!--侧边工具栏：用于显示更多的工具-->
-    <div id="side-toolbar">
+    <!--侧边工具栏：用于显示更多的工具
+    aside标签：定义article标签外的内容，可用作文章的侧边栏-->
+    <aside id="side-toolbar">
         <!--”显示更多“Logo-->
         <div id="sideToolbarLogoDiv" @click="isOpenDrawer = true">
             <a>
@@ -52,7 +53,7 @@
                 </div>
             </div>
         </transition>
-    </div>
+    </aside>
 </template>
 
 <script>

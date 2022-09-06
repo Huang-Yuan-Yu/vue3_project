@@ -26,8 +26,9 @@
         <my-weather ref="myWeather"></my-weather>
         <!--引入侧边工具栏的组件-->
         <side-toolbar></side-toolbar>
-        <!--说明：单击左边圆形可标记为完成事项或取消，双击文字可修改内容，输入框按回车可添加事项-->
-        <div id="todoForm" :class="{ backgroundBlur: $store.state.backgroundIsBlur }" @click="closeWindows">
+        <!--说明：单击左边圆形可标记为完成事项或取消，双击文字可修改内容，输入框按回车可添加事项
+        main标签：页面主要内容，一个页面只能使用一次-->
+        <main id="todoForm" :class="{ backgroundBlur: $store.state.backgroundIsBlur }" @click="closeWindows">
             <p id="YyTodo">YY待办</p>
             <p v-if="serverStatus === '未知'" class="currentStatus" style="color: #909399">正在连接服务器中······</p>
             <!--如果服务器关闭了-->
@@ -283,7 +284,7 @@
                     </li>
                 </transition-group>
             </el-scrollbar>
-        </div>
+        </main>
 
         <!--网站底部-->
         <web-footer></web-footer>

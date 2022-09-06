@@ -1,5 +1,6 @@
 <template>
-    <div id="qq-login"></div>
+    <!--article标签：用来定义独立于文档且有意义的来自外部的内容-->
+    <article id="qq-login"></article>
 </template>
 
 <script>
