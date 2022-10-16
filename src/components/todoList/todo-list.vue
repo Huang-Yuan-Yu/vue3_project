@@ -1303,7 +1303,7 @@ export default {
     // 初始背景
     background: rgba(255, 255, 255, 0.6);
     // 磨砂玻璃
-    backdrop-filter: blur(0.2vh);
+    backdrop-filter: blur(1vh);
     color: #333;
     transition: all 0.5s ease-in-out;
 }
@@ -1312,7 +1312,7 @@ export default {
 .todoNotDoneBorder {
     // 渐变背景颜色要用的
     background-image: linear-gradient(to top, rgba(217, 252, 255, 0.8), rgba(255, 255, 255, 0.1));
-    border-bottom: 3px solid #51faff;
+    border-bottom: 3px solid rgba(81, 250, 255, 0.8);
     box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.4) inset, 0 2px 4px rgba(81, 250, 255, 0.5);
 }
 
@@ -1325,7 +1325,7 @@ export default {
 /*完成事项后的边框样式*/
 .todoDoneBorder {
     background-image: linear-gradient(to top, rgba(232, 255, 231, 0.8), rgba(255, 255, 255, 0.1));
-    border-bottom: 3px solid #76ff35;
+    border-bottom: 3px solid rgba(118, 255, 53, 0.8);
     box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.1) inset, 0 2px 4px rgba(118, 255, 53, 0.5);
 }
 
