@@ -14,7 +14,7 @@
                     v-if="isShow"
                     fill="none"
                     points="88,214 173,284 304,138"
-                    stroke="#68E534"
+                    stroke="#fff"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="24"
@@ -39,11 +39,13 @@ export default {
 
 <style lang="scss" scoped>
 svg {
-    border: 1px solid #a8abb2;
+    border: 1px solid #fff;
+    opacity: 0.5;
     border-radius: 100%;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8) inset;
 }
 
-/*元素开始显示完毕时*/
+/*元素开始显示时*/
 .doneSvg-enter-active {
     /*stroke-dasharray属性用于在 SVG 形状的笔划中创建破折号*/
     stroke-dasharray: 350;

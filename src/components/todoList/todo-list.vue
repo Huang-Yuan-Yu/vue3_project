@@ -1240,8 +1240,8 @@ export default {
 
 .completed::selection,
 .noCompleted::selection {
-    color: #004da3;
-    background: #cdd0d6;
+    color: #5ea5ff;
+    background: #ffffff;
 }
 
 /*未完成时的事项内容字体颜色*/
@@ -1249,11 +1249,11 @@ export default {
     color: #303133;
 }
 
-/*如果已完成，则列表文字的颜色改为绿色*/
+/*如果已完成*/
 .completed {
-    color: #67C23A;
+    color: #303133;
     text-decoration: line-through;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 /*输入框外边的div（在UI库中）*/
@@ -1300,20 +1300,38 @@ export default {
     margin-bottom: 10px;
     text-align: center;
     border-radius: 4px;
-    background: var(--el-color-primary-light-9);
+    // 初始背景
+    background: rgba(255, 255, 255, 0.6);
+    // 磨砂玻璃
+    backdrop-filter: blur(0.2vh);
     color: #333;
-}
-
-/*完成事项后的边框样式*/
-.todoDoneBorder {
-    border: 1px solid #67c23a;
-    box-shadow: 0 0 6px #67c23a;
+    transition: all 0.5s ease-in-out;
 }
 
 /*事项未完成时的边框样式*/
 .todoNotDoneBorder {
-    border: 1px solid #409eff;
-    box-shadow: 0 0 6px #409eff;
+    // 渐变背景颜色要用的
+    background-image: linear-gradient(to top, rgba(217, 252, 255, 0.8), rgba(255, 255, 255, 0.1));
+    border-bottom: 3px solid #51faff;
+    box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.4) inset, 0 2px 4px rgba(81, 250, 255, 0.5);
+}
+
+.todoNotDoneBorder:hover {
+    // 渐变背景颜色要用的
+    background-image: linear-gradient(to top, rgba(200, 249, 252, 0.8), rgba(255, 255, 255, 0.1));
+    border-bottom: 3px solid #00f8ff;
+}
+
+/*完成事项后的边框样式*/
+.todoDoneBorder {
+    background-image: linear-gradient(to top, rgba(232, 255, 231, 0.8), rgba(255, 255, 255, 0.1));
+    border-bottom: 3px solid #76ff35;
+    box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.1) inset, 0 2px 4px rgba(118, 255, 53, 0.5);
+}
+
+.todoDoneBorder:hover {
+    background-image: linear-gradient(to top, rgba(222, 255, 220, 0.8), rgba(255, 255, 255, 0.1));
+    border-bottom: 3px solid #76ff35;
 }
 
 /*列表中后面的div*/
@@ -1340,7 +1358,7 @@ export default {
 ::v-deep(.showModificationTime) {
     min-width: 20px;
     height: 100%;
-    margin-right: -1px;
+    margin-right: 4px;
     cursor: url("../../assets/cursor/default.png"), default;
     /*直接覆盖按钮的背景颜色，能够防止点击按钮后颜色不会恢复*/
     background-color: #330c82;
@@ -1440,7 +1458,7 @@ export default {
     width: 20px;
     margin-right: 16px;
     cursor: url("../../assets/cursor/pointer.png"), pointer;
-    margin-top: 4px;
+    margin-top: 6px;
     margin-left: 4px;
 }
 

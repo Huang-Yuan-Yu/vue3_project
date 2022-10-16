@@ -41,7 +41,7 @@
                         <p v-if="isShowIntroduction" class="websiteTime">
                             待办事项已上线{{ parseInt(distanceTime / 86400) }}天
                             <br />
-                            最后更新：2022-7-30
+                            最后更新：2022-10-16
                         </p>
                     </transition>
                 </div>
@@ -55,6 +55,13 @@
                         :style="{ height: isShowIntroduction === false ? '140%' : '100%' }"
                         @scroll="scrollAnnouncementUl"
                     >
+                        <li class="announcementLi">
+                            <p>2022-10-16</p>
+                            <div>
+                                <span class="updateTag improve">改进</span>
+                                <span class="announcementText">事项列表的样式</span>
+                            </div>
+                        </li>
                         <li class="announcementLi">
                             <p>2022-7-30</p>
                             <div>
