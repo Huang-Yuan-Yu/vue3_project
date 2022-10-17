@@ -1317,9 +1317,9 @@ export default {
 }
 
 .todoNotDoneBorder:hover {
-    // 渐变背景颜色要用的
     background-image: linear-gradient(to top, rgba(200, 249, 252, 0.8), rgba(255, 255, 255, 0.1));
     border-bottom: 3px solid #00f8ff;
+    box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.4) inset, 0 2px 4px rgba(81, 250, 255, 0.7);
 }
 
 /*完成事项后的边框样式*/
@@ -1332,6 +1332,7 @@ export default {
 .todoDoneBorder:hover {
     background-image: linear-gradient(to top, rgba(222, 255, 220, 0.8), rgba(255, 255, 255, 0.1));
     border-bottom: 3px solid #76ff35;
+    box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.1) inset, 0 2px 4px rgba(118, 255, 53, 0.7);
 }
 
 /*列表中后面的div*/
