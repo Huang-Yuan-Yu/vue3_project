@@ -55,139 +55,26 @@
                         :style="{ height: isShowIntroduction === false ? '140%' : '100%' }"
                         @scroll="scrollAnnouncementUl"
                     >
-                        <li class="announcementLi">
-                            <p>2022-10-16</p>
-                            <div>
-                                <span class="updateTag improve">改进</span>
-                                <span class="announcementText">事项列表的样式</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-30</p>
-                            <div>
-                                <span class="updateTag repair">修复</span>
-                                <span class="announcementText">无法设置头像的问题</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-26</p>
-                            <div>
-                                <span class="updateTag new">新增</span>
-                                <span class="announcementText">QQ第三方登录功能</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-22</p>
-                            <div>
-                                <span class="updateTag new">新增</span>
-                                <span class="announcementText">登录时需进行滑动拼图验证</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-20</p>
-                            <div>
-                                <span class="updateTag new">新增</span>
-                                <span class="announcementText">游客登录功能</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-18</p>
-                            <div>
-                                <span class="updateTag repair">修复</span>
-                                <span class="announcementText">事项列表超出div以及显示高度不够的问题</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-17</p>
-                            <div>
-                                <span class="updateTag repair">修复</span>
-                                <span class="announcementText">部分移动设备显示错位和不全的情况</span>
-                            </div>
-                            <div>
-                                <span class="updateTag improve">改进</span>
-                                <span class="announcementText">工具栏图标根据数量和设备尺寸进行响应式显示</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-16</p>
-                            <div>
-                                <span class="updateTag new">新增</span>
-                                <span class="announcementText">网站底部的“关于”面板</span>
-                            </div>
-                            <div>
-                                <span class="updateTag improve">改进</span>
-                                <span class="announcementText">网站字体类型、大小以及字体兼容性</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-15</p>
-                            <div>
-                                <span class="updateTag repair">修复</span>
-                                <span class="announcementText">部分移动端显示异常的问题</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-14</p>
-                            <div>
-                                <span class="updateTag improve">改进</span>
-                                <span class="announcementText">调整界面的Logo的各个样式，优化观感</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-6</p>
-                            <div>
-                                <span class="updateTag new">新增</span>
-                                <span class="announcementText">侧边栏的更多内容，如微信小程序、远程仓库地址等</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-5</p>
-                            <div>
-                                <span class="updateTag improve">改进</span>
-                                <span class="announcementText">优化服务器端的网络性能，使用户访问更快</span>
-                            </div>
-                            <div>
-                                <span class="updateTag improve">改进</span>
-                                <span class="announcementText">兼容更多的浏览器，使老版本的浏览器也能打开此网站</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-4</p>
-                            <div>
-                                <span class="updateTag new">新增</span>
-                                <span class="announcementText">设置头像、修改头像的功能</span>
-                            </div>
-                            <div>
-                                <span class="updateTag improve">改进</span>
-                                <span class="announcementText">验证码邮件的样式</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-3</p>
-                            <div>
-                                <span class="updateTag improve">改进</span>
-                                <span class="announcementText">优化网站的构建文件大小，缩短首屏时间</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-7-2</p>
-                            <div>
-                                <span class="updateTag improve">新增</span>
-                                <span class="announcementText">邮箱注册、登录以及密码找回等功能，增强判断逻辑</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-6-23</p>
-                            <div>
-                                <span class="updateTag remove">移除</span>
-                                <span class="announcementText">网站中上部分碍眼的滚动公告通知</span>
-                            </div>
-                        </li>
-                        <li class="announcementLi">
-                            <p>2022-05-12</p>
-                            <div>
-                                <span class="updateTag new">新增</span>
-                                <span class="announcementText">网站上线</span>
+                        <!--遍历包含所有更新信息的数组-->
+                        <li class="announcementLi" v-for="update in updateAnnouncement" :key="update">
+                            <p>{{ update.updateTime }}</p>
+                            <div v-for="data in update.data" :key="data">
+                                <!--更新的类型-->
+                                <span class="updateTag new" v-if="data.updateType === '新增'">{{
+                                    data.updateType
+                                }}</span>
+                                <span class="updateTag improve" v-else-if="data.updateType === '改进'">{{
+                                    data.updateType
+                                }}</span>
+                                <span class="updateTag repair" v-else-if="data.updateType === '修复'">{{
+                                    data.updateType
+                                }}</span>
+                                <span class="updateTag remove" v-else-if="data.updateType === '移除'">{{
+                                    data.updateType
+                                }}</span>
+
+                                <!--更新的内容-->
+                                <span class="announcementText">{{ data.updateContent }}</span>
                             </div>
                         </li>
                     </ul>
@@ -210,6 +97,74 @@ export default {
             isShowIntroduction: true,
             // 更新公告向上划的动画
             announcementUlAnimation: false,
+            // 更新公告的所有内容
+            updateAnnouncement: [
+                { updateTime: "2022-10-16", data: [{ updateType: "改进", updateContent: "事项列表的样式" }] },
+                { updateTime: "2022-7-30", data: [{ updateType: "修复", updateContent: "无法设置头像的问题" }] },
+                { updateTime: "2022-7-26", data: [{ updateType: "新增", updateContent: "QQ第三方登录功能" }] },
+                { updateTime: "2022-7-22", data: [{ updateType: "新增", updateContent: "登录时需进行滑动拼图验证" }] },
+                { updateTime: "2022-7-20", data: [{ updateType: "新增", updateContent: "游客登录功能" }] },
+                {
+                    updateTime: "2022-7-18",
+                    data: [{ updateType: "修复", updateContent: "事项列表超出div以及显示高度不够的问题" }],
+                },
+                {
+                    updateTime: "2022-7-17",
+                    data: [
+                        { updateType: "修复", updateContent: "部分移动设备显示错位和不全的情况" },
+                        { updateType: "改进", updateContent: "工具栏图标根据数量和设备尺寸进行响应式显示" },
+                    ],
+                },
+                {
+                    updateTime: "2022-7-16",
+                    data: [
+                        { updateType: "新增", updateContent: "网站底部的“关于”面板" },
+                        { updateType: "改进", updateContent: "网站字体类型、大小以及字体兼容性" },
+                    ],
+                },
+                {
+                    updateTime: "2022-7-15",
+                    data: [{ updateType: "修复", updateContent: "部分移动端显示异常的问题" }],
+                },
+                {
+                    updateTime: "2022-7-14",
+                    data: [{ updateType: "改进", updateContent: "调整界面的Logo的各个样式，优化观感" }],
+                },
+                {
+                    updateTime: "2022-7-6",
+                    data: [{ updateType: "新增", updateContent: "侧边栏的更多内容，如微信小程序、远程仓库地址等" }],
+                },
+                {
+                    updateTime: "2022-7-5",
+                    data: [
+                        { updateType: "改进", updateContent: "优化服务器端的网络性能，使用户访问更快" },
+                        { updateType: "改进", updateContent: "兼容更多的浏览器，使老版本的浏览器也能打开此网站" },
+                    ],
+                },
+                {
+                    updateTime: "2022-7-4",
+                    data: [
+                        { updateType: "新增", updateContent: "设置头像、修改头像的功能" },
+                        { updateType: "改进", updateContent: "验证码邮件的样式" },
+                    ],
+                },
+                {
+                    updateTime: "2022-7-3",
+                    data: [{ updateType: "改进", updateContent: "优化网站的构建文件大小，缩短首屏时间" }],
+                },
+                {
+                    updateTime: "2022-7-2",
+                    data: [{ updateType: "新增", updateContent: "邮箱注册、登录以及密码找回等功能，增强判断逻辑" }],
+                },
+                {
+                    updateTime: "2022-6-23",
+                    data: [{ updateType: "移除", updateContent: "网站中上部分碍眼的滚动公告通知" }],
+                },
+                {
+                    updateTime: "2022-05-12",
+                    data: [{ updateType: "新增", updateContent: "编写代码——网站上线" }],
+                },
+            ],
         };
     },
     mounted() {
