@@ -1324,20 +1324,18 @@ export default {
 .todoNotDoneBorder {
     // 渐变背景颜色要用的
     background-image: linear-gradient(to top, rgba(217, 252, 255, 0.8), rgba(255, 255, 255, 0.1));
-    //background: white;
     border-bottom: 3px solid rgba(81, 250, 255, 0.8);
     box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.4) inset, 0 2px 4px rgba(81, 250, 255, 0.5);
 }
 
 .todoNotDoneBorder:hover {
-    border-bottom: 3px solid #00f8ff;
+    border-bottom: 3px solid #00f9ff;
     box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.4) inset, 0 2px 4px rgba(81, 250, 255, 0.7);
 }
 
 /*完成事项后的边框样式*/
 .todoDoneBorder {
     background-image: linear-gradient(to top, rgba(232, 255, 231, 0.8), rgba(255, 255, 255, 0.1));
-    //background: black;
     border-bottom: 3px solid rgba(118, 255, 53, 0.8);
     box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.4) inset, 0 2px 4px rgba(118, 255, 53, 0.5);
 }
@@ -1345,36 +1343,6 @@ export default {
 .todoDoneBorder:hover {
     border-bottom: 3px solid #76ff35;
     box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.1) inset, 0 2px 4px rgba(118, 255, 53, 0.7);
-}
-
-.todoNotDoneBorder::before,
-.todoDoneBorder::before {
-    // content和position一定要加，否则伪元素无效果
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-    transition: opacity 0.5s;
-    // 一定要在原元素的下面，才不会遮挡到上面的文字
-    z-index: -1;
-}
-
-/*让伪元素原位叠加在原来的元素上*/
-.todoNotDoneBorder::before {
-    background-image: linear-gradient(to top, rgba(200, 249, 252, 1), rgba(255, 255, 255, 0.2));
-}
-
-.todoDoneBorder::before {
-    background-image: linear-gradient(to top, rgba(222, 255, 220, 1), rgba(255, 255, 255, 0.2));
-}
-
-// 鼠标移动到伪元素上，伪元素就显示
-.todoNotDoneBorder:hover::before,
-.todoDoneBorder:hover::before {
-    opacity: 1;
 }
 
 /*列表中后面的div*/

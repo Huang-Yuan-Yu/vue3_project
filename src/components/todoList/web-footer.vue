@@ -41,7 +41,7 @@
                         <p v-if="isShowIntroduction" class="websiteTime">
                             待办事项已上线{{ parseInt(distanceTime / 86400) }}天
                             <br />
-                            最后更新：2022-10-16
+                            最后更新：{{ updateAnnouncement[0].updateTime }}
                         </p>
                     </transition>
                 </div>
@@ -99,6 +99,7 @@ export default {
             announcementUlAnimation: false,
             // 更新公告的所有内容
             updateAnnouncement: [
+                { updateTime: "2022-10-21", data: [{ updateType: "修复", updateContent: "将验证码拼图源换为国内，国外源被墙了" }] },
                 { updateTime: "2022-10-16", data: [{ updateType: "改进", updateContent: "事项列表的样式" }] },
                 { updateTime: "2022-7-30", data: [{ updateType: "修复", updateContent: "无法设置头像的问题" }] },
                 { updateTime: "2022-7-26", data: [{ updateType: "新增", updateContent: "QQ第三方登录功能" }] },
@@ -381,7 +382,7 @@ export default {
     text-align: left;
     margin-top: 0;
     margin-bottom: 0;
-    line-height: 18px;
+    line-height: 20px;
 }
 
 .websiteTime-enter-active {
