@@ -116,7 +116,7 @@
 
             <div id="functionIcon">
                 <!--鼠标悬停时，会有提示-->
-                <el-tooltip content="显示所有事项" effect="light" placement="top">
+                <el-tooltip content="显示所有事项" effect="light" placement="bottom">
                     <el-image
                         :class="{ opacity100: currentStatus === '显示所有事项' }"
                         :src="require('@/assets/showAll.png')"
@@ -126,7 +126,7 @@
                         @click.stop="currentStatus = '显示所有事项'"
                     ></el-image>
                 </el-tooltip>
-                <el-tooltip content="只显示已完成的事项" effect="light" placement="top">
+                <el-tooltip content="只显示已完成的事项" effect="light" placement="bottom">
                     <el-image
                         :class="{ opacity100: currentStatus === '只显示已完成的事项' }"
                         :src="require('@/assets/showFinish.png')"
@@ -136,7 +136,7 @@
                         @click.stop="currentStatus = '只显示已完成的事项'"
                     ></el-image>
                 </el-tooltip>
-                <el-tooltip content="只显示未完成的事项" effect="light" placement="top">
+                <el-tooltip content="只显示未完成的事项" effect="light" placement="bottom">
                     <el-image
                         :class="{ opacity100: currentStatus === '只显示未完成的事项' }"
                         :src="require('@/assets/showIncomplete.png')"
@@ -146,7 +146,7 @@
                         @click.stop="currentStatus = '只显示未完成的事项'"
                     ></el-image>
                 </el-tooltip>
-                <el-tooltip content="清除已完成的事项" effect="light" placement="top">
+                <el-tooltip content="清除已完成的事项" effect="light" placement="bottom">
                     <!--事件修饰符“.stop”能够解决冒泡问题，就不会导致这里点击之后冒泡，又在底层点击一次，造成连续点击两个的操作-->
                     <el-image
                         :class="{ cursorNotAllowed: inputDisabled }"
@@ -158,7 +158,7 @@
                         @click.stop="clearCompleteTheTask"
                     ></el-image>
                 </el-tooltip>
-                <el-tooltip content="完成所有事项" effect="light" placement="top">
+                <el-tooltip content="完成所有事项" effect="light" placement="bottom">
                     <el-image
                         :class="{ cursorNotAllowed: inputDisabled }"
                         :disabled="inputDisabled"
@@ -169,7 +169,7 @@
                         @click.stop="finishAllTodo"
                     ></el-image>
                 </el-tooltip>
-                <el-tooltip content="取消完成所有事项" effect="light" placement="top">
+                <el-tooltip content="取消完成所有事项" effect="light" placement="bottom">
                     <el-image
                         :class="{ cursorNotAllowed: inputDisabled }"
                         :disabled="inputDisabled"
@@ -218,70 +218,70 @@
                     
                     可以以事项内容作为唯一标识，因为是唯一的，这里没有id，id只存在于数据库中-->
                     <li v-for="todo in filterMethod(todoArray)" :key="todo.mission">
-                            <div
-                                :class="{ todoDoneBorder: todo.done === 1, todoNotDoneBorder: todo.done === 0 }"
-                                class="todoListElement"
-                            >
-                                <!--用于完成或取消完成事项-->
-                                <g class="svgContainer" @click="completeTheTask(todo)">
-                                    <!--这里的父组件传向子组件-->
-                                    <done-svg :isShow="todo.done === 1"></done-svg>
-                                    <!--循环会将每一个元素填进<li>列表里，调用mission名称，结果是任务的名称-->
-                                </g>
-                                <!--存放事项内容的div，双击此div就可以修改内容-->
-                                <div class="todoDiv" @dblclick="beginModification(todo)">
-                                    <!--label用于显示事项内容。:class后面的内容，判断文字的颜色是否改为绿色（完成则为绿色）
+                        <div
+                            :class="{ todoDoneBorder: todo.done === 1, todoNotDoneBorder: todo.done === 0 }"
+                            class="todoListElement"
+                        >
+                            <!--用于完成或取消完成事项-->
+                            <g class="svgContainer" @click="completeTheTask(todo)">
+                                <!--这里的父组件传向子组件-->
+                                <done-svg :isShow="todo.done === 1"></done-svg>
+                                <!--循环会将每一个元素填进<li>列表里，调用mission名称，结果是任务的名称-->
+                            </g>
+                            <!--存放事项内容的div，双击此div就可以修改内容-->
+                            <div class="todoDiv" @dblclick="beginModification(todo)">
+                                <!--label用于显示事项内容。:class后面的内容，判断文字的颜色是否改为绿色（完成则为绿色）
                                     beginModification：开始修改事项内容；originallyContent：原先的内容
                                     如果当前内容与正要修改的内容不一样，证明不是要修改的，就显示
                                     “|| isRevised === false”表示没有在修改，也会显示，只要其中一个为true，那就显示
                                     v-html能够渲染HTML有的标签，比如<br>-->
-                                    <p
-                                        v-if="todo.mission !== originallyContent || isRevised === false"
-                                        :class="{ completed: todo.done, noCompleted: !todo.done }"
-                                        v-html="todo.mission"
-                                    ></p>
-                                    <!--双击之后就会显示此输入框，失去焦点和按下回车键都会保存，是否显示取决于使用的CSS
+                                <p
+                                    v-if="todo.mission !== originallyContent || isRevised === false"
+                                    :class="{ completed: todo.done, noCompleted: !todo.done }"
+                                    v-html="todo.mission"
+                                ></p>
+                                <!--双击之后就会显示此输入框，失去焦点和按下回车键都会保存，是否显示取决于使用的CSS
                                     v-focus是自定义指令，用于自动聚焦到输入框。isRevised === true表示正在修改-->
-                                    <el-input
-                                        v-if="todo.mission === originallyContent && isRevised === true"
-                                        ref="revisedInputBox"
-                                        v-model="inputRevisedContent"
-                                        v-focus
-                                        :autosize="{ maxRows: elScrollbarHeight }"
-                                        class="revisedInputBox"
-                                        clearable
-                                        type="textarea"
-                                        @blur="saveInput(todo, $event)"
-                                        @keyup.esc.stop="saveInput(todo, $event)"
-                                        @keyup.enter.exact="saveInput(todo, $event)"
-                                        @keyup.ctrl.enter="revisedLineFeed"
-                                    />
-                                </div>
-
-                                <div class="liEndDiv">
-                                    <span class="deleteTodo" type="button" @click="deleteTodo(todo)">✖</span>
-                                    <!--弹出“气泡卡片”——trigger：触发方式，hover则是鼠标悬停触发-->
-                                    <el-popover
-                                        ref="popover"
-                                        :content="todo.time"
-                                        placement="top"
-                                        title="最近一次修改时间"
-                                        trigger="hover"
-                                    >
-                                        <template #reference>
-                                            <el-button
-                                                class="showModificationTime"
-                                                color="#330C82"
-                                                size="large"
-                                                type="info"
-                                            >
-                                                <!--用户图标，:size为图标大小-->
-                                                <el-icon :size="22"><Timer /></el-icon>
-                                            </el-button>
-                                        </template>
-                                    </el-popover>
-                                </div>
+                                <el-input
+                                    v-if="todo.mission === originallyContent && isRevised === true"
+                                    ref="revisedInputBox"
+                                    v-model="inputRevisedContent"
+                                    v-focus
+                                    :autosize="{ maxRows: elScrollbarHeight }"
+                                    class="revisedInputBox"
+                                    clearable
+                                    type="textarea"
+                                    @blur="saveInput(todo, $event)"
+                                    @keyup.esc.stop="saveInput(todo, $event)"
+                                    @keyup.enter.exact="saveInput(todo, $event)"
+                                    @keyup.ctrl.enter="revisedLineFeed"
+                                />
                             </div>
+
+                            <div class="liEndDiv">
+                                <span class="deleteTodo" type="button" @click="deleteTodo(todo)">✖</span>
+                                <!--弹出“气泡卡片”——trigger：触发方式，hover则是鼠标悬停触发-->
+                                <el-popover
+                                    ref="popover"
+                                    :content="todo.time"
+                                    placement="top"
+                                    title="最近一次修改时间"
+                                    trigger="hover"
+                                >
+                                    <template #reference>
+                                        <el-button
+                                            class="showModificationTime"
+                                            color="#330C82"
+                                            size="large"
+                                            type="info"
+                                        >
+                                            <!--用户图标，:size为图标大小-->
+                                            <el-icon :size="22"><Timer /></el-icon>
+                                        </el-button>
+                                    </template>
+                                </el-popover>
+                            </div>
+                        </div>
                     </li>
                 </transition-group>
             </el-scrollbar>
@@ -1446,6 +1446,8 @@ export default {
 .todo-li-leave-active {
     /*需要让这个元素脱离标准流，不然后面的元素动不了*/
     position: absolute;
+    transition: all 1s ease;
+    width: 100%;
     /*不要显示消失的事项框*/
     opacity: 0;
 }
