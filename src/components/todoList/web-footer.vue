@@ -99,8 +99,21 @@ export default {
             announcementUlAnimation: false,
             // 更新公告的所有内容
             updateAnnouncement: [
+                {
+                    updateTime: "2022-10-24",
+                    data: [
+                        { updateType: "新增", updateContent: "断网和重连都有相应的提示" },
+                        {
+                            updateType: "修复",
+                            updateContent: "多次进行游客登录会重复拉取数据",
+                        },
+                    ],
+                },
                 { updateTime: "2022-10-23", data: [{ updateType: "新增", updateContent: "事项列表删除动画" }] },
-                { updateTime: "2022-10-21", data: [{ updateType: "修复", updateContent: "将验证码拼图换为国内源，国外源被墙了" }] },
+                {
+                    updateTime: "2022-10-21",
+                    data: [{ updateType: "修复", updateContent: "将验证码拼图换为国内源，国外源被墙了" }],
+                },
                 { updateTime: "2022-10-16", data: [{ updateType: "改进", updateContent: "事项列表的样式" }] },
                 { updateTime: "2022-7-30", data: [{ updateType: "修复", updateContent: "无法设置头像的问题" }] },
                 { updateTime: "2022-7-26", data: [{ updateType: "新增", updateContent: "QQ第三方登录功能" }] },

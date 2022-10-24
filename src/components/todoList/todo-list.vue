@@ -557,20 +557,33 @@ export default {
                 document.title = "待办事项";
             }, 2000);
         };
+
         // 网络断开时触发
-        window.addEventListener("offline", function () {
-            this.serverStatus = "关闭";
-            // 调用my-test组件的reload()，能够平滑刷新页面
-            that.reload();
-        });
+        window.addEventListener("offline", this.disconnection, false);
         // 网络重连时触发
-        window.addEventListener("online", function () {
-            this.serverStatus = "开启";
-            // 平滑刷新页面
-            that.reload();
-        });
+        window.addEventListener("online", this.reconnection, false);
+    },
+    // Vue生命周期——销毁时的操作
+    beforeUnmount() {
+        // 一定要在这里移除监听，否则无效
+        window.removeEventListener("offline", this.disconnection, false);
+        window.removeEventListener("online", this.reconnection, false);
     },
     methods: {
+        // 网络断开时触发
+        disconnection() {
+            this.serverStatus = "关闭";
+            // 调用my-test组件的reload()，能够平滑刷新页面
+            this.reload();
+            console.log("断网");
+        },
+        // 网络重连时触发
+        reconnection() {
+            this.serverStatus = "开启";
+            // 平滑刷新页面
+            this.reload();
+            console.log("重连");
+        },
         // 在点击指定背景时，会关闭窗口，此方法主要为了适配移动端“无法使光标移出元素”的问题
         closeWindows() {
             this.$refs.myWeather.isShowWeather = false;
@@ -1023,7 +1036,8 @@ export default {
                                 type: "success",
                             });
                         }
-                        emitter.off("游客登录成功", "是");
+                        // 关闭监听
+                        emitter.all.delete("游客登录成功");
                     });
                 });
             });
