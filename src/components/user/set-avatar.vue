@@ -30,7 +30,7 @@
                             </div>
 
                             <template v-if="isFirstCroppingCompleted === false" #tip>
-                                <div id="imageTip">图片格式只支持jpg/png/gif/bmp</div>
+                                <div id="imageTip">图片格式只支持jpg/jfif/png/gif/bmp</div>
                             </template>
                         </el-upload>
 
