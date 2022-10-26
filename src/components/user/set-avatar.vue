@@ -144,7 +144,7 @@ export default defineComponent({
                 ElMessage({
                     // 显示关闭按钮
                     showClose: true,
-                    message: "图片格式只能为jpg/png/gif/bmp",
+                    message: "图片格式只能为jpg/jfif/png/gif/bmp",
                     type: "error",
                 });
                 return false;

@@ -100,6 +100,12 @@ export default {
             // 更新公告的所有内容
             updateAnnouncement: [
                 {
+                    updateTime: "2022-10-26",
+                    data: [
+                        { updateType: "移除", updateContent: "登录时自动聚焦，以免邮箱填充遮挡输入框" },
+                    ],
+                },
+                {
                     updateTime: "2022-10-24",
                     data: [
                         { updateType: "新增", updateContent: "断网和重连都有相应的提示" },
