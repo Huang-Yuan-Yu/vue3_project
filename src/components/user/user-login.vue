@@ -83,7 +83,6 @@
                         show-word-limit：显示输入框允许输入的最大字符数
                         inputError: this.inputAccountError表示“当输入有误时，就应用inputError这个CSS的class，将输入框变红色-->
                         <el-input
-                            v-focus
                             v-model.trim="user.name"
                             :class="{ inputError: inputAccountError }"
                             class="noCodeUserAccountInput"
