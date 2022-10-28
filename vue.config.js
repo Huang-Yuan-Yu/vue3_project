@@ -109,7 +109,7 @@ module.exports = {
             })
         );
 
-        // 在生产环境下，在打包时进行gzip压缩，就不用等服务器端动态压缩了，提高性能
+        // 在打包时对图片有损压缩，在不太影响视觉效果的前提下减少网络开销
         if (process.env.NODE_ENV === "production") {
             // “npm install image-webpack-loader”，能够压缩图片
             config.module
@@ -141,12 +141,13 @@ module.exports = {
                     threshold: 10240,
                     // 为true表示删除源文件
                     deleteOriginalAssets: false,
-                    //只有压缩率比这个值小的文件才会被处理，压缩率=压缩大小/原始大小，如果压缩后和原始文件大小没有太大区别，就不用压缩
+                    // 只有压缩率比这个值小的文件才会被处理
+                    // 压缩率=压缩大小/原始大小，如果压缩后和原始文件大小没有太大区别，就不用压缩
                     minRatio: 0.8,
                 })
             );
 
-            // 分包
+            // 分包打包
             config.optimization.splitChunks({
                 // 对于需要动态加载的内容，抽出来
                 chunks: "async",
