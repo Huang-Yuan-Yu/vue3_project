@@ -14,7 +14,7 @@
                     v-if="isShow"
                     fill="none"
                     points="88,214 173,284 304,138"
-                    stroke="#fff"
+                    stroke="#290C0B99"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="24"
@@ -39,10 +39,16 @@ export default {
 
 <style lang="scss" scoped>
 svg {
-    border: 1px solid #fff;
+    border: 1px solid rgba(41, 4, 1, 0.6);
     opacity: 0.5;
     border-radius: 100%;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8) inset;
+    box-shadow: 0 0 8px rgba(41, 4, 1, 0.1),0 0 8px rgba(41, 4, 1, 0.1) inset;
+    transition: all 0.5s ease-in-out;
+}
+
+svg:hover {
+    border: 1px solid rgba(41, 4, 1, 0.8);
+    opacity: 0.7;
 }
 
 /*元素开始显示时*/
