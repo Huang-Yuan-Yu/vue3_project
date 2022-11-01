@@ -6,7 +6,7 @@
 
 1. **共用Public Key**：一个公钥同时可同时使用于GitHub和Gitee平台！
 2. **主分支改名**：origin/main：指的是远程分支的分支名称为main，在以前叫master，因为受到“Black Lives Matter”运动和民众情绪的影响，所以推荐改主分支名
-3. **免密操作**：把token直接添加远程仓库链接中，这样就可以避免同一个仓库每次提交代码都要输入token了：
+3. **免密操作**：把token直接添加远程仓库链接中，这样就可以避免同一个仓库每次提交代码都要输入邮箱、密码了：
     - git remote set-url origin https://填写你的密钥@github.com/2690085099/vue3_project.git
     - git remote set-url origin https://gitee.com/用户名/仓库名称.git
 
