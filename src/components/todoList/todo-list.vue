@@ -1232,7 +1232,8 @@ export default {
     padding-right: 20px;
     // 缩放时的过渡
     transition: all 1s ease-in-out;
-    border-radius: 4px;
+    border-radius: 4vh;
+    backdrop-filter: blur(2vh);
 }
 
 @media (max-height: 250px) {
