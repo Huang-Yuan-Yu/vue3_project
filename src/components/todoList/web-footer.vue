@@ -20,13 +20,15 @@
                 </div>
                 <div id="aboutTopDiv">
                     <transition name="introduction">
-                        <p v-if="isShowIntroduction" id="introduction">
-                            这是<a
-                                class="textHighlight"
-                                href="http://wpa.qq.com/msgrd?v=3&uin=2690085099&site=qq&menu=yes"
-                                target="_blank"
-                                >黄元昱</a
-                            >的个人网站(〃'▽'〃)
+                        <div v-if="isShowIntroduction" id="introduction">
+                            <span>
+                                本网站由<a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"
+                                    ><img
+                                        :src="require('@/assets/shootTheCloudAgain.png')"
+                                        alt="又拍云"
+                                        id="shootTheCloudAgain" /></a
+                                >提供CDN加速服务
+                            </span>
                             <br />
                             如果您觉得此网站有需要改进，可以<a
                                 class="textHighlight"
@@ -34,7 +36,7 @@
                                 target="_blank"
                                 >联系</a
                             >我
-                        </p>
+                        </div>
                     </transition>
                     <transition name="websiteTime">
                         <!--开始滚动则隐藏，如果滚动到顶部则显示-->
@@ -101,9 +103,7 @@ export default {
             updateAnnouncement: [
                 {
                     updateTime: "2022-10-26",
-                    data: [
-                        { updateType: "移除", updateContent: "登录时自动聚焦，以免邮箱填充遮挡输入框" },
-                    ],
+                    data: [{ updateType: "移除", updateContent: "登录时自动聚焦，以免邮箱填充遮挡输入框" }],
                 },
                 {
                     updateTime: "2022-10-24",
@@ -348,6 +348,7 @@ export default {
     color: #79bbff;
     font-size: 20px;
     margin-left: 4px;
+    margin-top: 4px;
 }
 
 /*网站Logo*/
@@ -393,6 +394,19 @@ export default {
 .textHighlight {
     color: #79bbff;
     text-decoration: none;
+}
+
+/*又拍云*/
+#shootTheCloudAgain {
+    height: 18px;
+    /*文字基线对齐，负值表示向下移*/
+    vertical-align: -4px;
+    margin: 0 3px;
+}
+
+.textHighlight,
+#shootTheCloudAgain {
+    cursor: url("../../assets/cursor/pointer.png"), pointer;
 }
 
 /*网站创立时间*/
