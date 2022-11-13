@@ -102,6 +102,14 @@ export default {
             // 更新公告的所有内容
             updateAnnouncement: [
                 {
+                    updateTime: "2022-11-13",
+                    data: [{ updateType: "改进", updateContent: "将背景图片放到新浪微博图床，减小服务器压力" }],
+                },
+                {
+                    updateTime: "2022-11-12",
+                    data: [{ updateType: "改进", updateContent: "“关于”面板的UI" }],
+                },
+                {
                     updateTime: "2022-10-26",
                     data: [{ updateType: "移除", updateContent: "登录时自动聚焦，以免邮箱填充遮挡输入框" }],
                 },

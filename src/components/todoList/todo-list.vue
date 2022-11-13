@@ -11,7 +11,7 @@
                 v-show="showBackgroundImage"
                 id="backgroundImage"
                 :class="{ backgroundBlur: $store.state.backgroundIsBlur }"
-                :src="require(`@/assets/scenery/${imageUrl}.jpg`)"
+                :src="backgroundImageUrls[imageUrl]"
                 alt="背景图片"
                 draggable="false"
                 @load="showBackgroundImage = true"
@@ -362,6 +362,24 @@ export default {
     },
     data() {
         return {
+            // 背景图片已上传到“新浪微博图床”——用Chrome插件上传
+            backgroundImageUrls: [
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j5iqhsoj31hc0u0q7t.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bb26nj31hc0u0ada.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bc0w8j31hc0u00vp.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bhq6dj31hc0u0gqo.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bh30tj31hc0u0gqe.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bp1txj31hc0u0qa6.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bu89vj31hc0u047h.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bvrtgj31hc0u0n1u.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bz7t3j31hc0u0gva.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9c2agwj31hc0u0dr1.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9c4qvuj31hc0u0drg.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9c5ulwj31hc0u0all.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9cb8t4j31hc0u0k5w.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9ceotcj31hc0u0ka4.jpg",
+                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9cfildj31hc0u0ql8.jpg",
+            ],
             // 引用图片用的随机数（背景图片资源目录下有多少张图片，这里的数字就是多少）
             imageUrl: Math.floor(Math.random() * 15),
             // 服务器状态——未知、关闭或开启，默认为未知，如果出现网络错误，则赋值为“关闭”
