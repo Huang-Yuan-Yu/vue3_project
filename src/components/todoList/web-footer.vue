@@ -15,7 +15,7 @@
             <div v-if="isShowAbout" id="aboutDiv">
                 <p id="close" @click="closeWindows">✖</p>
                 <div id="topDiv">
-                    <img id="logo" :src="require('@/assets/logo.png')" alt="网站图标" />
+                    <img id="logo" :src="require('@/assets/logo.png')" alt="网站图标"/>
                     <span id="title">待办事项</span>
                 </div>
                 <div id="aboutTopDiv">
@@ -242,7 +242,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /*网站备案的Footer——类似于Div*/
 #footer {
     width: 100%;

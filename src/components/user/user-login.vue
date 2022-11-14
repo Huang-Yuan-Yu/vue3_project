@@ -130,8 +130,8 @@
                         <p v-if="inputPasswordError" class="loginInputErrorTips">
                             提示：您的密码至少包括总共8位的英文和数字！
                         </p>
-                        <!--使用v-model:visible控制是否要显示-->
-                        <el-popover v-model:visible="isShowSlideVerify" :width="310" placement="top" trigger="click">
+                        <!--使用:visible控制是否要显示-->
+                        <el-popover :visible="isShowSlideVerify" :width="336" placement="top" trigger="click">
                             <template #reference>
                                 <el-button
                                     v-if="isLogin === false"

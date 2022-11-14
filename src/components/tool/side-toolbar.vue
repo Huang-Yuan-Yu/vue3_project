@@ -49,6 +49,7 @@
                         :src="require('@/assets/WechatMiniProgram.png')"
                         class="wechatMiniProgram"
                         fit="contain"
+                        :lazy="true"
                     />
                 </div>
             </div>
@@ -106,7 +107,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /*”显示更多“文本图标的div*/
 #sideToolbarLogoDiv {
     display: flex;

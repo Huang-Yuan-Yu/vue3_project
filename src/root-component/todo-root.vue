@@ -40,7 +40,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /*修改所有超链接的光标悬停样式*/
 a:hover {
     cursor: url("../assets/cursor/pointer.png"), pointer;

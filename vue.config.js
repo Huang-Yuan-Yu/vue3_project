@@ -106,6 +106,7 @@ module.exports = {
             // 不输出路径信息
             pathinfo: false,
         },
+        mode: "production",
     },
     chainWebpack: (config) => {
         // 打包可视化——npm install --save-dev webpack-bundle-analyzer

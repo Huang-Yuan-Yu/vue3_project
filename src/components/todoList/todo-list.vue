@@ -267,6 +267,7 @@
                                     placement="top"
                                     title="最近一次修改时间"
                                     trigger="hover"
+                                    width="156px"
                                 >
                                     <template #reference>
                                         <el-button

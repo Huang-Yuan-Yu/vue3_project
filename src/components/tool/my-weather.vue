@@ -70,7 +70,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /*天气图标的div*/
 #weatherLogoDiv {
     position: absolute;

@@ -15,7 +15,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .routerTransition-enter-active {
     animation: routerAnimation 0.3s ease-in-out;
 }
