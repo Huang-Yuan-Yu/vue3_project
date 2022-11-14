@@ -69,7 +69,7 @@ module.exports = {
             msTileImage: "favicon.ico",
         },
     },
-    // 其他配置（不能直接将plugins添加到下面，而是外面要有configureWebpack）
+    // 相当于Webpack.config.js的配置（不能直接将plugins添加到下面，而是外面要有configureWebpack）
     configureWebpack: {
         resolve: {
             alias: {
@@ -92,6 +92,19 @@ module.exports = {
         // 导入模块为qc变量名为QC，导入qc将不做打包——QQ互联（用于QQ第三方登录）
         externals: {
             qc: "QC",
+        },
+        // Webpack5自带的缓存构建，会使打包增大
+        /*cache: {
+            type: "filesystem",
+            allowCollectingMemory: true,
+            buildDependencies: {
+                config: [__filename],
+            },
+            cacheDirectory: path.resolve(__dirname, "node_modules/.cache/webpack"),
+        },*/
+        output: {
+            // 不输出路径信息
+            pathinfo: false,
         },
     },
     chainWebpack: (config) => {
@@ -198,15 +211,15 @@ module.exports = {
                 },
             });
             // 去掉调试信息
-            config.optimization.minimizer('terser').tap((args) => {
-                args[0].terserOptions.compress.drop_console = true
-                args[0].terserOptions.compress.drop_debugger = true
-                args[0].terserOptions.compress.pure_funcs = ['console.log']
+            config.optimization.minimizer("terser").tap((args) => {
+                args[0].terserOptions.compress.drop_console = true;
+                args[0].terserOptions.compress.drop_debugger = true;
+                args[0].terserOptions.compress.pure_funcs = ["console.log"];
                 args[0].terserOptions.output = {
-                    comments: false
+                    comments: false,
                 };
-                return args
-            })
+                return args;
+            });
             // 兼容更多的浏览器——ES6转ES5，转换后在本地打不开是正常的
             config.entry("main").add("babel-polyfill");
             config.entry.app = ["babel-polyfill", "./src/main.js"];
