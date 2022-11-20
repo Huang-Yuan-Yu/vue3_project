@@ -102,6 +102,10 @@ export default {
             // 更新公告的所有内容
             updateAnnouncement: [
                 {
+                    updateTime: "2022-11-20",
+                    data: [{ updateType: "改进", updateContent: "针对浏览器和服务器进行优化，提高网站的整体性能" }],
+                },
+                {
                     updateTime: "2022-11-13",
                     data: [{ updateType: "改进", updateContent: "将背景图片放到新浪微博图床，减小服务器压力" }],
                 },
@@ -196,7 +200,7 @@ export default {
             ],
         };
     },
-    mounted() {
+    beforeMount() {
         // 从服务器端获取时间戳
         this.$axios({
             method: "get",

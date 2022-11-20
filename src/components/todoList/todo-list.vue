@@ -420,7 +420,8 @@ export default {
             inputRevisedContent: "",
         };
     },
-    created() {
+    // 组件挂载阶段
+    beforeMount() {
         // 测试网络连接是否正常，这里面是为了确认“当前状态”
         ping()
             .then((response) => {

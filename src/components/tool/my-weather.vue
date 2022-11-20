@@ -49,7 +49,7 @@ export default {
             }
         },
     },
-    mounted() {
+    beforeMount() {
         // 监听子组件的消息
         emitter.on("是否关闭天气模块", (message) => {
             if (message === "是") {

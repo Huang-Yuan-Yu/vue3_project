@@ -45,7 +45,7 @@ export default {
             },
         };
     },
-    mounted() {
+    beforeMount() {
         document.getElementById("app").onclick = (e) => {
             this.createWave(e);
             this.intervalClearWave();

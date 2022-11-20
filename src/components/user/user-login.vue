@@ -500,7 +500,7 @@ export default {
         };
     },
     // 当页面加载完毕时
-    mounted() {
+    beforeMount() {
         // 回来后在钩子函数这里检查是否登录成功，这里的代码块每次看到首页都会触发
         if (QC.Login.check()) {
             // 保存作用域，提供给下面用，否则下面的代码用this是无法访问Vue实例的

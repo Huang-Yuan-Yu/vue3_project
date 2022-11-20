@@ -10,7 +10,7 @@ import { ElMessage } from "element-plus";
 
 export default {
     name: "qq-login",
-    created() {
+    beforeMount() {
         // 检查是否登录成功，登录成功后只会触发一次这里的代码，因为最后会路由跳转到首页
         if (QC.Login.check()) {
             // 保存作用域，提供给下面用，否则下面的代码用this是无法访问Vue实例的
