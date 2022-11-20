@@ -75,6 +75,7 @@ module.exports = {
             alias: {
                 "@": path.resolve(__dirname, "./src"),
                 "@i": path.resolve(__dirname, "./src/assets"),
+                querystring: "querystring-browser",
             },
             // 解决部分const等ES6语法未转换的难题
             mainFields: ["main", "module"],
@@ -93,7 +94,7 @@ module.exports = {
         externals: {
             qc: "QC",
         },
-        // Webpack5自带的缓存构建，会使打包增大
+        // Webpack5自带的缓存构建，虽然构建变快但会使打包增大
         /*cache: {
             type: "filesystem",
             allowCollectingMemory: true,

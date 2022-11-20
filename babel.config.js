@@ -2,7 +2,7 @@ module.exports = {
     // 对babel进行配置，由此命令安装——npm i --save babel-polyfill
     presets: [
         [
-            "@vue/app",
+            "@vue/babel-preset-app",
             {
                 useBuiltIns: "entry",
                 polyfills: [
