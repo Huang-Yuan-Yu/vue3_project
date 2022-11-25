@@ -192,3 +192,9 @@ git push -u origin 分支名称 -f
 ```shell
 git config --global --unset 具体命令内容
 ```
+
+### 20. 把远程仓库和本地同步，消除差异（解决git push与远程仓库冲突）
+
+```shell
+git pull origin 分支名 --allow-unrelated-histories
+```
