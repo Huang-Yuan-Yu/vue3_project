@@ -102,6 +102,10 @@ export default {
             // 更新公告的所有内容
             updateAnnouncement: [
                 {
+                    updateTime: "2022-11-25",
+                    data: [{ updateType: "新增", updateContent: "顶部的页面加载进度条" }],
+                },
+                {
                     updateTime: "2022-11-20",
                     data: [{ updateType: "改进", updateContent: "针对浏览器和服务器进行优化，提高网站的整体性能" }],
                 },
