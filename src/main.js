@@ -19,12 +19,12 @@ import axios from "axios";
 
 // 提高滚动性能——npm i default-passive-events -S
 import "default-passive-events";
+// 视图
+import App from "@/views/App";
 
 // 引入nprogress，页面加载进度条——npm install --save nprogress
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-// 视图
-import App from "@/views/App";
 
 NProgress.configure({
     easing: "ease", // 动画方式
@@ -36,7 +36,7 @@ NProgress.configure({
 router.beforeEach((to, from, next) => {
     // 每次切换页面时，调用进度条
     NProgress.start();
-    // 这个一定要加，没有next()页面不会跳转的。这部分还不清楚的去翻一下官网就明白了
+    // 这个一定要加，没有next()页面不会跳转的
     next();
 });
 router.afterEach(() => {
