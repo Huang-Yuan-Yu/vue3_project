@@ -181,7 +181,7 @@ git push
 
 ```
 
-### 18. 强制推送（解决“error: failed to push some refs to···）
+### 18. 强制推送（不推荐）
 
 ```shell
 git push -u origin 分支名称 -f 
@@ -193,7 +193,7 @@ git push -u origin 分支名称 -f
 git config --global --unset 具体命令内容
 ```
 
-### 20. 把远程仓库和本地同步，消除差异（解决git push与远程仓库冲突）
+### 20. 把远程仓库和本地同步，消除差异（解决git push与远程仓库冲突——“error: failed to push some refs to···）
 
 ```shell
 git pull origin 分支名 --allow-unrelated-histories
