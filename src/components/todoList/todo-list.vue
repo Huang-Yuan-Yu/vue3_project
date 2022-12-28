@@ -581,9 +581,9 @@ export default {
         };
         // 当重新回到标签页
         window.onfocus = function () {
-            document.title = "欢迎回到待办事项~";
+            document.title = "欢迎回到星辰速记~";
             setTimeout(() => {
-                document.title = "待办事项";
+                document.title = "星辰速记";
             }, 2000);
         };
 
