@@ -7,6 +7,7 @@
         生成随机数的代码不能直接写在:src里，否则有一个Bug（点击其他按钮，无冒泡时也会重新随机一遍，如果使用data里的变量则不会出现此情况
         draggable="false"：禁止拖拽该图片-->
         <div id="backgroundImageBoxShadow" @click="closeWindows">
+            <!--referrerpolicy="no-referrer"能解决B站图床防盗链的问题，只给图片单独使用“no-referrer”-->
             <img
                 v-show="showBackgroundImage"
                 id="backgroundImage"
@@ -15,6 +16,7 @@
                 alt="背景图片"
                 draggable="false"
                 @load="showBackgroundImage = true"
+                referrerpolicy="no-referrer"
             />
         </div>
 
