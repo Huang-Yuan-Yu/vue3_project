@@ -363,26 +363,26 @@ export default {
     },
     data() {
         return {
-            // 背景图片已上传到“新浪微博图床”——用Chrome插件上传
+            // 背景图片已上传到“Bilibili图床（B站）”——用Chrome插件上传
             backgroundImageUrls: [
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j5iqhsoj31hc0u0q7t.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bb26nj31hc0u0ada.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bc0w8j31hc0u00vp.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bhq6dj31hc0u0gqo.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bh30tj31hc0u0gqe.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bp1txj31hc0u0qa6.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bu89vj31hc0u047h.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bvrtgj31hc0u0n1u.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9bz7t3j31hc0u0gva.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9c2agwj31hc0u0dr1.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9c4qvuj31hc0u0drg.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9c5ulwj31hc0u0all.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9cb8t4j31hc0u0k5w.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9ceotcj31hc0u0ka4.jpg",
-                "https://tva1.sinaimg.cn/large/006b3PeSgy1h83j9cfildj31hc0u0ql8.jpg",
+                "https://i0.hdslb.com/bfs/album/6107a5fceff59722702ae6af141c12df5b8b7163.jpg",
+                "https://i0.hdslb.com/bfs/album/8567e1d863289794e0d3dea1e9396641a4fbe4ab.jpg",
+                "https://i0.hdslb.com/bfs/album/a2518fdb05ddc0f647d6eb007fd581b6ec771c00.jpg",
+                "https://i0.hdslb.com/bfs/album/4d31e1f7608c7b591392b359c59bfced94f5bdf5.jpg",
+                "https://i0.hdslb.com/bfs/album/759cddcbbe176c181fd1961c6d9f78fbd99c9c50.jpg",
+                "https://i0.hdslb.com/bfs/album/df083d416c6c256bf4c74294d5b97f03c8b8a37d.jpg",
+                "https://i0.hdslb.com/bfs/album/30518a52c43d5f6daca85605d5d9ca3a7b6daba3.jpg",
+                "https://i0.hdslb.com/bfs/album/eb358ecf9d1fe7d6cac5b9b69006a28c30430038.jpg",
+                "https://i0.hdslb.com/bfs/album/174a2e690347e622305d69648c11366d590d7d96.jpg",
+                "https://i0.hdslb.com/bfs/album/0a87781d5f2d57eb5be2e9a6f8c37043fb2bf2fe.jpg",
+                "https://i0.hdslb.com/bfs/album/92c7435473de82de1560d37b50482e555ed9277b.jpg",
+                "https://i0.hdslb.com/bfs/album/413297a27c4041816f48dddc6ba97ad3b2d7fffb.jpg",
+                "https://i0.hdslb.com/bfs/album/842404de9e7f660c20a39c6b6eadcb3acf3388a3.jpg",
+                "https://i0.hdslb.com/bfs/album/e6be3886707484b2448da2284e6e844fa8a77303.jpg",
+                "https://i0.hdslb.com/bfs/album/e80f817c12defc46c6af7a9d789aa598e662b614.jpg",
             ],
             // 引用图片用的随机数（背景图片资源目录下有多少张图片，这里的数字就是多少）
-            imageUrl: Math.floor(Math.random() * 15),
+            // imageUrl: Math.floor(Math.random() * 15),
             // 服务器状态——未知、关闭或开启，默认为未知，如果出现网络错误，则赋值为“关闭”
             serverStatus: "未知",
             // 用于判断是否正在匿名登录W
@@ -419,6 +419,13 @@ export default {
             // 输入内容的缓存，用于临时存储，这里最后是“修改后的内容”
             inputRevisedContent: "",
         };
+    },
+    // 计算属性
+    computed: {
+        // 自动计算出包含图片链接的数组里的元素个数，然后随机引用
+        imageUrl() {
+            return Math.floor(Math.random() * this.backgroundImageUrls.length);
+        },
     },
     // 组件挂载阶段
     beforeMount() {
