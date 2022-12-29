@@ -11,9 +11,9 @@ export default {
      * @returns {string} 加密后的密文，Base64格式
      */
     encrypt(text) {
-        var keyHex = CryptoJS.enc.Base64.parse(secretKey);
-        var messageHex = CryptoJS.enc.Utf8.parse(text);
-        var encrypted = CryptoJS.AES.encrypt(messageHex, keyHex, {
+        let keyHex = CryptoJS.enc.Base64.parse(secretKey);
+        let messageHex = CryptoJS.enc.Utf8.parse(text);
+        let encrypted = CryptoJS.AES.encrypt(messageHex, keyHex, {
             mode: CryptoJS.mode.ECB,
             padding: CryptoJS.pad.Pkcs7,
         });
@@ -26,8 +26,8 @@ export default {
      * @returns {string} 解密后的明文
      */
     decrypt(textBase64) {
-        var keyHex = CryptoJS.enc.Base64.parse(secretKey);
-        var decrypt = CryptoJS.AES.decrypt(textBase64, keyHex, {
+        let keyHex = CryptoJS.enc.Base64.parse(secretKey);
+        let decrypt = CryptoJS.AES.decrypt(textBase64, keyHex, {
             mode: CryptoJS.mode.ECB,
             padding: CryptoJS.pad.Pkcs7,
         });
