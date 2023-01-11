@@ -627,6 +627,7 @@ export default {
                                 message: `上次登录时间：${time["上次登录时间"]}`,
                                 position: "bottom-right",
                             });
+                            
                         } else if (loginMethod === "游客") {
                             ElNotification({
                                 title: "正式登录后才能跨设备同步数据哦~",
@@ -825,7 +826,7 @@ export default {
                 this.getVerificationCode.verificationCode = Math.random().toFixed(6).slice(-6);
                 // 调用后端发送邮件的接口
                 this.$axios
-                    .post("/api/TodoEmail/postEmail", {
+                    .post("/api/TodoList/postEmail", {
                         // 用户输入的邮箱
                         email: this.user.name,
                         // 前端随机生成的6位数字验证码
@@ -958,7 +959,6 @@ export default {
                                         // 那么就本地存储token，jwt名称，值为服务器返回的jwt字符串（长长的那个）
                                         localStorage.setItem("jwt", response.data.jwt);
                                         localStorage.setItem("name", this.user.name);
-
                                         // 然后设置到HTTP请求头里面，字段名称就为“token”
                                         this.$axios.defaults.headers.common["token"] = response.data.jwt;
                                         // 将loginSuccess的布尔值改为true，方便上面HTML显示登录成功
