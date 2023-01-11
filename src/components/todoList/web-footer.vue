@@ -102,6 +102,10 @@ export default {
             // 更新公告的所有内容
             updateAnnouncement: [
                 {
+                    updateTime: "2023-1-11",
+                    data: [{ updateType: "改进", updateContent: "后端框架由ThinkPHP更换为SpringBoot" }],
+                },
+                {
                     updateTime: "2022-11-25",
                     data: [{ updateType: "新增", updateContent: "顶部的页面加载进度条" }],
                 },
