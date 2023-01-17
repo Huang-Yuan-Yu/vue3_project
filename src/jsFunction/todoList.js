@@ -56,7 +56,7 @@ export function deleteObject(todo) {
  */
 export function clearCompletedTodo(completedTodoIdArray) {
     axios({
-        method: "delete",
+        method: "post",
         // 这里直接传递数组，方便后台直接使用
         data: completedTodoIdArray,
         url: "/api/TodoList/clearCompletedTodo",
@@ -86,7 +86,7 @@ export async function getObjectArray(myName) {
     await axios({
         method: "post",
         url: "/api/TodoList/getObjectArray",
-        data: { name: myName },
+        data: {name: myName},
     }).then((response) => {
         // compare()是自己写的，给数组中每个对象排序，按id进行降序排序，将后来添加的事项放在前面
         objectArray = response.data.sort(compare("id"));
@@ -116,7 +116,7 @@ export function finishAllTodo(userName) {
     axios({
         method: "patch",
         // 只需要将用户名字提交给后台，后天自然会根据条件去遍历数据库
-        data: { name: userName },
+        data: {name: userName},
         url: "/api/TodoList/finishAllTodo",
     });
 }
@@ -128,7 +128,7 @@ export function noFinishAllTodo(userName) {
     axios({
         method: "patch",
         // 只需要将用户名字提交给后台，后天自然会根据条件去遍历数据库
-        data: { name: userName },
+        data: {name: userName},
         url: "/api/TodoList/noFinishAllTodo",
     });
 }
@@ -142,7 +142,7 @@ export async function loginTime(myName) {
     await axios({
         method: "post",
         // 要以对象的形式传过去
-        data: { name: myName },
+        data: {name: myName},
         url: "/api/TodoList/updateLoginTime",
     }).then((response) => {
         timeObject["上次登录时间"] = response.data["上次登录时间"];
