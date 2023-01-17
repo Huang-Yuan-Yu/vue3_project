@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </transition>
-
+    
             <!--未登录时显示未登录的头像-->
             <a>
                 <img
@@ -54,7 +54,7 @@
                     class="userLogo"
                     src="../../assets/userLogo.png"
                     @mouseenter="userMouseEnter"
-            /></a>
+                /></a>
             <!--登录后显示用户的头像，如果未设置头像，则显示默认头像-->
             <a>
                 <img
@@ -67,11 +67,11 @@
                     alt="登录后的用户头像"
                     class="userLogo"
                     @mouseenter="userMouseEnter"
-            /></a>
+                /></a>
         </header>
         <!--设置用户头像的组件，将布尔值变量传入子组件，决定子组件是否要显示-->
         <set-avatar ref="setAvatar" :isShowSetAvatarWindow="isShowSetAvatarWindow" :myName="myName"></set-avatar>
-
+    
         <transition name="loginUi">
             <!--是否显示登录界面-->
             <div v-if="isShowLoginWindow || isShowRegistrationWindow || isShowResetPassword" id="loginUi">
@@ -98,7 +98,9 @@
                             <!--使用Element Plus（UI库）提供的插槽，这里“#prefix”表示从输入表单的开头插入-->
                             <template #prefix>
                                 <!--用户图标，:size为图标大小-->
-                                <el-icon :size="22" class="avatar"><avatar /></el-icon>
+                                <el-icon :size="22" class="avatar">
+                                    <avatar/>
+                                </el-icon>
                             </template>
                         </el-input>
                         <p v-if="inputAccountError" class="loginInputErrorTips">提示：电子邮箱格式错误</p>
@@ -120,7 +122,9 @@
                         >
                             <template #prefix>
                                 <!--锁的图标-->
-                                <el-icon :size="22" class="avatar"><lock /></el-icon>
+                                <el-icon :size="22" class="avatar">
+                                    <lock/>
+                                </el-icon>
                             </template>
                         </el-input>
                         <!--大写提示-->
@@ -139,7 +143,7 @@
                                     size="large"
                                     type="primary"
                                     @click="showVerification"
-                                    >登录
+                                >登录
                                 </el-button>
                                 <!--包含登录中动画的按钮，如果正在登录，就显示此按钮-->
                                 <el-button
@@ -148,7 +152,7 @@
                                     loading
                                     size="large"
                                     type="primary"
-                                    >登录中
+                                >登录中
                                 </el-button>
                             </template>
                             <!--滑块验证组件——accuracy表示允许的误差，范围从1到10；@success事件：验证成功就登录
@@ -166,11 +170,11 @@
                         <span class="forgetPassword" @click="forgotPassword">忘记密码？</span>
                         <div id="thirdPartyLoginDiv">
                             <span id="thirdPartyLogin">第三方登录：</span>
-                            <img id="qqLogin" :src="require('@/assets/qqLogo.png')" alt="QQ登录" @click="qqLogin" />
+                            <img id="qqLogin" :src="require('@/assets/qqLogo.png')" alt="QQ登录" @click="qqLogin"/>
                         </div>
                     </form>
                 </div>
-
+    
                 <div v-if="isShowResetPassword">
                     <p class="loginText">重置密码</p>
                     <form>
@@ -193,7 +197,9 @@
                                     @keyup.enter="userRegistration"
                                 >
                                     <template #prefix>
-                                        <el-icon :size="22" class="avatar"><avatar /></el-icon>
+                                        <el-icon :size="22" class="avatar">
+                                            <avatar/>
+                                        </el-icon>
                                     </template>
                                 </el-input>
                             </el-col>
@@ -212,7 +218,7 @@
                                     class="sendVerificationCode"
                                     loading
                                     type="primary"
-                                    >获取中
+                                >获取中
                                 </el-button>
                             </el-col>
                         </el-row>
@@ -233,7 +239,9 @@
                             @keyup.enter="userRegistration"
                         >
                             <template #prefix>
-                                <el-icon :size="22" class="avatar"><lock /></el-icon>
+                                <el-icon :size="22" class="avatar">
+                                    <lock/>
+                                </el-icon>
                             </template>
                         </el-input>
                         <!--大写提示-->
@@ -259,17 +267,19 @@
                                 >
                                     <template #prefix>
                                         <!--<el-icon><avatar /></el-icon>-->
-                                        <el-icon :size="22" class="avatar"><Promotion /></el-icon>
+                                        <el-icon :size="22" class="avatar">
+                                            <Promotion/>
+                                        </el-icon>
                                     </template>
                                 </el-input>
                             </el-col>
                         </el-row>
                         <el-button class="resetPasswordButton" size="large" type="primary" @click="resetPassword"
-                            >确认修改
+                        >确认修改
                         </el-button>
                     </form>
                 </div>
-
+    
                 <div v-if="isShowRegistrationWindow">
                     <p class="loginText">注册</p>
                     <!--form里面是表单元素，如果不加from，会提示”密码字段不包含在表单中（已翻译）“-->
@@ -293,7 +303,9 @@
                                     @keyup.enter="userRegistration"
                                 >
                                     <template #prefix>
-                                        <el-icon :size="22" class="avatar"><avatar /></el-icon>
+                                        <el-icon :size="22" class="avatar">
+                                            <avatar/>
+                                        </el-icon>
                                     </template>
                                 </el-input>
                             </el-col>
@@ -312,7 +324,7 @@
                                     class="sendVerificationCode"
                                     loading
                                     type="primary"
-                                    >获取中
+                                >获取中
                                 </el-button>
                             </el-col>
                         </el-row>
@@ -333,7 +345,9 @@
                             @keyup.enter="userRegistration"
                         >
                             <template #prefix>
-                                <el-icon :size="22" class="avatar"><lock /></el-icon>
+                                <el-icon :size="22" class="avatar">
+                                    <lock/>
+                                </el-icon>
                             </template>
                         </el-input>
                         <!--大写提示-->
@@ -359,13 +373,15 @@
                                 >
                                     <template #prefix>
                                         <!--<el-icon><avatar /></el-icon>-->
-                                        <el-icon :size="22" class="avatar"><Promotion /></el-icon>
+                                        <el-icon :size="22" class="avatar">
+                                            <Promotion/>
+                                        </el-icon>
                                     </template>
                                 </el-input>
                             </el-col>
                         </el-row>
                         <el-button class="registerButton" size="large" type="primary" @click="userRegistration"
-                            >注册
+                        >注册
                         </el-button>
                     </form>
                 </div>
@@ -378,17 +394,17 @@
 // AES加密
 import aes from "@/jsFunction/aes";
 // 引入消息提示框，属于非模态提示框，不会打断用户操作
-import { ElMessage } from "element-plus";
+import {ElMessage} from "element-plus";
 // 引入用户图标以及锁图标（需要全局引入加局部注册才能用）
-import { Avatar, Lock } from "@element-plus/icons-vue";
+import {Avatar, Lock} from "@element-plus/icons-vue";
 // 弹出提示框
-import { ElNotification } from "element-plus";
+import {ElNotification} from "element-plus";
 // 获取上次登录时间和本次登录时间
-import { loginTime } from "@/jsFunction/todoList";
+import {loginTime} from "@/jsFunction/todoList";
 // 引入mitt库，用于高效率的组件间通信
 import emitter from "@/jsFunction/eventbus";
 import setAvatar from "@/components/user/set-avatar";
-import { ref } from "vue";
+import {ref} from "vue";
 // 引入滑块验证的依赖——npm i vue3-slide-verify
 import SlideVerify from "vue3-slide-verify";
 import "vue3-slide-verify/dist/style.css";
@@ -397,7 +413,7 @@ import QC from "qc";
 
 export default {
     name: "user-login",
-    components: { "set-avatar": setAvatar, "slide-verify": SlideVerify },
+    components: {"set-avatar": setAvatar, "slide-verify": SlideVerify},
     // 在Vue3中，新引入的Avatar, Lock要注册到全局，使之变成响应式，最好不要在components里注册
     setup() {
         // 滑动验证要用到的，block用于刷新验证
@@ -422,7 +438,7 @@ export default {
         const refreshVerification = () => {
             block.value?.refresh();
         };
-
+        
         return {
             // 用户图标
             Avatar,
@@ -546,7 +562,7 @@ export default {
             let loginMethod = localStorage.getItem("登录方式");
             this.$axios({
                 method: "post",
-                data: { name: name },
+                data: {name: name},
                 url: "/api/TodoList/verification",
                 // 每次请求都会在HTTP请求头中加上token的值
                 headers: {
@@ -594,7 +610,7 @@ export default {
                     this.$store.dispatch("setShowAvatar", response.data.avatar);
                     this.myName = name;
                     emitter.emit("Token认证", "认证成功");
-
+    
                     // 趁现在还处于vue对象的作用域，先将data中myName变量保留下来，存储到一个变量中
                     let myName = this.myName;
                     // 使用“匿名函数+直接调用”的方式，将函数定义为同步执行，这样才使获取的时间不为undefined
@@ -646,7 +662,7 @@ export default {
                 position: "bottom-right",
             });
         }
-
+    
         // 监听键盘是否开启大写锁定
         window.addEventListener("keydown", (event) => {
             let e = event || window.event;
@@ -657,19 +673,19 @@ export default {
                 }
             }
         });
-
+    
         emitter.on("设置头像", (message) => {
             if (message === "成功") {
                 this.isShowSetAvatarWindow = false;
             }
         });
-
+    
         // 游客登录——visitorId是浏览器指纹
         emitter.on("游客登录", (visitorId) => {
             // 使用axios的post方法，向后端传递数据
             this.$axios
                 // 游客注册没有设置密码，且用户名为浏览器指纹
-                .post("/api/TodoList/loginAnonymously", { name: visitorId })
+                .post("/api/TodoList/loginAnonymously", {name: visitorId})
                 .then((res) => {
                     if (res.data.result === "登录成功") {
                         // 那么就本地存储token，jwt名称，值为服务器返回的jwt字符串（长长的那个）
@@ -854,7 +870,7 @@ export default {
                                 message: response.data,
                                 type: "success",
                             });
-
+    
                             // 倒计时期间按钮不能单击（为true，按钮处于禁用状态）
                             this.getVerificationCode.disabled = true;
                             // 清除掉定时器
@@ -931,7 +947,7 @@ export default {
                 // 使用axios的post方法，向后端传递数据
                 this.$axios
                     // 调用自定义的aes.js文件里的“加密encrypt”方法，将密码加密后传给后端
-                    .post("/api/TodoList/register", { name: this.user.name, password: aes.encrypt(this.user.password) })
+                    .post("/api/TodoList/register", {name: this.user.name, password: aes.encrypt(this.user.password)})
                     .then((res) => {
                         if (res.data === "用户名重复，请更换用户名！") {
                             ElMessage({
@@ -1045,7 +1061,7 @@ export default {
                 this.isLogin = true;
                 // 先将用户输入的信息传给后台，此信息是用户需要查询的信息：
                 this.$axios
-                    .post("/api/TodoList/login", { name: this.user.name, password: aes.encrypt(this.user.password) })
+                    .post("/api/TodoList/login", {name: this.user.name, password: aes.encrypt(this.user.password)})
                     .then((response) => {
                         // 如果返回的信息为登录成功：
                         if (response.data.result === "登录成功") {
@@ -1056,7 +1072,7 @@ export default {
                             this.isLoginAnonymously = this.user.name;
                             // 将头像的数据保存到Vuex的state中
                             this.$store.dispatch("setShowAvatar", response.data.userAvatarData);
-
+    
                             // 然后设置到HTTP请求头里面，字段名称就为“token”
                             this.$axios.defaults.headers.common["token"] = response.data.jwt;
                             // 将loginSuccess的布尔值改为true，方便上面HTML显示登录成功
@@ -1117,7 +1133,7 @@ export default {
             if (typeof _that.userPassword === "undefined") return;
             let userPassword = _that.userPassword;
             let stringLength = userPassword.length;
-
+    
             if (stringLength) {
                 let uniCode = userPassword.charCodeAt(stringLength - 1);
                 // 65到90字母键
@@ -1672,7 +1688,7 @@ export default {
         margin-top: 0;
         margin-left: 0;
     }
-
+    
     .forgetPassword {
         display: flex;
         width: 80px;
